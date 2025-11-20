@@ -1,0 +1,14 @@
+/* Custom Flagship logo styling for Dokka */
+.library-name a::before {
+    content: "";
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-image: url('images/flagship_icon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
