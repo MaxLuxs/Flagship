@@ -33,6 +33,78 @@ jobs:
     - name: Generate Dokka documentation
       run: ./gradlew dokkaHtmlMultiModule --no-daemon
       
+    - name: Install markdown converter
+      run: npm install -g marked
+      
+    - name: Convert markdown guides to HTML
+      run: |
+        cd docs
+        for file in USAGE_GUIDE.md MIGRATION_GUIDE.md API_REFERENCE.md; do
+          echo "Converting $file to HTML..."
+          cat <<'EOF' > "${file%.md}.html"
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>$(head -1 "$file" | sed 's/<[^>]*>//g' | sed 's/# //')</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                    line-height: 1.6;
+                    max-width: 900px;
+                    margin: 40px auto;
+                    padding: 20px;
+                    color: #333;
+                }
+                h1, h2, h3 { color: #667eea; margin-top: 30px; }
+                code {
+                    background: #f4f4f4;
+                    padding: 2px 6px;
+                    border-radius: 3px;
+                    font-family: 'Monaco', 'Courier New', monospace;
+                }
+                pre {
+                    background: #f4f4f4;
+                    padding: 15px;
+                    border-radius: 8px;
+                    overflow-x: auto;
+                    border-left: 4px solid #667eea;
+                }
+                pre code { background: none; padding: 0; }
+                a { color: #667eea; text-decoration: none; }
+                a:hover { text-decoration: underline; }
+                img { max-width: 100%; height: auto; }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 12px;
+                    text-align: left;
+                }
+                th { background: #667eea; color: white; }
+                .back-link {
+                    display: inline-block;
+                    margin-bottom: 20px;
+                    padding: 8px 16px;
+                    background: #667eea;
+                    color: white;
+                    border-radius: 5px;
+                    font-size: 14px;
+                }
+                .back-link:hover { opacity: 0.9; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <a href="index.html" class="back-link">← Back to Documentation</a>
+        EOF
+          marked "$file" >> "${file%.md}.html"
+          echo "</body></html>" >> "${file%.md}.html"
+        done
+      
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
