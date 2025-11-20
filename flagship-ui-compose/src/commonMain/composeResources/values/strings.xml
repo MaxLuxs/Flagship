@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tab Names -->
+    <string name="tab_flags">Flags</string>
+    <string name="tab_overrides">Overrides</string>
+    <string name="tab_diagnostics">Diagnostics</string>
+    <string name="tab_settings">Settings</string>
+    
+    <!-- Flags Screen -->
+    <string name="flags_title">Feature Flags</string>
+    <string name="flags_search">Search flags...</string>
+    <string name="flags_no_results">No flags found</string>
+    <string name="flags_loading">Loading flags...</string>
+    <string name="flag_enabled">Enabled</string>
+    <string name="flag_disabled">Disabled</string>
+    <string name="flag_source">Source: %s</string>
+    <string name="flag_type">Type: %s</string>
+    <string name="flag_value">Value: %s</string>
+    
+    <!-- Overrides Screen -->
+    <string name="overrides_title">Local Overrides</string>
+    <string name="overrides_no_items">No overrides set</string>
+    <string name="overrides_add">Add Override</string>
+    <string name="overrides_clear_all">Clear All</string>
+    <string name="override_remove">Remove</string>
+    
+    <!-- Add Override Dialog -->
+    <string name="add_override_title">Add Override</string>
+    <string name="add_override_key">Flag Key</string>
+    <string name="add_override_type">Type</string>
+    <string name="add_override_value">Value</string>
+    <string name="add_override_cancel">Cancel</string>
+    <string name="add_override_save">Save</string>
+    
+    <!-- Diagnostics Screen -->
+    <string name="diagnostics_title">System Diagnostics</string>
+    <string name="diagnostics_providers">Providers</string>
+    <string name="diagnostics_cache">Cache</string>
+    <string name="diagnostics_performance">Performance</string>
+    <string name="diagnostics_errors">Errors</string>
+    <string name="diagnostics_status">Status: %s</string>
+    <string name="diagnostics_healthy">Healthy</string>
+    <string name="diagnostics_issues">Issues Detected</string>
+    <string name="diagnostics_unknown">Unknown</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_refresh">Refresh Configuration</string>
+    <string name="settings_refreshing">Refreshing...</string>
+    <string name="settings_environment">Environment</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_last_refresh">Last Refresh</string>
+    <string name="settings_ttl">TTL</string>
+    
+    <!-- Common -->
+    <string name="common_refresh">Refresh</string>
+    <string name="common_close">Close</string>
+    <string name="common_save">Save</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_edit">Edit</string>
+    <string name="common_unknown">Unknown</string>
+    <string name="common_error">Error</string>
+    
+    <!-- Time -->
+    <string name="time_just_now">Just now</string>
+    <string name="time_minutes_ago">%d minutes ago</string>
+    <string name="time_hours_ago">%d hours ago</string>
+    <string name="time_days_ago">%d days ago</string>
+    
+    <!-- Messages -->
+    <string name="message_override_added">Override added</string>
+    <string name="message_override_removed">Override removed</string>
+    <string name="message_overrides_cleared">All overrides cleared</string>
+    <string name="message_refresh_success">Configuration refreshed</string>
+    <string name="message_refresh_error">Failed to refresh configuration</string>
+</resources>
+
