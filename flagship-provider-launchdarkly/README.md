@@ -21,7 +21,39 @@ implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.0")
 
 ## Usage
 
-### Android
+### Android (Recommended - using Factory)
+
+The easiest way to create a LaunchDarkly provider on Android:
+
+```kotlin
+import io.maxluxs.flagship.provider.launchdarkly.LaunchDarklyProviderFactory
+
+val provider = LaunchDarklyProviderFactory.create(
+    application = application,
+    mobileKey = "mob-YOUR-MOBILE-KEY",
+    userId = "user-123",
+    userName = "User Name",
+    name = "launchdarkly"
+)
+
+val config = FlagsConfig(
+    appKey = "your-app",
+    environment = "production",
+    providers = listOf(provider),
+    cache = AndroidFlagsInitializer.createPersistentCache(context)
+)
+
+Flags.configure(config)
+```
+
+The factory handles:
+- LaunchDarkly SDK initialization
+- LDConfig and LDContext setup
+- Client initialization (blocks until ready)
+
+### Manual Setup (Advanced)
+
+If you need more control, you can create the provider manually:
 
 ```kotlin
 val ldClient = LDClient.init(
@@ -33,20 +65,11 @@ val ldClient = LDClient.init(
         .kind("user")
         .name("User Name")
         .build()
-)
+).get() // Block until initialized
 
 val provider = LaunchDarklyProvider(
     AndroidLaunchDarklyAdapter(ldClient)
 )
-
-val config = FlagsConfig(
-    appKey = "your-app",
-    environment = "production",
-    providers = listOf(provider),
-    cache = AndroidFlagsInitializer.createPersistentCache(context)
-)
-
-Flags.configure(config)
 ```
 
 ### iOS

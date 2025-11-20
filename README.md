@@ -91,21 +91,27 @@ dependencies {
 Configure the library in your Application class (Android) or App Delegate (iOS).
 
 ```kotlin
-        val config = FlagsConfig(
-            appKey = "my-app",
+// Android example using provider factories (recommended)
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+
+val config = FlagsConfig(
+    appKey = "my-app",
     environment = "production",
-            providers = listOf(
-        // High priority: Firebase
-        FirebaseRemoteConfigProvider(FirebaseAdapter(remoteConfig)),
+    providers = listOf(
+        // High priority: Firebase (factory handles initialization)
+        FirebaseProviderFactory.create(application),
         // Fallback: Custom REST API
         RestFlagsProvider(httpClient, "https://api.myserver.com/flags")
-            ),
+    ),
     cache = PersistentCache(platformContext),
     logger = DefaultLogger()
-        )
-        
-        Flags.configure(config)
+)
+
+Flags.configure(config)
 ```
+
+> **Note**: Provider factories (`FirebaseProviderFactory`, `LaunchDarklyProviderFactory`) simplify initialization on Android by handling SDK setup automatically. You can also create providers manually if you need more control.
 
 ### 2. Use Feature Flags
 

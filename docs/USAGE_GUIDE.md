@@ -35,15 +35,27 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         
+        // Recommended: Use factory for easy setup
         val config = FlagsConfig(
             appKey = "my-banking-app",
             environment = "production",
             providers = listOf(
-                FirebaseRemoteConfigProvider(Firebase.remoteConfig)
+                FirebaseProviderFactory.create(application)
             ),
             cache = PersistentCache(FlagsSerializer()),
             logger = DefaultLogger()
         )
+        
+        // Alternative: Manual setup (for advanced use cases)
+        // val config = FlagsConfig(
+        //     appKey = "my-banking-app",
+        //     environment = "production",
+        //     providers = listOf(
+        //         FirebaseRemoteConfigProvider(AndroidFirebaseAdapter(Firebase.remoteConfig))
+        //     ),
+        //     cache = PersistentCache(FlagsSerializer()),
+        //     logger = DefaultLogger()
+        // )
         
         Flags.configure(config)
     }
@@ -160,17 +172,20 @@ Flags.configure(config)
 ### With Multiple Providers
 
 ```kotlin
+// Using factories (recommended)
 val config = FlagsConfig(
     appKey = "my-app",
     environment = "production",
     providers = listOf(
-        FirebaseRemoteConfigProvider(Firebase.remoteConfig), // Priority 1
+        FirebaseProviderFactory.create(application), // Priority 1
         RestFlagsProvider(httpClient, "https://api.example.com/flags") // Fallback
     ),
     cache = PersistentCache(FlagsSerializer()),
     logger = DefaultLogger()
 )
 ```
+
+> **Note**: `FirebaseProviderFactory` handles Firebase initialization automatically. For manual setup, see the [Firebase Provider section](#firebase-remote-config).
 
 **Important:** Providers are processed in order. The first successful result is used.
 
@@ -436,10 +451,16 @@ val assignment = manager.assign(
 // build.gradle.kts
 implementation(project(":flagship-provider-firebase"))
 
-// Code
-val provider = FirebaseRemoteConfigProvider(
-    remoteConfig = Firebase.remoteConfig,
-    fetchIntervalSeconds = 3600 // Refresh every hour
+// Recommended: Using factory (Android)
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+
+val provider = FirebaseProviderFactory.create(
+    application = application,
+    defaults = mapOf(
+        "new_feature" to false,
+        "dark_mode" to false
+    ),
+    name = "firebase"
 )
 
 val config = FlagsConfig(
@@ -448,6 +469,14 @@ val config = FlagsConfig(
     providers = listOf(provider),
     cache = PersistentCache(FlagsSerializer())
 )
+```
+
+**Alternative: Manual Setup**
+
+```kotlin
+// For advanced use cases or iOS
+val adapter = AndroidFirebaseAdapter(Firebase.remoteConfig)
+val provider = FirebaseRemoteConfigProvider(adapter, name = "firebase")
 ```
 
 **Firebase Console structure:**

@@ -20,10 +20,42 @@ implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.0")
 
 ## Usage
 
+### Android (Recommended - using Factory)
+
+The easiest way to create a Firebase provider on Android:
+
 ```kotlin
-val firebaseProvider = FirebaseRemoteConfigProvider(
-    // Platform specific adapter (Android/iOS)
-    adapter = FirebaseAdapter(remoteConfig) 
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+
+val firebaseProvider = FirebaseProviderFactory.create(
+    application = application,
+    defaults = mapOf(
+        "new_feature" to false,
+        "dark_mode" to false
+    ),
+    name = "firebase"
 )
+```
+
+The factory handles:
+- Firebase initialization
+- Remote Config settings configuration
+- Default values setup
+
+### Manual Setup (Advanced)
+
+If you need more control, you can create the provider manually:
+
+```kotlin
+// Initialize Firebase
+if (FirebaseApp.getApps(application).isEmpty()) {
+    FirebaseApp.initializeApp(application)
+}
+
+val remoteConfig = FirebaseRemoteConfig.getInstance()
+// Configure settings...
+
+val adapter = AndroidFirebaseAdapter(remoteConfig)
+val firebaseProvider = FirebaseRemoteConfigProvider(adapter, name = "firebase")
 ```
 
