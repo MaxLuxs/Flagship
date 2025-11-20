@@ -4,9 +4,10 @@ import android.app.Application
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import com.launchdarkly.sdk.LDContext
 import com.launchdarkly.sdk.android.LDClient
 import com.launchdarkly.sdk.android.LDConfig
-import com.launchdarkly.sdk.android.LDUser
+import java.util.concurrent.Future
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -93,15 +94,17 @@ object ProviderFactory {
     }
     
     private fun initializeLaunchDarkly(application: Application): LDClient {
-        val config = LDConfig.Builder()
+        val config = LDConfig.Builder(LDConfig.Builder.AutoEnvAttributes.Disabled)
             .mobileKey(LAUNCHDARKLY_MOBILE_KEY)
             .build()
         
-        val user = LDUser.Builder("user-${System.currentTimeMillis()}")
+        val context = LDContext.builder("user-${System.currentTimeMillis()}")
+            .kind("user")
             .name("Test User")
             .build()
         
-        return LDClient.init(application, config, user)
+        val future: Future<LDClient> = LDClient.init(application, config, context)
+        return future.get() // Block until client is initialized
     }
 }
 
