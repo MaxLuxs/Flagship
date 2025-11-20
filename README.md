@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <a href="http://kotlinlang.org"><img src="https://img.shields.io/badge/kotlin-1.9.20-blue.svg?logo=kotlin" alt="Kotlin"></a>
+  <a href="http://kotlinlang.org"><img src="https://img.shields.io/badge/kotlin-2.1.21-blue.svg?logo=kotlin" alt="Kotlin"></a>
   <a href="https://kotlinlang.org/docs/multiplatform.html"><img src="https://img.shields.io/badge/platform-android%20%7C%20ios-green.svg" alt="Platform"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://maxluxs.github.io/Flagship/"><img src="https://img.shields.io/badge/docs-latest-brightgreen.svg" alt="Documentation"></a>
