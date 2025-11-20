@@ -309,20 +309,170 @@ struct PaymentView: View {
 <hr />
 <h2 id="installation">📦 Installation</h2>
 <h3 id="android">Android</h3>
-<ol type="1">
-<li>Add modules to <code>settings.gradle.kts</code>:</li>
-</ol>
-<pre class="kotlin"><code>include(&quot;:flagship-core&quot;)
-include(&quot;:flagship-provider-firebase&quot;)
-include(&quot;:flagship-ui-compose&quot;) // optional</code></pre>
-<ol start="2" type="1">
-<li>In <code>build.gradle.kts</code>:</li>
-</ol>
-<pre class="kotlin"><code>dependencies {
-    implementation(project(&quot;:flagship-core&quot;))
-    implementation(project(&quot;:flagship-provider-firebase&quot;))
-    implementation(project(&quot;:flagship-ui-compose&quot;)) // for debug dashboard
+<h4 id="step-1-add-repository">Step 1: Add Repository</h4>
+<p>Add Maven repository to <code>settings.gradle.kts</code> (or
+<code>settings.gradle</code>):</p>
+<pre class="kotlin"><code>dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Add Flagship repository if published to custom Maven repo
+        // maven { url = uri(&quot;https://jitpack.io") }
+    }
 }</code></pre>
+<h4 id="step-2-add-dependencies">Step 2: Add Dependencies</h4>
+<p>In your app module's <code>build.gradle.kts</code> (or
+<code>build.gradle</code>):</p>
+<pre class="kotlin"><code>dependencies {
+    // Core library
+    implementation(&quot;io.maxluxs.flagship:flagship-core:0.1.0&quot;)
+    
+    // Android platform support
+    implementation(&quot;io.maxluxs.flagship:flagship-platform-android:0.1.0&quot;)
+    
+    // Providers (choose what you need)
+    implementation(&quot;io.maxluxs.flagship:flagship-provider-rest:0.1.0&quot;)
+    implementation(&quot;io.maxluxs.flagship:flagship-provider-firebase:0.1.0&quot;)
+    // implementation(&quot;io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.0&quot;)
+    
+    // Optional: Debug UI
+    // implementation(&quot;io.maxluxs.flagship:flagship-ui-compose:0.1.0&quot;)
+    
+    // Required for REST provider
+    implementation(&quot;io.ktor:ktor-client-android:3.3.2&quot;)
+    implementation(&quot;io.ktor:ktor-client-content-negotiation:3.3.2&quot;)
+    implementation(&quot;io.ktor:ktor-serialization-kotlinx-json:3.3.2&quot;)
+    
+    // Serialization
+    implementation(&quot;org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0&quot;)
+}</code></pre>
+<h4 id="step-3-enable-kotlin-serialization">Step 3: Enable Kotlin Serialization</h4>
+<p>In your app's <code>build.gradle.kts</code>:</p>
+<pre class="kotlin"><code>plugins {
+    id(&quot;com.android.application&quot;)
+    kotlin(&quot;android&quot;)
+    kotlin(&quot;plugin.serialization&quot;) // Add this
+}</code></pre>
+<h4 id="step-4-initialize-in-application-class">Step 4: Initialize in Application Class</h4>
+<p>Create or update your <code>Application</code> class:</p>
+<pre class="kotlin"><code>package com.example.myapp
+
+import android.app.Application
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.manager.DefaultFlagsManager
+import io.maxluxs.flagship.platform.android.AndroidFlagsInitializer
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+import kotlinx.serialization.json.Json
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initializeFlagship()
+    }
+    
+    private fun initializeFlagship() {
+        // Create HTTP client for REST provider
+        val httpClient = HttpClient(Android) {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
+            }
+        }
+        
+        // Configure providers (in priority order)
+        val providers = listOf(
+            // Option 1: Firebase Remote Config (recommended)
+            FirebaseProviderFactory.create(
+                application = this,
+                defaults = mapOf(
+                    &quot;new_feature&quot; to false,
+                    &quot;max_retries&quot; to 3,
+                    &quot;api_timeout&quot; to 30.0,
+                    &quot;welcome_message&quot; to &quot;Welcome!&quot;
+                ),
+                name = &quot;firebase&quot;
+            ),
+            
+            // Option 2: REST API (fallback)
+            RestFlagsProvider(
+                client = httpClient,
+                baseUrl = &quot;https://api.example.com/flags&quot;
+            )
+        )
+        
+        // Create configuration
+        val config = FlagsConfig(
+            appKey = &quot;my-app&quot;, // Unique app identifier
+            environment = if (BuildConfig.DEBUG) &quot;development&quot; else &quot;production&quot;,
+            providers = providers,
+            cache = AndroidFlagsInitializer.createPersistentCache(this),
+            defaultRefreshIntervalMs = 15 * 60 * 1000L // 15 minutes
+        )
+        
+        // Initialize Flagship
+        Flags.configure(config)
+        
+        // Set default context
+        val manager = Flags.manager() as DefaultFlagsManager
+        val defaultContext = AndroidFlagsInitializer.createDefaultContext(this)
+        manager.setDefaultContext(defaultContext)
+    }
+}</code></pre>
+<h4 id="step-5-register-application-in-androidmanifestxml">Step 5: Register Application in AndroidManifest.xml</h4>
+<pre class="xml"><code>&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+    &lt;application
+        android:name=&quot;.MyApplication&quot;
+        ...&gt;
+        ...
+    &lt;/application&gt;
+&lt;/manifest&gt;</code></pre>
+<h4 id="step-6-use-in-your-code">Step 6: Use in Your Code</h4>
+<pre class="kotlin"><code>import io.maxluxs.flagship.core.Flags
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        val flags = Flags.manager()
+        
+        // Check boolean flag
+        if (flags.isEnabled(&quot;new_payment_flow&quot;)) {
+            showNewPaymentScreen()
+        } else {
+            showLegacyPaymentScreen()
+        }
+        
+        // Get typed values
+        val maxRetries = flags.value(&quot;max_retries&quot;, default = 3)
+        val apiTimeout = flags.value(&quot;api_timeout&quot;, default = 30.0)
+        val welcomeMessage = flags.value(&quot;welcome_message&quot;, default = &quot;Welcome!&quot;)
+    }
+}</code></pre>
+<h4 id="firebase-setup-optional">Firebase Setup (Optional)</h4>
+<p>If using Firebase Remote Config:</p>
+<ol type="1">
+<li>Add Firebase to your project following <a
+href="https://firebase.google.com/docs/android/setup">official
+documentation</a></li>
+<li>Add <code>google-services.json</code> to <code>app/</code>
+directory</li>
+<li>Add plugin to <code>build.gradle.kts</code>:</li>
+</ol>
+<pre class="kotlin"><code>plugins {
+    id(&quot;com.google.gms.google-services&quot;)
+}</code></pre>
+<ol start="4" type="1">
+<li>FirebaseProviderFactory will handle initialization automatically</li>
+</ol>
 <h3 id="ios-swift-package-manager">iOS (Swift Package Manager)</h3>
 <ol type="1">
 <li>In Xcode: <strong>File &gt; Add Packages…</strong></li>

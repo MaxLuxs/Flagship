@@ -95,3 +95,6 @@ iosApp/**/build/
 **/build/bin/ios*/
 **/build/bin/*Framework/
 **/build/bin/*framework/
+
+# Flagship Server (proprietary/commercial)
+/flagship-server/

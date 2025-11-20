@@ -121,21 +121,195 @@ struct PaymentView: View {
 
 ### Android
 
-1. Add modules to `settings.gradle.kts`:
-```kotlin
-include(":flagship-core")
-include(":flagship-provider-firebase")
-include(":flagship-ui-compose") // optional
-```
+#### Step 1: Add Repository
 
-2. In `build.gradle.kts`:
+Add Maven repository to `settings.gradle.kts` (or `settings.gradle`):
+
 ```kotlin
-dependencies {
-    implementation(project(":flagship-core"))
-    implementation(project(":flagship-provider-firebase"))
-    implementation(project(":flagship-ui-compose")) // for debug dashboard
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Add Flagship repository if published to custom Maven repo
+        // maven { url = uri("https://jitpack.io") }
+    }
 }
 ```
+
+#### Step 2: Add Dependencies
+
+In your app module's `build.gradle.kts` (or `build.gradle`):
+
+```kotlin
+dependencies {
+    // Core library
+    implementation("io.maxluxs.flagship:flagship-core:0.1.0")
+    
+    // Android platform support
+    implementation("io.maxluxs.flagship:flagship-platform-android:0.1.0")
+    
+    // Providers (choose what you need)
+    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")
+    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.0")
+    // implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.0")
+    
+    // Optional: Debug UI
+    // implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.0")
+    
+    // Required for REST provider
+    implementation("io.ktor:ktor-client-android:3.3.2")
+    implementation("io.ktor:ktor-client-content-negotiation:3.3.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.3.2")
+    
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+}
+```
+
+#### Step 3: Enable Kotlin Serialization
+
+In your app's `build.gradle.kts`:
+
+```kotlin
+plugins {
+    id("com.android.application")
+    kotlin("android")
+    kotlin("plugin.serialization") // Add this
+}
+```
+
+#### Step 4: Initialize in Application Class
+
+Create or update your `Application` class:
+
+```kotlin
+package com.example.myapp
+
+import android.app.Application
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.manager.DefaultFlagsManager
+import io.maxluxs.flagship.platform.android.AndroidFlagsInitializer
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+import kotlinx.serialization.json.Json
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initializeFlagship()
+    }
+    
+    private fun initializeFlagship() {
+        // Create HTTP client for REST provider
+        val httpClient = HttpClient(Android) {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
+            }
+        }
+        
+        // Configure providers (in priority order)
+        val providers = listOf(
+            // Option 1: Firebase Remote Config (recommended)
+            FirebaseProviderFactory.create(
+                application = this,
+                defaults = mapOf(
+                    "new_feature" to false,
+                    "max_retries" to 3,
+                    "api_timeout" to 30.0,
+                    "welcome_message" to "Welcome!"
+                ),
+                name = "firebase"
+            ),
+            
+            // Option 2: REST API (fallback)
+            RestFlagsProvider(
+                client = httpClient,
+                baseUrl = "https://api.example.com/flags"
+            )
+        )
+        
+        // Create configuration
+        val config = FlagsConfig(
+            appKey = "my-app", // Unique app identifier
+            environment = if (BuildConfig.DEBUG) "development" else "production",
+            providers = providers,
+            cache = AndroidFlagsInitializer.createPersistentCache(this),
+            defaultRefreshIntervalMs = 15 * 60 * 1000L // 15 minutes
+        )
+        
+        // Initialize Flagship
+        Flags.configure(config)
+        
+        // Set default context
+        val manager = Flags.manager() as DefaultFlagsManager
+        val defaultContext = AndroidFlagsInitializer.createDefaultContext(this)
+        manager.setDefaultContext(defaultContext)
+    }
+}
+```
+
+#### Step 5: Register Application in AndroidManifest.xml
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:name=".MyApplication"
+        ...>
+        ...
+    </application>
+</manifest>
+```
+
+#### Step 6: Use in Your Code
+
+```kotlin
+import io.maxluxs.flagship.core.Flags
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        val flags = Flags.manager()
+        
+        // Check boolean flag
+        if (flags.isEnabled("new_payment_flow")) {
+            showNewPaymentScreen()
+        } else {
+            showLegacyPaymentScreen()
+        }
+        
+        // Get typed values
+        val maxRetries = flags.value("max_retries", default = 3)
+        val apiTimeout = flags.value("api_timeout", default = 30.0)
+        val welcomeMessage = flags.value("welcome_message", default = "Welcome!")
+    }
+}
+```
+
+#### Firebase Setup (Optional)
+
+If using Firebase Remote Config:
+
+1. Add Firebase to your project following [official documentation](https://firebase.google.com/docs/android/setup)
+2. Add `google-services.json` to `app/` directory
+3. Add plugin to `build.gradle.kts`:
+
+```kotlin
+plugins {
+    id("com.google.gms.google-services")
+}
+```
+
+4. FirebaseProviderFactory will handle initialization automatically
 
 ### iOS (Swift Package Manager)
 

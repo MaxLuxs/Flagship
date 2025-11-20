@@ -394,7 +394,7 @@ fun DeveloperSettingsScreen() {
 ## 📚 Documentation
 
 **Comprehensive Guides:**
-- 📖 [Usage Guide](docs/USAGE_GUIDE.md) - Полное руководство по использованию
+- 📖 [Usage Guide](docs/USAGE_GUIDE.md) - Полное руководство по использованию (включая подробную интеграцию Android)
 - 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Миграция с других решений
 - 📚 [API Reference](docs/API_REFERENCE.md) - Справочник по API
 - 🚀 [Publishing Guide](PUBLISHING.md) - Как опубликовать библиотеку
