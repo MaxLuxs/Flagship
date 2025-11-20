@@ -1,0 +1,40 @@
+# Dokka documentation output
+/docs/
+
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Local configuration (contains sensitive data: API keys, passwords)
+local.properties
+
+# Kotlin Native
+.konan/
+
+# Internal documentation (not for public)
+/presentation/
+/DEV_LOG.md
+/PUBLISHING.md
+
+# SPM build artifacts
+/spm-build/
+
+# Secrets and credentials
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+secrets.properties
+
+# Firebase
+firebase-debug.log
+firebaserc
