@@ -128,14 +128,14 @@ dependencies {
 ### iOS (Swift Package Manager)
 
 1. In Xcode: **File > Add Packages...**
-2. URL: `https://github.com/maxluxs/Flagship`
+2. URL: `https://github.com/maxluks/Flagship`
 3. Version: `0.1.0`
 4. Add Package
 
 Or in `Package.swift`:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/maxluxs/Flagship", from: "0.1.0")
+    .package(url: "https://github.com/maxluks/Flagship", from: "0.1.0")
 ]
 ```
 
@@ -861,5 +861,5 @@ manager.addListener(object : FlagsListener {
 ---
 
 <p align="center">
-  <b>Need help? Create an Issue on <a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b>
+  <b>Need help? Create an Issue on <a href="https://github.com/maxluks/Flagship/issues">GitHub</a>!</b>
 </p>

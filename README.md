@@ -196,7 +196,7 @@ Flagship can be easily integrated into any native iOS project using **Swift Pack
 ### 1. Adding the Package to Xcode
 
 1. In Xcode, go to **File > Add Packages...**
-2. Enter the repository URL: `https://github.com/maxluxs/Flagship` (or your separate SPM repo URL)
+2. Enter the repository URL: `https://github.com/maxluks/Flagship` (or your separate SPM repo URL)
 3. Select the version you want to install (e.g., `1.0.0`)
 4. Click **Add Package**
 
