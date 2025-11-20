@@ -65,3 +65,33 @@ secrets.properties
 # Firebase
 firebase-debug.log
 firebaserc
+
+# Root level files that shouldn't be in repo
+/flagship_icon.svg
+/RELEASE_NOTES_v0.1.0.md
+/TESTING_GUIDE.md
+/fix_version.sh
+
+# iOS/Swift Package Manager build artifacts
+# These contain Objective-C headers that GitHub counts as code
+# Ignore xcframework and zip files, but keep Package.swift
+**/swiftpackage/*.xcframework/
+**/swiftpackage/*.zip
+**/swiftpackage/*.framework/
+*.xcframework
+*.framework
+*.xcarchive
+# Keep Package.swift files
+!**/swiftpackage/Package.swift
+
+# Xcode build artifacts
+iosApp/**/DerivedData/
+iosApp/**/build/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/
+
+# Kotlin/Native iOS build outputs
+**/build/bin/ios*/
+**/build/bin/*Framework/
+**/build/bin/*framework/
