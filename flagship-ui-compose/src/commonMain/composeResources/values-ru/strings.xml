@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tab Names -->
+    <string name="tab_flags">Флаги</string>
+    <string name="tab_overrides">Переопределения</string>
+    <string name="tab_diagnostics">Диагностика</string>
+    <string name="tab_settings">Настройки</string>
+    
+    <!-- Flags Screen -->
+    <string name="flags_title">Фича-флаги</string>
+    <string name="flags_search">Поиск флагов...</string>
+    <string name="flags_no_results">Флаги не найдены</string>
+    <string name="flags_loading">Загрузка флагов...</string>
+    <string name="flag_enabled">Включен</string>
+    <string name="flag_disabled">Выключен</string>
+    <string name="flag_source">Источник: %s</string>
+    <string name="flag_type">Тип: %s</string>
+    <string name="flag_value">Значение: %s</string>
+    
+    <!-- Overrides Screen -->
+    <string name="overrides_title">Локальные переопределения</string>
+    <string name="overrides_no_items">Переопределения отсутствуют</string>
+    <string name="overrides_add">Добавить</string>
+    <string name="overrides_clear_all">Очистить всё</string>
+    <string name="override_remove">Удалить</string>
+    
+    <!-- Add Override Dialog -->
+    <string name="add_override_title">Добавить переопределение</string>
+    <string name="add_override_key">Ключ флага</string>
+    <string name="add_override_type">Тип</string>
+    <string name="add_override_value">Значение</string>
+    <string name="add_override_cancel">Отмена</string>
+    <string name="add_override_save">Сохранить</string>
+    
+    <!-- Diagnostics Screen -->
+    <string name="diagnostics_title">Диагностика системы</string>
+    <string name="diagnostics_providers">Провайдеры</string>
+    <string name="diagnostics_cache">Кэш</string>
+    <string name="diagnostics_performance">Производительность</string>
+    <string name="diagnostics_errors">Ошибки</string>
+    <string name="diagnostics_status">Статус: %s</string>
+    <string name="diagnostics_healthy">Исправно</string>
+    <string name="diagnostics_issues">Обнаружены проблемы</string>
+    <string name="diagnostics_unknown">Неизвестно</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_refresh">Обновить конфигурацию</string>
+    <string name="settings_refreshing">Обновление...</string>
+    <string name="settings_environment">Окружение</string>
+    <string name="settings_version">Версия</string>
+    <string name="settings_last_refresh">Последнее обновление</string>
+    <string name="settings_ttl">TTL</string>
+    
+    <!-- Common -->
+    <string name="common_refresh">Обновить</string>
+    <string name="common_close">Закрыть</string>
+    <string name="common_save">Сохранить</string>
+    <string name="common_cancel">Отмена</string>
+    <string name="common_delete">Удалить</string>
+    <string name="common_edit">Редактировать</string>
+    <string name="common_unknown">Неизвестно</string>
+    <string name="common_error">Ошибка</string>
+    
+    <!-- Time -->
+    <string name="time_just_now">Только что</string>
+    <string name="time_minutes_ago">%d мин. назад</string>
+    <string name="time_hours_ago">%d ч. назад</string>
+    <string name="time_days_ago">%d дн. назад</string>
+    
+    <!-- Messages -->
+    <string name="message_override_added">Переопределение добавлено</string>
+    <string name="message_override_removed">Переопределение удалено</string>
+    <string name="message_overrides_cleared">Все переопределения очищены</string>
+    <string name="message_refresh_success">Конфигурация обновлена</string>
+    <string name="message_refresh_error">Не удалось обновить конфигурацию</string>
+</resources>
+
