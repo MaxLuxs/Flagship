@@ -101,7 +101,10 @@ class FirebaseRemoteConfigProvider(
                 val variantObj = variantElement.jsonObject
                 val name = variantObj["name"]?.jsonPrimitive?.content ?: "control"
                 val weight = variantObj["weight"]?.jsonPrimitive?.double ?: 0.0
-                val payload = variantObj["payload"]?.jsonObject?.toMap() ?: emptyMap()
+                val payloadObj = variantObj["payload"]?.jsonObject
+                val payload = payloadObj?.entries?.associate { (key, value) -> 
+                    key to (value.jsonPrimitive?.content ?: value.toString())
+                } ?: emptyMap()
                 Variant(name, weight, payload)
             }
             
