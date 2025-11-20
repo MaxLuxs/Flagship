@@ -11,6 +11,9 @@ build/
 
 # IDE
 .idea/
+.vscode/
+.cursor/
+.kotlin/
 *.iml
 *.ipr
 *.iws
