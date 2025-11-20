@@ -58,9 +58,9 @@ kotlin {
         }
         
         androidMain.dependencies {
+            implementation(libs.kotlinx.coroutines.play.services)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.config)
-            implementation(libs.kotlinx.coroutines.play.services)
         }
 
         commonTest.dependencies {
@@ -82,4 +82,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-

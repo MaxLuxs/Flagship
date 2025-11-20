@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -30,9 +31,17 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(projects.flagshipPlatformAndroid)
+            implementation(projects.flagshipProviderFirebase)
+            implementation(projects.flagshipProviderLaunchdarkly)
             implementation(libs.ktor.client.android)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.json)
+            
+            // Firebase & LaunchDarkly
+            implementation(libs.kotlinx.coroutines.play.services)
+            implementation(libs.launchdarkly.android.client.sdk)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.config)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -84,8 +93,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
 
-dependencies {
-    debugImplementation(compose.uiTooling)
+    dependencies {
+        debugImplementation(compose.uiTooling)
+    }
 }
