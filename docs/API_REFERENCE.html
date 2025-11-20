@@ -210,6 +210,373 @@
         </div>
     </header>
     <div class="content">
+<p align="center">
+<img src="images/flagship_icon.svg" width="120" height="120" alt="Flagship Logo">
+</p>
+<h1 align="center">
+📚 API Reference
+</h1>
+<p>Complete reference for the Flagship library public API.</p>
+<hr />
+<h2 id="core-api">Core API</h2>
+<h3 id="flags-singleton"><code>Flags</code> (Singleton)</h3>
+<p>Global access point to Flagship.</p>
+<pre class="kotlin"><code>object Flags {
+    fun configure(config: FlagsConfig)
+    fun manager(): FlagsManager
+}</code></pre>
+<h4
+id="configureconfig-flagsconfig"><code>configure(config: FlagsConfig)</code></h4>
+<p>Initializes Flagship with the given configuration. Call
+<strong>once</strong> at app startup.</p>
+<p><strong>Parameters:</strong> - <code>config: FlagsConfig</code> -
+library configuration</p>
+<p><strong>Throws:</strong> - <code>IllegalStateException</code> - if
+<code>configure()</code> was already called</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>Flags.configure(
+    FlagsConfig(
+        appKey = &quot;my-app&quot;,
+        environment = &quot;production&quot;,
+        providers = listOf(FirebaseRemoteConfigProvider(Firebase.remoteConfig)),
+        cache = InMemoryCache(),
+        logger = DefaultLogger()
+    )
+)</code></pre>
+<h4 id="manager-flagsmanager"><code>manager(): FlagsManager</code></h4>
+<p>Returns a <code>FlagsManager</code> instance for working with
+flags.</p>
+<p><strong>Returns:</strong> <code>FlagsManager</code></p>
+<p><strong>Throws:</strong> - <code>IllegalStateException</code> - if
+<code>configure()</code> was not called</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val manager = Flags.manager()</code></pre>
+<hr />
+<h3 id="flagsmanager-interface"><code>FlagsManager</code>
+(Interface)</h3>
+<p>Main interface for working with flags and experiments.</p>
+<pre class="kotlin"><code>interface FlagsManager {
+    // Feature Flags
+    fun isEnabled(key: FlagKey, default: Boolean = false, ctx: EvalContext? = null): Boolean
+    fun &lt;T&gt; value(key: FlagKey, default: T, ctx: EvalContext? = null): T
+    
+    // Experiments
+    fun assign(key: ExperimentKey, ctx: EvalContext? = null): ExperimentAssignment?
+    
+    // Lifecycle
+    suspend fun bootstrap(): Boolean
+    suspend fun refresh(): Boolean
+    suspend fun ensureBootstrap(timeoutMs: Long): Boolean
+    
+    // Overrides (Debug only)
+    fun setOverride(key: FlagKey, value: FlagValue)
+    fun clearOverride(key: FlagKey)
+    fun listOverrides(): List&lt;FlagKey&gt;
+    
+    // Introspection
+    fun listAllFlags(): Map&lt;FlagKey, FlagValue&gt;
+    
+    // Listeners
+    fun addListener(listener: FlagsListener)
+    fun removeListener(listener: FlagsListener)
+}</code></pre>
+<h4
+id="isenabledkey-default-ctx-boolean"><code>isEnabled(key, default, ctx): Boolean</code></h4>
+<p>Checks if a feature flag is enabled.</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - flag key -
+<code>default: Boolean = false</code> - default value (if flag not
+found) - <code>ctx: EvalContext? = null</code> - context for targeting
+(optional)</p>
+<p><strong>Returns:</strong> <code>Boolean</code> - <code>true</code> if
+flag is enabled, otherwise <code>false</code></p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>if (manager.isEnabled(&quot;dark_mode&quot;)) {
+    enableDarkTheme()
+}</code></pre>
+<h4
+id="valuetkey-default-ctx-t"><code>value&lt;T&gt;(key, default, ctx): T</code></h4>
+<p>Gets a typed flag value.</p>
+<p><strong>Type Parameters:</strong> - <code>T</code> - value type
+(String, Int, Double, Boolean, JsonElement)</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - flag key -
+<code>default: T</code> - default value -
+<code>ctx: EvalContext? = null</code> - context for targeting</p>
+<p><strong>Returns:</strong> <code>T</code> - flag value or
+<code>default</code> if not found/wrong type</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val timeout: Int = manager.value(&quot;request_timeout&quot;, default = 5000)
+val apiUrl: String = manager.value(&quot;api_base_url&quot;, default = &quot;https://api.example.com&quot;)</code></pre>
+<h4
+id="assignkey-ctx-experimentassignment"><code>assign(key, ctx): ExperimentAssignment?</code></h4>
+<p>Assigns a user to an experiment variant.</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - experiment
+key - <code>ctx: EvalContext? = null</code> - user context (userId
+required!)</p>
+<p><strong>Returns:</strong> <code>ExperimentAssignment?</code> -
+assignment or <code>null</code> if experiment not found</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val assignment = manager.assign(
+    &quot;checkout_test&quot;,
+    EvalContext(userId = &quot;user_123&quot;)
+)
+
+when (assignment?.variant) {
+    &quot;control&quot; -&gt; OldCheckout()
+    &quot;variant_a&quot; -&gt; NewCheckout()
+}</code></pre>
+<h4 id="bootstrap-boolean"><code>bootstrap(): Boolean</code></h4>
+<p>Asynchronously loads data from all providers.</p>
+<p><strong>Returns:</strong> <code>Boolean</code> - <code>true</code> if
+loading successful</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>lifecycleScope.launch {
+    val success = manager.bootstrap()
+    if (success) {
+        // Data loaded
+    }
+}</code></pre>
+<h4 id="refresh-boolean"><code>refresh(): Boolean</code></h4>
+<p>Forces data refresh from all providers (ignoring TTL).</p>
+<p><strong>Returns:</strong> <code>Boolean</code> - <code>true</code> if
+refresh successful</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>lifecycleScope.launch {
+    manager.refresh()
+}</code></pre>
+<h4
+id="ensurebootstraptimeoutms-boolean"><code>ensureBootstrap(timeoutMs): Boolean</code></h4>
+<p>Ensures data is loaded with timeout.</p>
+<p><strong>Parameters:</strong> - <code>timeoutMs: Long</code> - timeout
+in milliseconds</p>
+<p><strong>Returns:</strong> <code>Boolean</code> - <code>true</code> if
+data loaded within timeout</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val success = manager.ensureBootstrap(5000) // 5 seconds</code></pre>
+<h4 id="setoverridekey-value"><code>setOverride(key, value)</code></h4>
+<p>Sets a local flag override (for debugging).</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - flag key -
+<code>value: FlagValue</code> - new value</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>manager.setOverride(&quot;dark_mode&quot;, FlagValue.Bool(true))</code></pre>
+<h4 id="clearoverridekey"><code>clearOverride(key)</code></h4>
+<p>Removes a local override.</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - flag
+key</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>manager.clearOverride(&quot;dark_mode&quot;)</code></pre>
+<h4
+id="listoverrides-liststring"><code>listOverrides(): List&lt;String&gt;</code></h4>
+<p>Returns list of all active overrides.</p>
+<p><strong>Returns:</strong> <code>List&lt;String&gt;</code> - keys of
+flags with overrides</p>
+<h4
+id="listallflags-mapstring-flagvalue"><code>listAllFlags(): Map&lt;String, FlagValue&gt;</code></h4>
+<p>Returns all available flags and their values.</p>
+<p><strong>Returns:</strong>
+<code>Map&lt;String, FlagValue&gt;</code></p>
+<h4 id="addlistenerlistener"><code>addListener(listener)</code></h4>
+<p>Adds a change listener.</p>
+<p><strong>Parameters:</strong> -
+<code>listener: FlagsListener</code></p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>manager.addListener(object : FlagsListener {
+    override fun onSnapshotUpdated(providersCount: Int) {
+        // Update UI
+    }
+    
+    override fun onOverrideChanged(key: String) {
+        // Override changed
+    }
+})</code></pre>
+<h4
+id="removelistenerlistener"><code>removeListener(listener)</code></h4>
+<p>Removes a listener.</p>
+<p><strong>Parameters:</strong> -
+<code>listener: FlagsListener</code></p>
+<hr />
+<h3 id="flagsconfig-data-class"><code>FlagsConfig</code> (Data
+Class)</h3>
+<p>Flagship configuration.</p>
+<pre class="kotlin"><code>data class FlagsConfig(
+    val appKey: String,
+    val environment: String,
+    val providers: List&lt;FlagsProvider&gt;,
+    val cache: FlagsCache = InMemoryCache(),
+    val logger: FlagsLogger = DefaultLogger(),
+    val analytics: AnalyticsAdapter? = null
+)</code></pre>
+<p><strong>Fields:</strong> - <code>appKey: String</code> - unique
+application identifier - <code>environment: String</code> - environment
+(“production”, “staging”, “dev”) -
+<code>providers: List&lt;FlagsProvider&gt;</code> - list of providers
+(in priority order) - <code>cache: FlagsCache</code> - cache for offline
+support - <code>logger: FlagsLogger</code> - logger for debugging -
+<code>analytics: AnalyticsAdapter?</code> - analytics adapter
+(optional)</p>
+<hr />
+<h3 id="evalcontext-data-class"><code>EvalContext</code> (Data
+Class)</h3>
+<p>User context for targeting.</p>
+<pre class="kotlin"><code>data class EvalContext(
+    val userId: String,
+    val attributes: Map&lt;String, Any&gt; = emptyMap()
+)</code></pre>
+<p><strong>Fields:</strong> - <code>userId: String</code> - unique user
+ID (required for experiments) -
+<code>attributes: Map&lt;String, Any&gt;</code> - additional attributes
+for targeting</p>
+<p><strong>Common attributes:</strong> - <code>region: String</code> -
+country code (“US”, “GB”, “RU”) - <code>app_version: String</code> - app
+version (“2.5.0”) - <code>os_version: String</code> - OS version
+(“14.5”) - <code>device_type: String</code> - device type (“phone”,
+“tablet”) - <code>subscription_tier: String</code> - subscription level
+(“free”, “premium”)</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val ctx = EvalContext(
+    userId = &quot;user_12345&quot;,
+    attributes = mapOf(
+        &quot;region&quot; to &quot;US&quot;,
+        &quot;app_version&quot; to &quot;2.6.0&quot;,
+        &quot;subscription_tier&quot; to &quot;premium&quot;
+    )
+)</code></pre>
+<hr />
+<h3 id="flagvalue-sealed-class"><code>FlagValue</code> (Sealed
+Class)</h3>
+<p>Typed flag value.</p>
+<pre class="kotlin"><code>sealed class FlagValue {
+    data class Bool(val value: Boolean) : FlagValue()
+    data class String(val value: kotlin.String) : FlagValue()
+    data class Int(val value: kotlin.Int) : FlagValue()
+    data class Double(val value: kotlin.Double) : FlagValue()
+    data class Json(val value: JsonElement) : FlagValue()
+}</code></pre>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val flag1 = FlagValue.Bool(true)
+val flag2 = FlagValue.String(&quot;hello&quot;)
+val flag3 = FlagValue.Int(42)
+val flag4 = FlagValue.Double(3.14)
+val flag5 = FlagValue.Json(buildJsonObject { put(&quot;key&quot;, &quot;value&quot;) })</code></pre>
+<hr />
+<h3
+id="experimentassignment-data-class"><code>ExperimentAssignment</code>
+(Data Class)</h3>
+<p>Experiment assignment result.</p>
+<pre class="kotlin"><code>data class ExperimentAssignment(
+    val experimentKey: String,
+    val variant: String,
+    val payload: JsonObject = JsonObject(emptyMap()),
+    val assignmentHash: String
+)</code></pre>
+<p><strong>Fields:</strong> - <code>experimentKey: String</code> -
+experiment key - <code>variant: String</code> - variant name (“control”,
+“variant_a”, etc.) - <code>payload: JsonObject</code> - additional
+variant data - <code>assignmentHash: String</code> - assignment hash
+(for debugging)</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>val assignment = manager.assign(&quot;button_color_test&quot;)
+println(&quot;Variant: ${assignment?.variant}&quot;) // &quot;variant_a&quot;
+val color = assignment?.payload[&quot;color&quot;]?.jsonPrimitive?.content // &quot;#FF5733&quot;</code></pre>
+<hr />
+<h3 id="flagslistener-interface"><code>FlagsListener</code>
+(Interface)</h3>
+<p>Flags change listener.</p>
+<pre class="kotlin"><code>interface FlagsListener {
+    fun onSnapshotUpdated(providersCount: Int)
+    fun onOverrideChanged(key: FlagKey)
+}</code></pre>
+<h4
+id="onsnapshotupdatedproviderscount"><code>onSnapshotUpdated(providersCount)</code></h4>
+<p>Called when snapshot is updated from providers.</p>
+<p><strong>Parameters:</strong> - <code>providersCount: Int</code> -
+number of successfully updated providers</p>
+<h4 id="onoverridechangedkey"><code>onOverrideChanged(key)</code></h4>
+<p>Called when local override changes.</p>
+<p><strong>Parameters:</strong> - <code>key: String</code> - key of
+changed flag</p>
+<hr />
+<h2 id="providers">Providers</h2>
+<h3 id="flagsprovider-interface"><code>FlagsProvider</code>
+(Interface)</h3>
+<p>Interface for custom providers.</p>
+<pre class="kotlin"><code>interface FlagsProvider {
+    val name: String
+    suspend fun fetch(context: EvalContext): ProviderSnapshot
+}</code></pre>
+<h3
+id="firebaseremoteconfigprovider"><code>FirebaseRemoteConfigProvider</code></h3>
+<pre class="kotlin"><code>class FirebaseRemoteConfigProvider(
+    private val remoteConfig: FirebaseRemoteConfig,
+    private val fetchIntervalSeconds: Long = 3600
+) : FlagsProvider</code></pre>
+<h3 id="restflagsprovider"><code>RestFlagsProvider</code></h3>
+<pre class="kotlin"><code>class RestFlagsProvider(
+    private val httpClient: HttpClient,
+    private val baseUrl: String
+) : FlagsProvider</code></pre>
+<hr />
+<h2 id="cache">Cache</h2>
+<h3 id="flagscache-interface"><code>FlagsCache</code> (Interface)</h3>
+<pre class="kotlin"><code>interface FlagsCache {
+    suspend fun save(providerName: String, snapshot: ProviderSnapshot)
+    suspend fun load(providerName: String): ProviderSnapshot?
+    suspend fun clear(providerName: String)
+    suspend fun clearAll()
+}</code></pre>
+<h3 id="inmemorycache"><code>InMemoryCache</code></h3>
+<p>Stores data in memory (not persistent).</p>
+<pre class="kotlin"><code>class InMemoryCache : FlagsCache</code></pre>
+<h3 id="persistentcache"><code>PersistentCache</code></h3>
+<p>Stores data on disk (Android: SharedPreferences, iOS:
+UserDefaults).</p>
+<pre class="kotlin"><code>class PersistentCache(
+    private val serializer: FlagsSerializer
+) : FlagsCache</code></pre>
+<hr />
+<h2 id="analytics">Analytics</h2>
+<h3 id="analyticsadapter-interface"><code>AnalyticsAdapter</code>
+(Interface)</h3>
+<pre class="kotlin"><code>interface AnalyticsAdapter {
+    fun trackEvent(event: AnalyticsEvent)
+}</code></pre>
+<h3 id="analyticsevent-sealed-class"><code>AnalyticsEvent</code> (Sealed
+Class)</h3>
+<pre class="kotlin"><code>sealed class AnalyticsEvent {
+    data class ExperimentExposure(
+        val experimentKey: String,
+        val variant: String,
+        val timestamp: Long
+    ) : AnalyticsEvent()
+}</code></pre>
+<hr />
+<h2 id="compose-ui">Compose UI</h2>
+<h3 id="flagsdashboard"><code>FlagsDashboard</code></h3>
+<pre class="kotlin"><code>@Composable
+fun FlagsDashboard(
+    manager: FlagsManager,
+    allowOverrides: Boolean = true,
+    allowEnvSwitch: Boolean = false,
+    useDarkTheme: Boolean = false
+)</code></pre>
+<p><strong>Parameters:</strong> - <code>manager: FlagsManager</code> -
+FlagsManager instance - <code>allowOverrides: Boolean</code> - allow
+local overrides - <code>allowEnvSwitch: Boolean</code> - show
+environment switcher - <code>useDarkTheme: Boolean</code> - use dark
+theme</p>
+<p><strong>Example:</strong></p>
+<pre class="kotlin"><code>@Composable
+fun DebugScreen() {
+    FlagsDashboard(
+        manager = Flags.manager(),
+        allowOverrides = true,
+        allowEnvSwitch = false
+    )
+}</code></pre>
+<hr />
+<p align="center">
+<b>Complete API documentation:
+<a href="https://maxluks.github.io/Flagship/">Dokka HTML</a></b>
+</p>
     </div>
     <footer>
         <p>Made with ❤️ by <a href="https://github.com/maxluks" target="_blank">@maxluks</a> • Licensed under MIT</p>
