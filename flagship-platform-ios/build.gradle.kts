@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.dokka)
     // Publishing: uncomment when ready to publish
     // `maven-publish`
     // signing

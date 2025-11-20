@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
+    // Skip Dokka due to Firebase dependencies
+    // alias(libs.plugins.dokka)
     kotlin("native.cocoapods")
     // Publishing: uncomment when ready to publish
     // `maven-publish`
