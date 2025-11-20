@@ -4,12 +4,20 @@
 
 <h1 align="center">🚩 Flagship</h1>
 
+<h3 align="center">
+  Kotlin Multiplatform Feature Flags & A/B Testing Library
+</h3>
+
 <p align="center">
-  <b>Flagship</b> is a modern, robust, and universal <b>Kotlin Multiplatform (KMP)</b> library for Feature Flags, A/B Testing, and Remote Configuration.
+  <b>Flagship</b> is a modern, robust, and universal <b>Kotlin Multiplatform (KMP)</b> library for <b>Feature Flags</b>, <b>Feature Toggles</b>, <b>A/B Testing</b>, and <b>Remote Configuration</b>.
 </p>
 
 <p align="center">
   It is designed to be <b>backend-agnostic</b>, supporting Firebase Remote Config, custom REST APIs, and local evaluations out of the box.
+</p>
+
+<p align="center">
+  <i>Keywords: feature flags, feature toggles, feature switches, remote config, A/B testing, experiments, kotlin multiplatform, KMP, Android, iOS, gradual rollout, kill switch</i>
 </p>
 
 <p align="center">
@@ -21,14 +29,29 @@
 
 ---
 
+## 🎯 Why Flagship?
+
+Flagship is a **Kotlin Multiplatform feature flag library** that enables you to:
+
+- 🔄 **Feature Toggles** - Enable/disable features remotely without app updates
+- 🧪 **A/B Testing** - Run experiments and compare variants with statistical significance
+- 📊 **Gradual Rollouts** - Deploy new features to a percentage of users
+- 🛡️ **Kill Switches** - Instantly disable problematic features in production
+- 🎯 **Remote Configuration** - Change app behavior and settings dynamically
+- 🚀 **Kotlin Multiplatform** - Share logic between Android and iOS
+
+Perfect for: mobile apps, KMP projects, gradual feature releases, experimentation, and runtime configuration.
+
+---
+
 ## ✨ Features
 
 - **🚀 Multiplatform**: Native support for **Android** and **iOS**.
-- **🔌 Pluggable Providers**: Use Firebase, REST, or your own custom source. Use multiple sources simultaneously with fallback strategies.
-- **🧪 A/B Testing**: Built-in experimentation engine with deterministic bucketing (MurmurHash3) and variant assignment.
+- **🔌 Pluggable Providers**: Use Firebase Remote Config, REST APIs, or custom sources. Multiple providers with fallback strategies.
+- **🧪 A/B Testing & Experiments**: Built-in experimentation engine with deterministic bucketing (MurmurHash3) and variant assignment.
 - **🎯 Advanced Targeting**: Target users by Region, App Version (SemVer), OS, Language, or Custom Attributes.
 - **🛡️ Safety First**: Offline-first architecture, automatic rollback to last good snapshot, and thread-safe concurrency.
-- **📊 Analytics Ready**: Hooks for exposure tracking (assignment events) to integrate with Google Analytics, Segment, or Mixpanel.
+- **📊 Analytics Ready**: Hooks for exposure tracking (assignment events) to integrate with Google Analytics, Amplitude, Mixpanel, or Segment.
 - **🕵️ Debug Dashboard**: A drop-in **Compose Multiplatform** UI for inspecting flags, forcing overrides, and diagnostics.
 
 ---
