@@ -287,5 +287,5 @@ After successful migration (2-4 weeks):
 ---
 
 <p align="center">
-  <b>Need migration help? Create an Issue on <a href="https://github.com/maxluks/Flagship/issues">GitHub</a>!</b>
+  <b>Need migration help? Create an Issue on <a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b>
 </p>
