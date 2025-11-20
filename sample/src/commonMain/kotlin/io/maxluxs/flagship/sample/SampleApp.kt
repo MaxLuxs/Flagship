@@ -58,6 +58,8 @@ import kotlinx.coroutines.launch
 fun SampleApp() {
     var currentScreen by remember { mutableStateOf<Screen>(Screen.Home) }
     var flagsState by remember { mutableStateOf<FlagsState>(FlagsState.Loading) }
+    var showProviderSelection by remember { mutableStateOf(false) }
+    var currentProvider by remember { mutableStateOf(ProviderPreferences.getSelectedProvider()) }
 
     // Initialize flags manager
     LaunchedEffect(Unit) {
@@ -73,6 +75,24 @@ fun SampleApp() {
     }
 
     FlagshipTheme(useDarkTheme = false) {
+        if (showProviderSelection || currentScreen == Screen.ProviderSelection) {
+            ProviderSelectionScreen(
+                currentProvider = currentProvider,
+                onProviderSelected = { newProvider ->
+                    ProviderPreferences.saveSelectedProvider(newProvider)
+                    currentProvider = newProvider
+                    showProviderSelection = false
+                    // TODO: Reinitialize Flags with new provider
+                    println("Provider switched to: ${newProvider.displayName}")
+                },
+                onContinue = {
+                    showProviderSelection = false
+                    currentScreen = Screen.Home
+                }
+            )
+            return@FlagshipTheme
+        }
+        
         if (flagsState != FlagsState.Ready) {
             NotInitializedScreen(isLoading = flagsState == FlagsState.Loading)
             return@FlagshipTheme
@@ -83,8 +103,11 @@ fun SampleApp() {
                 TopAppBar(
                     title = {
                         Text(
-                            if (currentScreen == Screen.Dashboard) "Debug Dashboard"
-                            else "Flagship Sample"
+                            when (currentScreen) {
+                                Screen.Dashboard -> "Debug Dashboard"
+                                Screen.ProviderSelection -> "Provider Selection"
+                                else -> "Flagship Sample"
+                            }
                         )
                     },
                     navigationIcon = {
@@ -96,6 +119,18 @@ fun SampleApp() {
                     },
                     actions = {
                         if (currentScreen == Screen.Home) {
+                            // Provider indicator
+                            IconButton(onClick = { showProviderSelection = true }) {
+                                Icon(
+                                    when (currentProvider) {
+                                        ProviderType.MOCK -> Icons.Default.Science
+                                        ProviderType.REST -> Icons.Default.Api
+                                        ProviderType.FIREBASE -> Icons.Default.Cloud
+                                        ProviderType.LAUNCHDARKLY -> Icons.Default.Rocket
+                                    },
+                                    contentDescription = "Change Provider"
+                                )
+                            }
                             IconButton(onClick = { currentScreen = Screen.Dashboard }) {
                                 Icon(Icons.Default.Settings, "Dashboard")
                             }
@@ -110,6 +145,7 @@ fun SampleApp() {
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (currentScreen) {
                     Screen.Home -> HomeScreen(
+                        currentProvider = currentProvider,
                         onNavigateToDashboard = { currentScreen = Screen.Dashboard }
                     )
 
@@ -121,6 +157,10 @@ fun SampleApp() {
                             allowEnvSwitch = false,
                             useDarkTheme = false
                         )
+                    }
+                    
+                    Screen.ProviderSelection -> {
+                        // Handled above
                     }
                 }
             }
@@ -134,6 +174,7 @@ enum class FlagsState {
 
 @Composable
 fun HomeScreen(
+    currentProvider: ProviderType,
     onNavigateToDashboard: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -220,6 +261,35 @@ fun HomeScreen(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            Spacer(Modifier.height(4.dp))
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        when (currentProvider) {
+                            ProviderType.MOCK -> Icons.Default.Science
+                            ProviderType.REST -> Icons.Default.Api
+                            ProviderType.FIREBASE -> Icons.Default.Cloud
+                            ProviderType.LAUNCHDARKLY -> Icons.Default.Rocket
+                        },
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        "Provider: ${currentProvider.displayName}",
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
         }
 
         // Actions
@@ -371,6 +441,7 @@ fun HomeScreen(
 }
 
 sealed class Screen {
+    data object ProviderSelection : Screen()
     data object Home : Screen()
     data object Dashboard : Screen()
 }
