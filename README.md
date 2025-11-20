@@ -137,6 +137,72 @@ when (assignment?.variant) {
 
 ---
 
+## ⚙️ Setting Up Remote Config
+
+### Firebase Remote Config
+
+1. **Add Firebase to your project** - Follow [Firebase Setup Guide](https://firebase.google.com/docs/android/setup)
+
+2. **In Firebase Console**, create parameters:
+   - `flagship_flags` - JSON object with your feature flags
+   - `flagship_experiments` - JSON object with your A/B tests
+
+3. **Example Firebase Console JSON**:
+
+```json
+{
+  "flagship_flags": {
+    "new_payment_flow": true,
+    "dark_mode_enabled": false,
+    "api_timeout": 5000
+  },
+  "flagship_experiments": {
+    "checkout_test": {
+      "variants": [
+        { "name": "control", "weight": 0.5 },
+        { "name": "variant_a", "weight": 0.5 }
+      ]
+    }
+  }
+}
+```
+
+4. **That's it!** Flagship will automatically parse and use these values.
+
+📖 **Full guide**: [Firebase Integration Guide](docs/USAGE_GUIDE.md#firebase-remote-config)
+
+### REST API Provider
+
+If you have your own backend, just return JSON in this format:
+
+```json
+{
+  "revision": "abc123",
+  "fetchedAt": 1699999999999,
+  "ttlMs": 900000,
+  "flags": {
+    "new_payment_flow": { "type": "bool", "value": true },
+    "api_timeout": { "type": "int", "value": 5000 }
+  },
+  "experiments": {
+    "checkout_test": {
+      "variants": [
+        { "name": "control", "weight": 0.5 },
+        { "name": "variant_a", "weight": 0.5 }
+      ],
+      "targeting": {
+        "type": "region_in",
+        "regions": ["US", "CA"]
+      }
+    }
+  }
+}
+```
+
+📖 **Full API docs**: [REST Provider Guide](docs/USAGE_GUIDE.md#rest-provider)
+
+---
+
 ## 🧩 Modules
 
 | Module | Description |
