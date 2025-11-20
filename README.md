@@ -426,6 +426,27 @@ Flagship uses a **Composite Provider** strategy.
 
 ---
 
+## 🗺️ Roadmap
+
+Future development plans:
+
+1. **Stable API for Android and iOS**
+   - Finalize and stabilize the public API
+   - Ensure backward compatibility
+   - Improve documentation and usage examples
+
+2. **Web and Desktop Platform Support**
+   - Add targets for JS (Web) and Native (Desktop)
+   - Create artifacts for web applications
+   - Support Kotlin/JS and Kotlin/Native Desktop
+
+3. **Custom REST Server for Flags**
+   - Develop a backend server for flag management
+   - REST API for CRUD operations with flags and experiments
+   - Administrative dashboard for management
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
