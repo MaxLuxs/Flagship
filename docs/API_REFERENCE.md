@@ -528,6 +528,6 @@ fun DebugScreen() {
 ---
 
 <p align="center">
-  <b>Complete API documentation: <a href="https://maxluks.github.io/Flagship/">Dokka HTML</a></b>
+  <b>Complete API documentation: <a href="https://maxluxs.github.io/Flagship/">Dokka HTML</a></b>
 </p>
 
