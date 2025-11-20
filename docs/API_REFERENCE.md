@@ -4,7 +4,7 @@
 
 <h1 align="center">📚 API Reference</h1>
 
-Полный справочник по публичному API библиотеки Flagship.
+Complete reference for the Flagship library public API.
 
 ---
 
@@ -12,7 +12,7 @@
 
 ### `Flags` (Singleton)
 
-Глобальная точка доступа к Flagship.
+Global access point to Flagship.
 
 ```kotlin
 object Flags {
@@ -23,13 +23,13 @@ object Flags {
 
 #### `configure(config: FlagsConfig)`
 
-Инициализирует Flagship с заданной конфигурацией. Вызовите **один раз** при старте приложения.
+Initializes Flagship with the given configuration. Call **once** at app startup.
 
 **Parameters:**
-- `config: FlagsConfig` - конфигурация библиотеки
+- `config: FlagsConfig` - library configuration
 
 **Throws:**
-- `IllegalStateException` - если уже был вызван `configure()`
+- `IllegalStateException` - if `configure()` was already called
 
 **Example:**
 ```kotlin
@@ -46,12 +46,12 @@ Flags.configure(
 
 #### `manager(): FlagsManager`
 
-Возвращает экземпляр `FlagsManager` для работы с флагами.
+Returns a `FlagsManager` instance for working with flags.
 
 **Returns:** `FlagsManager`
 
 **Throws:**
-- `IllegalStateException` - если `configure()` не был вызван
+- `IllegalStateException` - if `configure()` was not called
 
 **Example:**
 ```kotlin
@@ -62,7 +62,7 @@ val manager = Flags.manager()
 
 ### `FlagsManager` (Interface)
 
-Основной интерфейс для работы с флагами и экспериментами.
+Main interface for working with flags and experiments.
 
 ```kotlin
 interface FlagsManager {
@@ -94,14 +94,14 @@ interface FlagsManager {
 
 #### `isEnabled(key, default, ctx): Boolean`
 
-Проверяет, включён ли feature flag.
+Checks if a feature flag is enabled.
 
 **Parameters:**
-- `key: String` - ключ флага
-- `default: Boolean = false` - значение по умолчанию (если флаг не найден)
-- `ctx: EvalContext? = null` - контекст для таргетинга (опционально)
+- `key: String` - flag key
+- `default: Boolean = false` - default value (if flag not found)
+- `ctx: EvalContext? = null` - context for targeting (optional)
 
-**Returns:** `Boolean` - `true` если флаг включён, иначе `false`
+**Returns:** `Boolean` - `true` if flag is enabled, otherwise `false`
 
 **Example:**
 ```kotlin
@@ -112,17 +112,17 @@ if (manager.isEnabled("dark_mode")) {
 
 #### `value<T>(key, default, ctx): T`
 
-Получает типизированное значение флага.
+Gets a typed flag value.
 
 **Type Parameters:**
-- `T` - тип значения (String, Int, Double, Boolean, JsonElement)
+- `T` - value type (String, Int, Double, Boolean, JsonElement)
 
 **Parameters:**
-- `key: String` - ключ флага
-- `default: T` - значение по умолчанию
-- `ctx: EvalContext? = null` - контекст для таргетинга
+- `key: String` - flag key
+- `default: T` - default value
+- `ctx: EvalContext? = null` - context for targeting
 
-**Returns:** `T` - значение флага или `default` если не найден/неверный тип
+**Returns:** `T` - flag value or `default` if not found/wrong type
 
 **Example:**
 ```kotlin
@@ -132,13 +132,13 @@ val apiUrl: String = manager.value("api_base_url", default = "https://api.exampl
 
 #### `assign(key, ctx): ExperimentAssignment?`
 
-Назначает пользователя в вариант эксперимента.
+Assigns a user to an experiment variant.
 
 **Parameters:**
-- `key: String` - ключ эксперимента
-- `ctx: EvalContext? = null` - контекст пользователя (userId обязателен!)
+- `key: String` - experiment key
+- `ctx: EvalContext? = null` - user context (userId required!)
 
-**Returns:** `ExperimentAssignment?` - назначение или `null` если эксперимент не найден
+**Returns:** `ExperimentAssignment?` - assignment or `null` if experiment not found
 
 **Example:**
 ```kotlin
@@ -155,25 +155,25 @@ when (assignment?.variant) {
 
 #### `bootstrap(): Boolean`
 
-Асинхронно загружает данные со всех провайдеров.
+Asynchronously loads data from all providers.
 
-**Returns:** `Boolean` - `true` если загрузка успешна
+**Returns:** `Boolean` - `true` if loading successful
 
 **Example:**
 ```kotlin
 lifecycleScope.launch {
     val success = manager.bootstrap()
     if (success) {
-        // Данные загружены
+        // Data loaded
     }
 }
 ```
 
 #### `refresh(): Boolean`
 
-Принудительно обновляет данные со всех провайдеров (игнорируя TTL).
+Forces data refresh from all providers (ignoring TTL).
 
-**Returns:** `Boolean` - `true` если обновление успешно
+**Returns:** `Boolean` - `true` if refresh successful
 
 **Example:**
 ```kotlin
@@ -184,25 +184,25 @@ lifecycleScope.launch {
 
 #### `ensureBootstrap(timeoutMs): Boolean`
 
-Гарантирует загрузку данных с таймаутом.
+Ensures data is loaded with timeout.
 
 **Parameters:**
-- `timeoutMs: Long` - таймаут в миллисекундах
+- `timeoutMs: Long` - timeout in milliseconds
 
-**Returns:** `Boolean` - `true` если данные загружены в пределах таймаута
+**Returns:** `Boolean` - `true` if data loaded within timeout
 
 **Example:**
 ```kotlin
-val success = manager.ensureBootstrap(5000) // 5 секунд
+val success = manager.ensureBootstrap(5000) // 5 seconds
 ```
 
 #### `setOverride(key, value)`
 
-Устанавливает локальное переопределение флага (для отладки).
+Sets a local flag override (for debugging).
 
 **Parameters:**
-- `key: String` - ключ флага
-- `value: FlagValue` - новое значение
+- `key: String` - flag key
+- `value: FlagValue` - new value
 
 **Example:**
 ```kotlin
@@ -211,10 +211,10 @@ manager.setOverride("dark_mode", FlagValue.Bool(true))
 
 #### `clearOverride(key)`
 
-Удаляет локальное переопределение.
+Removes a local override.
 
 **Parameters:**
-- `key: String` - ключ флага
+- `key: String` - flag key
 
 **Example:**
 ```kotlin
@@ -223,19 +223,19 @@ manager.clearOverride("dark_mode")
 
 #### `listOverrides(): List<String>`
 
-Возвращает список всех активных переопределений.
+Returns list of all active overrides.
 
-**Returns:** `List<String>` - ключи флагов с переопределениями
+**Returns:** `List<String>` - keys of flags with overrides
 
 #### `listAllFlags(): Map<String, FlagValue>`
 
-Возвращает все доступные флаги и их значения.
+Returns all available flags and their values.
 
 **Returns:** `Map<String, FlagValue>`
 
 #### `addListener(listener)`
 
-Добавляет слушателя изменений.
+Adds a change listener.
 
 **Parameters:**
 - `listener: FlagsListener`
@@ -244,18 +244,18 @@ manager.clearOverride("dark_mode")
 ```kotlin
 manager.addListener(object : FlagsListener {
     override fun onSnapshotUpdated(providersCount: Int) {
-        // Обновить UI
+        // Update UI
     }
     
     override fun onOverrideChanged(key: String) {
-        // Override изменён
+        // Override changed
     }
 })
 ```
 
 #### `removeListener(listener)`
 
-Удаляет слушателя.
+Removes a listener.
 
 **Parameters:**
 - `listener: FlagsListener`
@@ -264,7 +264,7 @@ manager.addListener(object : FlagsListener {
 
 ### `FlagsConfig` (Data Class)
 
-Конфигурация Flagship.
+Flagship configuration.
 
 ```kotlin
 data class FlagsConfig(
@@ -278,18 +278,18 @@ data class FlagsConfig(
 ```
 
 **Fields:**
-- `appKey: String` - уникальный идентификатор приложения
-- `environment: String` - окружение ("production", "staging", "dev")
-- `providers: List<FlagsProvider>` - список провайдеров (в порядке приоритета)
-- `cache: FlagsCache` - кэш для offline поддержки
-- `logger: FlagsLogger` - логгер для отладки
-- `analytics: AnalyticsAdapter?` - адаптер для аналитики (опционально)
+- `appKey: String` - unique application identifier
+- `environment: String` - environment ("production", "staging", "dev")
+- `providers: List<FlagsProvider>` - list of providers (in priority order)
+- `cache: FlagsCache` - cache for offline support
+- `logger: FlagsLogger` - logger for debugging
+- `analytics: AnalyticsAdapter?` - analytics adapter (optional)
 
 ---
 
 ### `EvalContext` (Data Class)
 
-Контекст пользователя для таргетинга.
+User context for targeting.
 
 ```kotlin
 data class EvalContext(
@@ -299,15 +299,15 @@ data class EvalContext(
 ```
 
 **Fields:**
-- `userId: String` - уникальный ID пользователя (обязательно для экспериментов)
-- `attributes: Map<String, Any>` - дополнительные атрибуты для таргетинга
+- `userId: String` - unique user ID (required for experiments)
+- `attributes: Map<String, Any>` - additional attributes for targeting
 
 **Common attributes:**
-- `region: String` - код страны ("US", "GB", "RU")
-- `app_version: String` - версия приложения ("2.5.0")
-- `os_version: String` - версия ОС ("14.5")
-- `device_type: String` - тип устройства ("phone", "tablet")
-- `subscription_tier: String` - уровень подписки ("free", "premium")
+- `region: String` - country code ("US", "GB", "RU")
+- `app_version: String` - app version ("2.5.0")
+- `os_version: String` - OS version ("14.5")
+- `device_type: String` - device type ("phone", "tablet")
+- `subscription_tier: String` - subscription level ("free", "premium")
 
 **Example:**
 ```kotlin
@@ -325,7 +325,7 @@ val ctx = EvalContext(
 
 ### `FlagValue` (Sealed Class)
 
-Типизированное значение флага.
+Typed flag value.
 
 ```kotlin
 sealed class FlagValue {
@@ -350,7 +350,7 @@ val flag5 = FlagValue.Json(buildJsonObject { put("key", "value") })
 
 ### `ExperimentAssignment` (Data Class)
 
-Результат назначения в эксперимент.
+Experiment assignment result.
 
 ```kotlin
 data class ExperimentAssignment(
@@ -362,10 +362,10 @@ data class ExperimentAssignment(
 ```
 
 **Fields:**
-- `experimentKey: String` - ключ эксперимента
-- `variant: String` - название варианта ("control", "variant_a", etc.)
-- `payload: JsonObject` - дополнительные данные варианта
-- `assignmentHash: String` - хэш назначения (для отладки)
+- `experimentKey: String` - experiment key
+- `variant: String` - variant name ("control", "variant_a", etc.)
+- `payload: JsonObject` - additional variant data
+- `assignmentHash: String` - assignment hash (for debugging)
 
 **Example:**
 ```kotlin
@@ -378,7 +378,7 @@ val color = assignment?.payload["color"]?.jsonPrimitive?.content // "#FF5733"
 
 ### `FlagsListener` (Interface)
 
-Слушатель изменений флагов.
+Flags change listener.
 
 ```kotlin
 interface FlagsListener {
@@ -389,17 +389,17 @@ interface FlagsListener {
 
 #### `onSnapshotUpdated(providersCount)`
 
-Вызывается при обновлении snapshot'а с провайдеров.
+Called when snapshot is updated from providers.
 
 **Parameters:**
-- `providersCount: Int` - количество успешно обновлённых провайдеров
+- `providersCount: Int` - number of successfully updated providers
 
 #### `onOverrideChanged(key)`
 
-Вызывается при изменении локального override.
+Called when local override changes.
 
 **Parameters:**
-- `key: String` - ключ изменённого флага
+- `key: String` - key of changed flag
 
 ---
 
@@ -407,7 +407,7 @@ interface FlagsListener {
 
 ### `FlagsProvider` (Interface)
 
-Интерфейс для кастомных провайдеров.
+Interface for custom providers.
 
 ```kotlin
 interface FlagsProvider {
@@ -451,7 +451,7 @@ interface FlagsCache {
 
 ### `InMemoryCache`
 
-Хранит данные в памяти (не персистентен).
+Stores data in memory (not persistent).
 
 ```kotlin
 class InMemoryCache : FlagsCache
@@ -459,7 +459,7 @@ class InMemoryCache : FlagsCache
 
 ### `PersistentCache`
 
-Хранит данные на диске (Android: SharedPreferences, iOS: UserDefaults).
+Stores data on disk (Android: SharedPreferences, iOS: UserDefaults).
 
 ```kotlin
 class PersistentCache(
@@ -508,10 +508,10 @@ fun FlagsDashboard(
 ```
 
 **Parameters:**
-- `manager: FlagsManager` - экземпляр FlagsManager
-- `allowOverrides: Boolean` - разрешить ли локальные overrides
-- `allowEnvSwitch: Boolean` - показывать ли переключатель окружения
-- `useDarkTheme: Boolean` - использовать тёмную тему
+- `manager: FlagsManager` - FlagsManager instance
+- `allowOverrides: Boolean` - allow local overrides
+- `allowEnvSwitch: Boolean` - show environment switcher
+- `useDarkTheme: Boolean` - use dark theme
 
 **Example:**
 ```kotlin
@@ -528,6 +528,6 @@ fun DebugScreen() {
 ---
 
 <p align="center">
-  <b>Полная документация API: <a href="https://maxluxs.github.io/Flagship/">Dokka HTML</a></b>
+  <b>Complete API documentation: <a href="https://maxluxs.github.io/Flagship/">Dokka HTML</a></b>
 </p>
 

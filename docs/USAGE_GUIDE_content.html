@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Flagship Usage Guide</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Flagship Usage Guide</h1>
+</header>
+<p align="center">
+<img src="images/flagship_icon.svg" width="150" height="150" alt="Flagship Logo">
+</p>
+<h1 align="center">
+📖 Flagship Usage Guide
+</h1>
+<p>Complete guide for using the Flagship library in your Android and iOS
+applications.</p>
+<hr />
+<h2 id="table-of-contents">📋 Table of Contents</h2>
+<ol type="1">
+<li><a href="#-quick-start">Quick Start</a></li>
+<li><a href="#-installation">Installation</a></li>
+<li><a href="#-initialization">Initialization</a></li>
+<li><a href="#-feature-flags">Feature Flags</a></li>
+<li><a href="#-ab-testing-experiments">A/B Testing
+(Experiments)</a></li>
+<li><a href="#-targeting-rules">Targeting Rules</a></li>
+<li><a href="#-providers">Providers</a></li>
+<li><a href="#-caching--offline-mode">Caching &amp; Offline
+Mode</a></li>
+<li><a href="#-debug-dashboard">Debug Dashboard</a></li>
+<li><a href="#-analytics-integration">Analytics Integration</a></li>
+<li><a href="#-best-practices">Best Practices</a></li>
+<li><a href="#-faq">FAQ</a></li>
+</ol>
+<hr />
+<h2 id="quick-start">🚀 Quick Start</h2>
+<h3 id="android-kotlin">Android (Kotlin)</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 1. In Application class</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyApp <span class="op">:</span> <span class="dt">Application</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreate</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">super</span><span class="op">.</span>onCreate<span class="op">()</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            appKey <span class="op">=</span> <span class="st">&quot;my-banking-app&quot;</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            environment <span class="op">=</span> <span class="st">&quot;production&quot;</span><span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            providers <span class="op">=</span> listOf<span class="op">(</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                FirebaseRemoteConfigProvider<span class="op">(</span>Firebase<span class="op">.</span>remoteConfig<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">),</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            cache <span class="op">=</span> PersistentCache<span class="op">(</span>FlagsSerializer<span class="op">()),</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            logger <span class="op">=</span> DefaultLogger<span class="op">()</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        Flags<span class="op">.</span>configure<span class="op">(</span>config<span class="op">)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">// 2. In your app code</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">flags</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">// Feature flag</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>flags<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_payment_flow&quot;</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    NewPaymentScreen<span class="op">()</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    LegacyPaymentScreen<span class="op">()</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">// A/B experiment</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> flags<span class="op">.</span>assign<span class="op">(</span><span class="st">&quot;checkout_experiment&quot;</span><span class="op">)</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">when</span> <span class="op">(</span>assignment<span class="op">?.</span>variant<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;control&quot;</span> <span class="op">-&gt;</span> OriginalCheckout<span class="op">()</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;variant_a&quot;</span> <span class="op">-&gt;</span> NewCheckoutA<span class="op">()</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;variant_b&quot;</span> <span class="op">-&gt;</span> NewCheckoutB<span class="op">()</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="ios-swift">iOS (Swift)</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode swift"><code class="sourceCode swift"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 1. In AppDelegate or App.swift</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">Flagship</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">@main</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> MyApp<span class="op">:</span> <span class="dt">App</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">init</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        FlagshipIOSInitializer<span class="op">.</span>shared<span class="op">.</span>initialize<span class="op">()</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> <span class="va">body</span><span class="op">:</span> some Scene <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        WindowGroup <span class="op">{</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            ContentView<span class="op">()</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">// 2. In SwiftUI View</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">Flagship</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> PaymentView<span class="op">:</span> <span class="dt">View</span> <span class="op">{</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="va">flags</span> <span class="op">=</span> Flags<span class="op">.</span>shared<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> <span class="va">body</span><span class="op">:</span> some View <span class="op">{</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> flags<span class="op">.</span>isEnabled<span class="op">(</span>key<span class="op">:</span> <span class="st">&quot;new_payment_flow&quot;</span><span class="op">,</span> <span class="kw">default</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> ctx<span class="op">:</span> <span class="kw">nil</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            NewPaymentView<span class="op">()</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>            LegacyPaymentView<span class="op">()</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="installation">📦 Installation</h2>
+<h3 id="android">Android</h3>
+<ol type="1">
+<li>Add modules to <code>settings.gradle.kts</code>:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>include<span class="op">(</span><span class="st">&quot;:flagship-core&quot;</span><span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>include<span class="op">(</span><span class="st">&quot;:flagship-provider-firebase&quot;</span><span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>include<span class="op">(</span><span class="st">&quot;:flagship-ui-compose&quot;</span><span class="op">)</span> <span class="co">// optional</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>In <code>build.gradle.kts</code>:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dependencies <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    implementation<span class="op">(</span>project<span class="op">(</span><span class="st">&quot;:flagship-core&quot;</span><span class="op">))</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    implementation<span class="op">(</span>project<span class="op">(</span><span class="st">&quot;:flagship-provider-firebase&quot;</span><span class="op">))</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    implementation<span class="op">(</span>project<span class="op">(</span><span class="st">&quot;:flagship-ui-compose&quot;</span><span class="op">))</span> <span class="co">// for debug dashboard</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="ios-swift-package-manager">iOS (Swift Package Manager)</h3>
+<ol type="1">
+<li>In Xcode: <strong>File &gt; Add Packages…</strong></li>
+<li>URL: <code>https://github.com/maxluxs/Flagship</code></li>
+<li>Version: <code>1.0.0</code></li>
+<li>Add Package</li>
+</ol>
+<p>Or in <code>Package.swift</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode swift"><code class="sourceCode swift"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dependencies<span class="op">:</span> <span class="op">[</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>package<span class="op">(</span>url<span class="op">:</span> <span class="st">&quot;https://github.com/maxluxs/Flagship&quot;</span><span class="op">,</span> from<span class="op">:</span> <span class="st">&quot;1.0.0&quot;</span><span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span></code></pre></div>
+<hr />
+<h2 id="initialization">⚙️ Initialization</h2>
+<h3 id="basic-configuration">Basic Configuration</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    appKey <span class="op">=</span> <span class="st">&quot;my-app&quot;</span><span class="op">,</span>           <span class="co">// Unique app ID</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    environment <span class="op">=</span> <span class="st">&quot;production&quot;</span><span class="op">,</span>   <span class="co">// production, staging, dev</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    providers <span class="op">=</span> listOf<span class="op">(</span><span class="co">/* ... */</span><span class="op">),</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    cache <span class="op">=</span> InMemoryCache<span class="op">(),</span>     <span class="co">// or PersistentCache()</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> DefaultLogger<span class="op">()</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Flags<span class="op">.</span>configure<span class="op">(</span>config<span class="op">)</span></span></code></pre></div>
+<h3 id="with-multiple-providers">With Multiple Providers</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    appKey <span class="op">=</span> <span class="st">&quot;my-app&quot;</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    environment <span class="op">=</span> <span class="st">&quot;production&quot;</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    providers <span class="op">=</span> listOf<span class="op">(</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        FirebaseRemoteConfigProvider<span class="op">(</span>Firebase<span class="op">.</span>remoteConfig<span class="op">),</span> <span class="co">// Priority 1</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        RestFlagsProvider<span class="op">(</span>httpClient<span class="op">,</span> <span class="st">&quot;https://api.example.com/flags&quot;</span><span class="op">)</span> <span class="co">// Fallback</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">),</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    cache <span class="op">=</span> PersistentCache<span class="op">(</span>FlagsSerializer<span class="op">()),</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> DefaultLogger<span class="op">()</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<p><strong>Important:</strong> Providers are processed in order. The
+first successful result is used.</p>
+<h3 id="async-loading">Async Loading</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In a coroutine</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lifecycleScope<span class="op">.</span>launch <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Attempt to load data (with 5 second timeout)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">success</span> <span class="op">=</span> manager<span class="op">.</span>ensureBootstrap<span class="op">(</span>timeoutMs <span class="op">=</span> <span class="dv">5000</span><span class="op">)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>success<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Data loaded, can use flags</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Using cache or default values</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="feature-flags">🎯 Feature Flags</h2>
+<h3 id="simple-boolean-flag">Simple Boolean Flag</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;dark_mode&quot;</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Enable dark theme</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="typed-values">Typed Values</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// String</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">apiUrl</span><span class="op">:</span> <span class="kw">String</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;api_base_url&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="st">&quot;https://api.example.com&quot;</span><span class="op">)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Int</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">timeout</span><span class="op">:</span> <span class="kw">Int</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;request_timeout&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="dv">5000</span><span class="op">)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Double</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">discount</span><span class="op">:</span> <span class="kw">Double</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;promo_discount&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">// JSON</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span><span class="op">:</span> JsonObject <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;feature_config&quot;</span><span class="op">,</span> default <span class="op">=</span> buildJsonObject <span class="op">{})</span></span></code></pre></div>
+<h3 id="type-safety">Type Safety</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// If type doesn&#39;t match, default value is returned</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">value</span><span class="op">:</span> <span class="kw">String</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;some_int_flag&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="st">&quot;fallback&quot;</span><span class="op">)</span> <span class="co">// &quot;fallback&quot;</span></span></code></pre></div>
+<h3 id="reactive-updates-in-compose">Reactive Updates in Compose</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Composable</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fun</span> <span class="fu">FeatureScreen</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> <span class="va">featureEnabled</span> <span class="kw">by</span> remember <span class="op">{</span> mutableStateOf<span class="op">(</span>manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_feature&quot;</span><span class="op">))</span> <span class="op">}</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Listen for changes</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    DisposableEffect<span class="op">(</span><span class="kw">Unit</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">val</span> <span class="va">listener</span> <span class="op">=</span> <span class="kw">object</span> <span class="op">:</span> <span class="dt">FlagsListener</span> <span class="op">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onSnapshotUpdated</span><span class="op">(</span><span class="va">providersCount</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                featureEnabled <span class="op">=</span> manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_feature&quot;</span><span class="op">)</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        manager<span class="op">.</span>addListener<span class="op">(</span>listener<span class="op">)</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        onDispose <span class="op">{</span> manager<span class="op">.</span>removeListener<span class="op">(</span>listener<span class="op">)</span> <span class="op">}</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>featureEnabled<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        NewFeatureUI<span class="op">()</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        OldFeatureUI<span class="op">()</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="ab-testing-experiments">🧪 A/B Testing (Experiments)</h2>
+<h3 id="basic-usage">Basic Usage</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> <span class="st">&quot;checkout_experiment&quot;</span><span class="op">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    ctx <span class="op">=</span> EvalContext<span class="op">(</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        userId <span class="op">=</span> <span class="st">&quot;user_12345&quot;</span><span class="op">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        attributes <span class="op">=</span> mapOf<span class="op">(</span><span class="st">&quot;tier&quot;</span> to <span class="st">&quot;premium&quot;</span><span class="op">)</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">when</span> <span class="op">(</span>assignment<span class="op">?.</span>variant<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;control&quot;</span> <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Original version (50%)</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        OriginalCheckout<span class="op">()</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;variant_a&quot;</span> <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Variant A (25%)</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        CheckoutVariantA<span class="op">()</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;variant_b&quot;</span> <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Variant B (25%)</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        CheckoutVariantB<span class="op">()</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Fallback (if experiment is disabled)</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        OriginalCheckout<span class="op">()</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="with-payload-data">With Payload Data</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span><span class="st">&quot;button_color_test&quot;</span><span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>assignment<span class="op">?.</span>let <span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">buttonColor</span> <span class="op">=</span> it<span class="op">.</span>payload<span class="op">[</span><span class="st">&quot;color&quot;</span><span class="op">]?.</span>jsonPrimitive<span class="op">?.</span>content <span class="op">?:</span> <span class="st">&quot;#007AFF&quot;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    Button<span class="op">(</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        colors <span class="op">=</span> ButtonDefaults<span class="op">.</span>buttonColors<span class="op">(</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            containerColor <span class="op">=</span> Color<span class="op">(</span>parseColor<span class="op">(</span>buttonColor<span class="op">))</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> <span class="op">{</span> Text<span class="op">(</span><span class="st">&quot;Buy Now&quot;</span><span class="op">)</span> <span class="op">}</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="deterministic-bucketing">Deterministic Bucketing</h3>
+<p>Flagship uses <strong>MurmurHash3</strong> for deterministic
+distribution: - Same <code>userId</code> always falls into the same
+group - Uniform distribution (50/50, 33/33/34, etc.) - Cross-platform
+consistency (Android ↔︎ iOS)</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Same user always gets the same variant</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">user1</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span><span class="st">&quot;exp&quot;</span><span class="op">,</span> EvalContext<span class="op">(</span>userId <span class="op">=</span> <span class="st">&quot;user_123&quot;</span><span class="op">))</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">user2</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span><span class="st">&quot;exp&quot;</span><span class="op">,</span> EvalContext<span class="op">(</span>userId <span class="op">=</span> <span class="st">&quot;user_123&quot;</span><span class="op">))</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">// user1.variant == user2.variant ✅</span></span></code></pre></div>
+<h3 id="exposure-tracking">Exposure Tracking</h3>
+<p>Flagship automatically sends exposure events for A/B tests:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    analytics <span class="op">=</span> <span class="kw">object</span> <span class="op">:</span> <span class="dt">AnalyticsAdapter</span> <span class="op">{</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">trackEvent</span><span class="op">(</span><span class="va">event</span><span class="op">:</span> <span class="dt">AnalyticsEvent</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">when</span> <span class="op">(</span>event<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                <span class="kw">is</span> AnalyticsEvent<span class="op">.</span>ExperimentExposure <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// Send to Firebase Analytics, Amplitude, etc.</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                    firebaseAnalytics<span class="op">.</span>logEvent<span class="op">(</span><span class="st">&quot;experiment_exposure&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                        param<span class="op">(</span><span class="st">&quot;experiment_key&quot;</span><span class="op">,</span> event<span class="op">.</span>experimentKey<span class="op">)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                        param<span class="op">(</span><span class="st">&quot;variant&quot;</span><span class="op">,</span> event<span class="op">.</span>variant<span class="op">)</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<hr />
+<h2 id="targeting-rules">🎯 Targeting Rules</h2>
+<h3 id="region-based-targeting">Region-based Targeting</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Server returns experiment with targeting:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">// &quot;targeting&quot;: {</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;type&quot;: &quot;region_in&quot;,</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;regions&quot;: [&quot;US&quot;, &quot;CA&quot;, &quot;GB&quot;]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;premium_feature_test&quot;</span><span class="op">,</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    ctx <span class="op">=</span> EvalContext<span class="op">(</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        userId <span class="op">=</span> <span class="st">&quot;user_123&quot;</span><span class="op">,</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        attributes <span class="op">=</span> mapOf<span class="op">(</span><span class="st">&quot;region&quot;</span> to <span class="st">&quot;US&quot;</span><span class="op">)</span> <span class="co">// User from US</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">// assignment != null ✅ (if user is from US, CA or GB)</span></span></code></pre></div>
+<h3 id="app-version-targeting">App Version Targeting</h3>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// &quot;targeting&quot;: {</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;type&quot;: &quot;app_version_gte&quot;,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;version&quot;: &quot;2.5.0&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;new_ui_rollout&quot;</span><span class="op">,</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    ctx <span class="op">=</span> EvalContext<span class="op">(</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        userId <span class="op">=</span> <span class="st">&quot;user_123&quot;</span><span class="op">,</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        attributes <span class="op">=</span> mapOf<span class="op">(</span><span class="st">&quot;app_version&quot;</span> to <span class="st">&quot;2.6.1&quot;</span><span class="op">)</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">// assignment != null ✅ (2.6.1 &gt;= 2.5.0)</span></span></code></pre></div>
+<p>Supports <strong>Semantic Versioning</strong> (SemVer): -
+<code>1.0.0</code> &gt; <code>1.0.0-beta</code> - <code>2.1.0</code>
+&gt; <code>2.0.9</code> - <code>1.0.0-rc.2</code> &gt;
+<code>1.0.0-beta.1</code></p>
+<h3 id="custom-attributes">Custom Attributes</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// &quot;targeting&quot;: {</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;type&quot;: &quot;attribute_equals&quot;,</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;key&quot;: &quot;subscription_tier&quot;,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;value&quot;: &quot;premium&quot;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">assignment</span> <span class="op">=</span> manager<span class="op">.</span>assign<span class="op">(</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;premium_only_feature&quot;</span><span class="op">,</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    ctx <span class="op">=</span> EvalContext<span class="op">(</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        userId <span class="op">=</span> <span class="st">&quot;user_123&quot;</span><span class="op">,</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        attributes <span class="op">=</span> mapOf<span class="op">(</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;subscription_tier&quot;</span> to <span class="st">&quot;premium&quot;</span><span class="op">,</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;account_age_days&quot;</span> to <span class="dv">365</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">// assignment != null ✅ (if subscription_tier == &quot;premium&quot;)</span></span></code></pre></div>
+<h3 id="composite-rules-andor">Composite Rules (AND/OR)</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// &quot;targeting&quot;: {</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;type&quot;: &quot;composite&quot;,</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;operator&quot;: &quot;AND&quot;,</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">//   &quot;rules&quot;: [</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">//     { &quot;type&quot;: &quot;region_in&quot;, &quot;regions&quot;: [&quot;US&quot;] },</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">//     { &quot;type&quot;: &quot;app_version_gte&quot;, &quot;version&quot;: &quot;3.0.0&quot; }</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">//   ]</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">// User must be from US AND have version &gt;= 3.0.0</span></span></code></pre></div>
+<hr />
+<h2 id="providers">🔌 Providers</h2>
+<h3 id="firebase-remote-config">Firebase Remote Config</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// build.gradle.kts</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>implementation<span class="op">(</span>project<span class="op">(</span><span class="st">&quot;:flagship-provider-firebase&quot;</span><span class="op">))</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Code</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">provider</span> <span class="op">=</span> FirebaseRemoteConfigProvider<span class="op">(</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    remoteConfig <span class="op">=</span> Firebase<span class="op">.</span>remoteConfig<span class="op">,</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    fetchIntervalSeconds <span class="op">=</span> <span class="dv">3600</span> <span class="co">// Refresh every hour</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    appKey <span class="op">=</span> <span class="st">&quot;my-app&quot;</span><span class="op">,</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    environment <span class="op">=</span> <span class="st">&quot;production&quot;</span><span class="op">,</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    providers <span class="op">=</span> listOf<span class="op">(</span>provider<span class="op">),</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    cache <span class="op">=</span> PersistentCache<span class="op">(</span>FlagsSerializer<span class="op">())</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<p><strong>Firebase Console structure:</strong></p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;flagship_flags&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;new_payment_flow&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dark_mode_enabled&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;flagship_experiments&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;checkout_test&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;variants&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;control&quot;</span><span class="fu">,</span> <span class="dt">&quot;weight&quot;</span><span class="fu">:</span> <span class="fl">0.5</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;variant_a&quot;</span><span class="fu">,</span> <span class="dt">&quot;weight&quot;</span><span class="fu">:</span> <span class="fl">0.5</span> <span class="fu">}</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="rest-provider">REST Provider</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// build.gradle.kts</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>implementation<span class="op">(</span>project<span class="op">(</span><span class="st">&quot;:flagship-provider-rest&quot;</span><span class="op">))</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Code</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">httpClient</span> <span class="op">=</span> HttpClient<span class="op">(</span>CIO<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    install<span class="op">(</span>ContentNegotiation<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        json<span class="op">()</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">provider</span> <span class="op">=</span> RestFlagsProvider<span class="op">(</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    httpClient <span class="op">=</span> httpClient<span class="op">,</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    baseUrl <span class="op">=</span> <span class="st">&quot;https://api.example.com/flags&quot;</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<p><strong>REST API format:</strong></p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;revision&quot;</span><span class="fu">:</span> <span class="st">&quot;abc123&quot;</span><span class="fu">,</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;fetchedAt&quot;</span><span class="fu">:</span> <span class="dv">1699999999999</span><span class="fu">,</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ttlMs&quot;</span><span class="fu">:</span> <span class="dv">900000</span><span class="fu">,</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;flags&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;new_payment_flow&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;bool&quot;</span><span class="fu">,</span> <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="kw">true</span> <span class="fu">},</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;api_timeout&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;int&quot;</span><span class="fu">,</span> <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="dv">5000</span> <span class="fu">}</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;experiments&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;checkout_test&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;variants&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;control&quot;</span><span class="fu">,</span> <span class="dt">&quot;weight&quot;</span><span class="fu">:</span> <span class="fl">0.5</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span> <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;treatment&quot;</span><span class="fu">,</span> <span class="dt">&quot;weight&quot;</span><span class="fu">:</span> <span class="fl">0.5</span> <span class="fu">}</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;targeting&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;region_in&quot;</span><span class="fu">,</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;regions&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;US&quot;</span><span class="ot">,</span> <span class="st">&quot;CA&quot;</span><span class="ot">]</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="custom-provider">Custom Provider</h3>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyCustomProvider <span class="op">:</span> <span class="dt">FlagsProvider</span> <span class="op">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">val</span> <span class="va">name</span><span class="op">:</span> <span class="kw">String</span> <span class="op">=</span> <span class="st">&quot;MyBackend&quot;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> suspend <span class="kw">fun</span> <span class="fu">fetch</span><span class="op">(</span><span class="va">context</span><span class="op">:</span> <span class="dt">EvalContext</span><span class="op">):</span> <span class="dt">ProviderSnapshot</span> <span class="op">{</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Load data from your backend</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">val</span> <span class="va">response</span> <span class="op">=</span> myApi<span class="op">.</span>getFlags<span class="op">()</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> ProviderSnapshot<span class="op">(</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>            revision <span class="op">=</span> response<span class="op">.</span>version<span class="op">,</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>            fetchedAt <span class="op">=</span> Clock<span class="op">.</span>System<span class="op">.</span>now<span class="op">().</span>toEpochMilliseconds<span class="op">(),</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>            ttlMs <span class="op">=</span> <span class="dv">3600_000</span><span class="op">,</span> <span class="co">// 1 hour</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>            flags <span class="op">=</span> mapOf<span class="op">(</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;feature_x&quot;</span> to FlagValue<span class="op">.</span>Bool<span class="op">(</span>response<span class="op">.</span>featureXEnabled<span class="op">)</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">),</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>            experiments <span class="op">=</span> emptyMap<span class="op">()</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="caching-offline-mode">💾 Caching &amp; Offline Mode</h2>
+<h3 id="in-memory-cache-default">In-Memory Cache (default)</h3>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    cache <span class="op">=</span> InMemoryCache<span class="op">()</span> <span class="co">// Fast but not persistent</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<p><strong>Pros:</strong> Very fast<br />
+<strong>Cons:</strong> Data lost on app restart</p>
+<h3 id="persistent-cache">Persistent Cache</h3>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    cache <span class="op">=</span> PersistentCache<span class="op">(</span>FlagsSerializer<span class="op">())</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<p><strong>Android:</strong> Uses <code>SharedPreferences</code><br />
+<strong>iOS:</strong> Uses <code>NSUserDefaults</code></p>
+<p><strong>Pros:</strong> Works offline, persists between launches<br />
+<strong>Cons:</strong> Slightly slower</p>
+<h3 id="ttl-time-to-live">TTL (Time-To-Live)</h3>
+<p>Each snapshot has a TTL. After expiration, Flagship will attempt to
+refresh:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In provider</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ProviderSnapshot<span class="op">(</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    revision <span class="op">=</span> <span class="st">&quot;v123&quot;</span><span class="op">,</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    fetchedAt <span class="op">=</span> Clock<span class="op">.</span>System<span class="op">.</span>now<span class="op">().</span>toEpochMilliseconds<span class="op">(),</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    ttlMs <span class="op">=</span> <span class="dv">1800_000</span><span class="op">,</span> <span class="co">// 30 minutes</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    flags <span class="op">=</span> myFlags<span class="op">,</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    experiments <span class="op">=</span> myExperiments</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<h3 id="offline-first-architecture">Offline-first Architecture</h3>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 1. Flagship tries to load data from providers</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>bootstrap<span class="op">()</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 2. If network unavailable, uses cache</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 3. If no cache, uses default values</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">enabled</span> <span class="op">=</span> manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;feature&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="kw">false</span><span class="op">)</span></span></code></pre></div>
+<hr />
+<h2 id="debug-dashboard">🛠️ Debug Dashboard</h2>
+<h3 id="enable-in-android">Enable in Android</h3>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In debug build</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Composable</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">fun</span> <span class="fu">DebugMenu</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    FlagsDashboard<span class="op">(</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        manager <span class="op">=</span> manager<span class="op">,</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        allowOverrides <span class="op">=</span> <span class="kw">true</span><span class="op">,</span>   <span class="co">// Allow overrides</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        allowEnvSwitch <span class="op">=</span> <span class="kw">false</span><span class="op">,</span>  <span class="co">// Disable environment switching</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        useDarkTheme <span class="op">=</span> <span class="kw">false</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="dashboard-features">Dashboard Features</h3>
+<ol type="1">
+<li><strong>All Flags List</strong> - current values and types</li>
+<li><strong>Overrides</strong> - force enable/disable flags</li>
+<li><strong>Experiment Assignments</strong> - view assigned
+variants</li>
+<li><strong>Provider Status</strong> - loading status from each
+provider</li>
+<li><strong>Cache Info</strong> - when data was loaded, TTL</li>
+</ol>
+<h3 id="local-overrides">Local Overrides</h3>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Programmatically</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>setOverride<span class="op">(</span><span class="st">&quot;new_feature&quot;</span><span class="op">,</span> FlagValue<span class="op">.</span>Bool<span class="op">(</span><span class="kw">true</span><span class="op">))</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Check</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_feature&quot;</span><span class="op">)</span> <span class="co">// true (override)</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Remove override</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>clearOverride<span class="op">(</span><span class="st">&quot;new_feature&quot;</span><span class="op">)</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Remove all overrides</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>listOverrides<span class="op">().</span>forEach <span class="op">{</span> manager<span class="op">.</span>clearOverride<span class="op">(</span>it<span class="op">)</span> <span class="op">}</span></span></code></pre></div>
+<p><strong>⚠️ Important:</strong> Overrides are local only and don’t
+affect other users!</p>
+<hr />
+<h2 id="analytics-integration">📊 Analytics Integration</h2>
+<h3 id="firebase-analytics">Firebase Analytics</h3>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">config</span> <span class="op">=</span> FlagsConfig<span class="op">(</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    analytics <span class="op">=</span> <span class="kw">object</span> <span class="op">:</span> <span class="dt">AnalyticsAdapter</span> <span class="op">{</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">trackEvent</span><span class="op">(</span><span class="va">event</span><span class="op">:</span> <span class="dt">AnalyticsEvent</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">when</span> <span class="op">(</span>event<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                <span class="kw">is</span> AnalyticsEvent<span class="op">.</span>ExperimentExposure <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                    Firebase<span class="op">.</span>analytics<span class="op">.</span>logEvent<span class="op">(</span><span class="st">&quot;experiment_exposure&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                        param<span class="op">(</span><span class="st">&quot;experiment_key&quot;</span><span class="op">,</span> event<span class="op">.</span>experimentKey<span class="op">)</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>                        param<span class="op">(</span><span class="st">&quot;variant&quot;</span><span class="op">,</span> event<span class="op">.</span>variant<span class="op">)</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>                        param<span class="op">(</span><span class="st">&quot;timestamp&quot;</span><span class="op">,</span> event<span class="op">.</span>timestamp<span class="op">)</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<h3 id="amplitude">Amplitude</h3>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>analytics <span class="op">=</span> <span class="kw">object</span> <span class="op">:</span> <span class="dt">AnalyticsAdapter</span> <span class="op">{</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">trackEvent</span><span class="op">(</span><span class="va">event</span><span class="op">:</span> <span class="dt">AnalyticsEvent</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">when</span> <span class="op">(</span>event<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">is</span> AnalyticsEvent<span class="op">.</span>ExperimentExposure <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                Amplitude<span class="op">.</span>getInstance<span class="op">().</span>logEvent<span class="op">(</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Experiment Exposure&quot;</span><span class="op">,</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                    JSONObject<span class="op">().</span>apply <span class="op">{</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                        put<span class="op">(</span><span class="st">&quot;experiment_key&quot;</span><span class="op">,</span> event<span class="op">.</span>experimentKey<span class="op">)</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>                        put<span class="op">(</span><span class="st">&quot;variant&quot;</span><span class="op">,</span> event<span class="op">.</span>variant<span class="op">)</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>                <span class="op">)</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="mixpanel">Mixpanel</h3>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>analytics <span class="op">=</span> <span class="kw">object</span> <span class="op">:</span> <span class="dt">AnalyticsAdapter</span> <span class="op">{</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">trackEvent</span><span class="op">(</span><span class="va">event</span><span class="op">:</span> <span class="dt">AnalyticsEvent</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">when</span> <span class="op">(</span>event<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">is</span> AnalyticsEvent<span class="op">.</span>ExperimentExposure <span class="op">-&gt;</span> <span class="op">{</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                mixpanel<span class="op">.</span>track<span class="op">(</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Experiment Exposure&quot;</span><span class="op">,</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                    mapOf<span class="op">(</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;experiment_key&quot;</span> to event<span class="op">.</span>experimentKey<span class="op">,</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;variant&quot;</span> to event<span class="op">.</span>variant</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>                    <span class="op">)</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>                <span class="op">)</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="best-practices">✅ Best Practices</h2>
+<h3 id="use-meaningful-flag-names">1. Use Meaningful Flag Names</h3>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ Good</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;new_payment_flow&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;dark_mode_enabled&quot;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;premium_features_unlock&quot;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ Bad</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;flag1&quot;</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;test&quot;</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;temp_feature&quot;</span></span></code></pre></div>
+<h3 id="remove-old-flags">2. Remove Old Flags</h3>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// After full rollout, remove the flag and simplify code:</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Before</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_checkout&quot;</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    NewCheckout<span class="op">()</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    OldCheckout<span class="op">()</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co">// After (when new_checkout = 100%)</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>NewCheckout<span class="op">()</span></span></code></pre></div>
+<h3 id="always-provide-defaults">3. Always Provide Defaults</h3>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ Always provide defaults</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">timeout</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">(</span><span class="st">&quot;request_timeout&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="dv">5000</span><span class="op">)</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ Avoid nulls</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> <span class="va">timeout</span> <span class="op">=</span> manager<span class="op">.</span>value<span class="op">&lt;</span><span class="kw">Int</span><span class="op">?&gt;(</span><span class="st">&quot;request_timeout&quot;</span><span class="op">,</span> default <span class="op">=</span> <span class="kw">null</span><span class="op">)</span> <span class="co">// Dangerous!</span></span></code></pre></div>
+<h3 id="cache-manager-instance">4. Cache Manager Instance</h3>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ Good</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyRepository <span class="op">{</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="kw">val</span> <span class="va">flags</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span> <span class="co">// Once</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fun</span> <span class="fu">isFeatureEnabled</span><span class="op">()</span> <span class="op">=</span> flags<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;feature_x&quot;</span><span class="op">)</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ Bad</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="kw">fun</span> <span class="fu">checkFeature</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">flags</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span> <span class="co">// Creates new instance each time</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> flags<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;feature_x&quot;</span><span class="op">)</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="test-with-overrides">5. Test with Overrides</h3>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Test</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fun</span> <span class="fu">testNewPaymentFlow</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Force enable flag</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    manager<span class="op">.</span>setOverride<span class="op">(</span><span class="st">&quot;new_payment_flow&quot;</span><span class="op">,</span> FlagValue<span class="op">.</span>Bool<span class="op">(</span><span class="kw">true</span><span class="op">))</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    assertTrue<span class="op">(</span>manager<span class="op">.</span>isEnabled<span class="op">(</span><span class="st">&quot;new_payment_flow&quot;</span><span class="op">))</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Cleanup</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    manager<span class="op">.</span>clearOverride<span class="op">(</span><span class="st">&quot;new_payment_flow&quot;</span><span class="op">)</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="handle-errors">6. Handle Errors</h3>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>lifecycleScope<span class="op">.</span>launch <span class="op">{</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">val</span> <span class="va">manager</span> <span class="op">=</span> Flags<span class="op">.</span>manager<span class="op">()</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">val</span> <span class="va">success</span> <span class="op">=</span> manager<span class="op">.</span>ensureBootstrap<span class="op">(</span><span class="dv">5000</span><span class="op">)</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span>success<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Show warning or use fallback</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>            showOfflineMode<span class="op">()</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span>e<span class="op">:</span> Exception<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>        Log<span class="op">.</span>e<span class="op">(</span><span class="st">&quot;Flags&quot;</span><span class="op">,</span> <span class="st">&quot;Failed to initialize&quot;</span><span class="op">,</span> e<span class="op">)</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Graceful degradation</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="faq">❓ FAQ</h2>
+<h3 id="q-how-does-provider-priority-work">Q: How does provider priority
+work?</h3>
+<p><strong>A:</strong> Providers are processed in order in the list. The
+first successful result is used.</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>providers <span class="op">=</span> listOf<span class="op">(</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    FirebaseProvider<span class="op">(),</span>  <span class="co">// Priority 1</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    RestProvider<span class="op">(),</span>      <span class="co">// Fallback 1</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    LocalProvider<span class="op">()</span>      <span class="co">// Fallback 2</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div>
+<h3 id="q-what-happens-when-offline">Q: What happens when offline?</h3>
+<p><strong>A:</strong> Flagship uses the last cached snapshot. If no
+cache, uses default values.</p>
+<h3 id="q-can-i-use-flagship-without-internet">Q: Can I use Flagship
+without internet?</h3>
+<p><strong>A:</strong> Yes! Use <code>PersistentCache()</code> and
+preload data once. Then the app works offline.</p>
+<h3 id="q-how-often-are-flags-updated">Q: How often are flags
+updated?</h3>
+<p><strong>A:</strong> Depends on TTL in snapshot (default 15 minutes).
+You can force refresh:</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>refresh<span class="op">()</span></span></code></pre></div>
+<h3 id="q-is-hot-reload-supported">Q: Is Hot Reload supported?</h3>
+<p><strong>A:</strong> Yes! Use <code>FlagsListener</code> for reactive
+updates:</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode kotlin"><code class="sourceCode kotlin"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span>addListener<span class="op">(</span><span class="kw">object</span> <span class="op">:</span> <span class="dt">FlagsListener</span> <span class="op">{</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onSnapshotUpdated</span><span class="op">(</span><span class="va">providersCount</span><span class="op">:</span> <span class="dt">Int</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Update UI</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="op">})</span></span></code></pre></div>
+<h3 id="q-how-to-test-experiments">Q: How to test experiments?</h3>
+<p><strong>A:</strong> Use debug dashboard to override variants or use
+<code>setOverride()</code>.</p>
+<h3 id="q-is-local-storage-safe">Q: Is local storage safe?</h3>
+<p><strong>A:</strong> Yes. Flagship doesn’t store sensitive data
+(tokens, keys). Only public flag settings.</p>
+<h3 id="q-can-i-use-flagship-in-compose-desktopweb">Q: Can I use
+Flagship in Compose Desktop/Web?</h3>
+<p><strong>A:</strong> Currently only Android and iOS are supported.
+Desktop/Web may be added in the future.</p>
+<hr />
+<p align="center">
+<b>Need help? Create an Issue on
+<a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b>
+</p>
+</body>
+</html>
