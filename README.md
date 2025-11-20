@@ -12,6 +12,8 @@
   <b>Flagship</b> is a modern, robust, and universal <b>Kotlin Multiplatform (KMP)</b> library for <b>Feature Flags</b>, <b>Feature Toggles</b>, <b>A/B Testing</b>, and <b>Remote Configuration</b>.
 </p>
 
+> ⚠️ **Note**: This library is currently in active development. The API may change in future versions. Use at your own risk.
+
 <p align="center">
   It is designed to be <b>backend-agnostic</b>, supporting Firebase Remote Config, custom REST APIs, and local evaluations out of the box.
 </p>
@@ -286,7 +288,7 @@ Flagship can be easily integrated into any native iOS project using **Swift Pack
 
 1. In Xcode, go to **File > Add Packages...**
 2. Enter the repository URL: `https://github.com/maxluxs/Flagship` (or your separate SPM repo URL)
-3. Select the version you want to install (e.g., `1.0.0`)
+3. Select the version you want to install (e.g., `0.1.0`)
 4. Click **Add Package**
 
 ### 2. Usage in Swift

@@ -12,7 +12,7 @@ val localProperties = Properties().apply {
     }
 }
 
-val libraryVersion = project.findProperty("LIBRARY_VERSION")?.toString() ?: "1.0.0"
+val libraryVersion = project.findProperty("LIBRARY_VERSION")?.toString() ?: "0.1.0"
 val libraryGroup = "io.maxluxs.flagship"
 
 project.group = libraryGroup
