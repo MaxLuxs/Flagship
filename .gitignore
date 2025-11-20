@@ -22,6 +22,8 @@
 !/docs/*.html
 !/docs/images/flagship_icon.svg
 !/docs/*.md
+/docs/build-guides.sh
+/docs/*.tmp
 
 # Gradle
 .gradle/
