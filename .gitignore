@@ -1,5 +1,7 @@
-# Dokka documentation output
-/docs/
+# Dokka documentation output (HTML)
+/docs/**
+!/docs/images/
+!/docs/*.md
 
 # Gradle
 .gradle/
