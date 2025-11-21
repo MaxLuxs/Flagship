@@ -5,6 +5,7 @@ import io.maxluxs.flagship.core.model.ProviderSnapshot
 import io.maxluxs.flagship.core.util.FlagsSerializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
 actual class PersistentCache actual constructor(
     private val serializer: FlagsSerializer
@@ -21,7 +22,7 @@ actual class PersistentCache actual constructor(
     actual override suspend fun save(providerName: String, snapshot: ProviderSnapshot) {
         withContext(Dispatchers.IO) {
             val data = serializer.serialize(snapshot)
-            getPrefs().edit().putString(providerName, data).apply()
+            getPrefs().edit { putString(providerName, data) }
         }
     }
 
@@ -40,7 +41,7 @@ actual class PersistentCache actual constructor(
 
     actual override suspend fun clearAll() {
         withContext(Dispatchers.IO) {
-            getPrefs().edit().clear().apply()
+            getPrefs().edit { clear() }
         }
     }
 }

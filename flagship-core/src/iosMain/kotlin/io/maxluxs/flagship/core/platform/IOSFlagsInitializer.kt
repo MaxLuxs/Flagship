@@ -1,4 +1,4 @@
-package io.maxluxs.flagship.platform.ios
+package io.maxluxs.flagship.core.platform
 
 import io.maxluxs.flagship.core.cache.PersistentCache
 import io.maxluxs.flagship.core.model.EvalContext

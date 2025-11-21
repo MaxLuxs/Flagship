@@ -12,6 +12,12 @@ plugins {
 // apply(from = rootProject.file("gradle/publish.gradle.kts"))
 
 kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+    
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -44,11 +50,13 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
+        jvmMain.dependencies {}
+        
         androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
         }
 
-        iosMain.dependencies {
-        }
+        iosMain.dependencies {}
     }
 }
 

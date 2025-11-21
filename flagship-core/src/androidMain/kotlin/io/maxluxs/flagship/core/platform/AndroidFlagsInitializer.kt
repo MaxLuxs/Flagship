@@ -1,10 +1,10 @@
-package io.maxluxs.flagship.platform.android
+package io.maxluxs.flagship.core.platform
 
 import android.content.Context
-import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.cache.PersistentCache
 import io.maxluxs.flagship.core.model.EvalContext
 import io.maxluxs.flagship.core.util.JsonSerializer
+import androidx.core.content.edit
 
 object AndroidFlagsInitializer {
     /**
@@ -40,7 +40,7 @@ object AndroidFlagsInitializer {
         
         if (deviceId == null) {
             deviceId = java.util.UUID.randomUUID().toString()
-            prefs.edit().putString("device_id", deviceId).apply()
+            prefs.edit { putString("device_id", deviceId) }
         }
         
         return deviceId

@@ -143,11 +143,8 @@ In your app module's `build.gradle.kts` (or `build.gradle`):
 
 ```kotlin
 dependencies {
-    // Core library
+    // Core library (includes Android platform support)
     implementation("io.maxluxs.flagship:flagship-core:0.1.0")
-    
-    // Android platform support
-    implementation("io.maxluxs.flagship:flagship-platform-android:0.1.0")
     
     // Providers (choose what you need)
     implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")
@@ -194,7 +191,7 @@ import io.ktor.serialization.kotlinx.json.*
 import io.maxluxs.flagship.core.Flags
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.manager.DefaultFlagsManager
-import io.maxluxs.flagship.platform.android.AndroidFlagsInitializer
+import io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
 import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
 import io.maxluxs.flagship.provider.rest.RestFlagsProvider
 import kotlinx.serialization.json.Json

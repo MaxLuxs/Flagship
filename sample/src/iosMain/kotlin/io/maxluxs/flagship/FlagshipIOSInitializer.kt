@@ -7,7 +7,7 @@ import io.ktor.serialization.kotlinx.json.*
 import io.maxluxs.flagship.core.Flags
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.manager.DefaultFlagsManager
-import io.maxluxs.flagship.platform.ios.IOSFlagsInitializer
+import io.maxluxs.flagship.core.platform.IOSFlagsInitializer
 import io.maxluxs.flagship.provider.rest.RestFlagsProvider
 import kotlinx.serialization.json.Json
 

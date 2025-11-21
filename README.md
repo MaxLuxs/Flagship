@@ -71,27 +71,47 @@ dependencies {
     implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.0")        // Optional: Debug UI
 }
 
-// Android Main
-dependencies {
-    implementation("io.maxluxs.flagship:flagship-platform-android:0.1.0")
-}
-
-// iOS Main
-dependencies {
-    implementation("io.maxluxs.flagship:flagship-platform-ios:0.1.0")
-}
+// Platform-specific code is included in flagship-core
+// No separate platform modules needed!
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Initialize
+### Method 1: Simplified API
 
-Configure the library in your Application class (Android) or App Delegate (iOS).
+For simple remote config use cases, you can use the simplified API with minimal boilerplate:
 
 ```kotlin
-// Android example using provider factories (recommended)
+// In Application.onCreate()
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Flags.initFirebase(application)
+    }
+}
+
+// Use flags directly without calling manager()
+if (Flags.isEnabled("new_payment_flow")) {
+    ShowNewPayment()
+} else {
+    ShowLegacyPayment()
+}
+
+// Typed values
+val maxUploadSize = Flags.value("max_upload_mb", default = 10)
+val apiTimeout = Flags.value("api_timeout", default = 30)
+```
+
+See [Simplified API Guide](docs/SIMPLIFIED_API.md) for more details.
+
+### Method 2: Full Configuration API
+
+For advanced use cases requiring custom configuration:
+
+```kotlin
+// Android example using provider factories
 import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
 import io.maxluxs.flagship.provider.rest.RestFlagsProvider
 
@@ -99,9 +119,7 @@ val config = FlagsConfig(
     appKey = "my-app",
     environment = "production",
     providers = listOf(
-        // High priority: Firebase (factory handles initialization)
         FirebaseProviderFactory.create(application),
-        // Fallback: Custom REST API
         RestFlagsProvider(httpClient, "https://api.myserver.com/flags")
     ),
     cache = PersistentCache(platformContext),
@@ -109,37 +127,30 @@ val config = FlagsConfig(
 )
 
 Flags.configure(config)
-```
 
-> **Note**: Provider factories (`FirebaseProviderFactory`, `LaunchDarklyProviderFactory`) simplify initialization on Android by handling SDK setup automatically. You can also create providers manually if you need more control.
-
-### 2. Use Feature Flags
-
-```kotlin
-    val flags = Flags.manager()
-    
-// Simple Boolean check
+// Use flags via manager
+val flags = Flags.manager()
 if (flags.isEnabled("new_payment_flow")) {
     ShowNewPayment()
-    } else {
-    ShowLegacyPayment()
 }
-
-// Typed values (Int, String, Double, JSON)
-val maxUploadSize = flags.value("max_upload_mb", default = 10)
 ```
 
-### 3. Run A/B Experiments
+### A/B Testing
+
+Both methods support A/B testing:
 
 ```kotlin
-// Deterministic assignment based on User ID
-val assignment = flags.assign("checkout_optimization_exp")
+// Simplified API
+val variant = Flags.assign("checkout_optimization_exp")?.variant
 
-when (assignment?.variant) {
+// Full API
+val assignment = Flags.manager().assign("checkout_optimization_exp")
+
+when (variant ?: assignment?.variant) {
     "control" -> ShowStandardCheckout()
     "treatment_a" -> ShowOnePageCheckout()
     "treatment_b" -> ShowModalCheckout()
-    else -> ShowStandardCheckout() // Fallback
+    else -> ShowStandardCheckout()
 }
 ```
 
@@ -215,12 +226,10 @@ If you have your own backend, just return JSON in this format:
 
 | Module | Description |
 |--------|-------------|
-| `:flagship-core` | The brain. Evaluator, models, caching logic. |
+| `:flagship-core` | The brain. Evaluator, models, caching logic. Includes platform-specific code (Android/iOS). |
 | `:flagship-provider-firebase` | Adapter for Firebase Remote Config. |
 | `:flagship-provider-rest` | Generic REST API adapter. |
 | `:flagship-ui-compose` | Debug UI dashboard (Inspect & Override). |
-| `:flagship-platform-android` | Android implementation (SharedPreferences). |
-| `:flagship-platform-ios` | iOS implementation (UserDefaults). |
 
 ---
 
@@ -394,19 +403,18 @@ fun DeveloperSettingsScreen() {
 ## 📚 Documentation
 
 **Comprehensive Guides:**
-- 📖 [Usage Guide](docs/USAGE_GUIDE.md) - Полное руководство по использованию (включая подробную интеграцию Android)
-- 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Миграция с других решений
-- 📚 [API Reference](docs/API_REFERENCE.md) - Справочник по API
-- 🚀 [Publishing Guide](PUBLISHING.md) - Как опубликовать библиотеку
-- 🔧 [Development Log](DEV_LOG.md) - История разработки
+- 📖 [Usage Guide](docs/USAGE_GUIDE.md) - Complete usage guide (including detailed Android integration)
+- 📱 [Simplified API Guide](docs/SIMPLIFIED_API.md) - Quick start with simplified API
+- 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Migrating from other solutions
+- 📚 [API Reference](docs/API_REFERENCE.md) - Full API reference
+- 🚀 [Publishing Guide](PUBLISHING.md) - How to publish the library
+- 🔧 [Development Log](DEV_LOG.md) - Development history
 
 **Module Documentation:**
 - [flagship-core](flagship-core/README.md)
 - [flagship-provider-firebase](flagship-provider-firebase/README.md)
 - [flagship-provider-rest](flagship-provider-rest/README.md)
 - [flagship-ui-compose](flagship-ui-compose/README.md)
-- [flagship-platform-android](flagship-platform-android/README.md)
-- [flagship-platform-ios](flagship-platform-ios/README.md)
 
 **Auto-generated API Docs:**
 - [Dokka HTML Documentation](https://maxluxs.github.io/Flagship/)

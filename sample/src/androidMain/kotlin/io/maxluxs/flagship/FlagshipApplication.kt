@@ -4,7 +4,7 @@ import android.app.Application
 import io.maxluxs.flagship.core.Flags
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.manager.DefaultFlagsManager
-import io.maxluxs.flagship.platform.android.AndroidFlagsInitializer
+import io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
 import io.maxluxs.flagship.sample.ProviderPreferences
 
 class FlagshipApplication : Application() {

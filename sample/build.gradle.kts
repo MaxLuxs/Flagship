@@ -30,7 +30,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(projects.flagshipPlatformAndroid)
             implementation(projects.flagshipProviderFirebase)
             implementation(projects.flagshipProviderLaunchdarkly)
             implementation(libs.ktor.client.android)
@@ -60,7 +59,7 @@ kotlin {
             implementation(projects.flagshipUiCompose)
         }
         iosMain.dependencies {
-            implementation(projects.flagshipPlatformIos)
+            // Platform code is now in flagship-core
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

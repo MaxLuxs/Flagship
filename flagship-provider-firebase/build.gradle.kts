@@ -58,9 +58,11 @@ kotlin {
         }
         
         androidMain.dependencies {
+            implementation(projects.flagshipCore)
             implementation(libs.kotlinx.coroutines.play.services)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.config)
+            implementation(libs.androidx.core.ktx)
         }
 
         commonTest.dependencies {
