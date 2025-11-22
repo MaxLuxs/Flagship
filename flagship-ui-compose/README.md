@@ -16,7 +16,7 @@ A debug dashboard for **Flagship** built with Compose Multiplatform. Embed this 
 ## Installation
 
 ```kotlin
-implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.0")
+implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.1")
 ```
 
 ## Usage

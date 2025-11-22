@@ -8,8 +8,8 @@ Add to your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.maxluxs.flagship:flagship-spring-boot-starter:0.1.0")
-    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")
+    implementation("io.maxluxs.flagship:flagship-spring-boot-starter:0.1.1")
+    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")
 }
 ```
 

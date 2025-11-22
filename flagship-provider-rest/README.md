@@ -15,7 +15,7 @@ A generic REST provider for **Flagship**. Connects to any HTTP endpoint that ret
 ## Installation
 
 ```kotlin
-implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")
+implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")
 ```
 
 ## Usage

@@ -65,10 +65,10 @@ Add the dependencies to your `build.gradle.kts`:
 ```kotlin
 // Common Main
 dependencies {
-    implementation("io.maxluxs.flagship:flagship-core:0.1.0")
-    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.0") // Optional
-    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")     // Optional
-    implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.0")        // Optional: Debug UI
+    implementation("io.maxluxs.flagship:flagship-core:0.1.1")
+    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1") // Optional
+    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")     // Optional
+    implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.1")        // Optional: Debug UI
 }
 
 // Platform-specific code is included in flagship-core
@@ -311,7 +311,7 @@ Flagship can be easily integrated into any native iOS project using **Swift Pack
 
 1. In Xcode, go to **File > Add Packages...**
 2. Enter the repository URL: `https://github.com/maxluxs/Flagship` (or your separate SPM repo URL)
-3. Select the version you want to install (e.g., `0.1.0`)
+3. Select the version you want to install (e.g., `0.1.1`)
 4. Click **Add Package**
 
 ### 2. Usage in Swift

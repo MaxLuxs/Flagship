@@ -17,11 +17,14 @@ Complete guide for using the Flagship library in your Android and iOS applicatio
 5. [A/B Testing (Experiments)](#-ab-testing-experiments)
 6. [Targeting Rules](#-targeting-rules)
 7. [Providers](#-providers)
-8. [Caching & Offline Mode](#-caching--offline-mode)
-9. [Debug Dashboard](#-debug-dashboard)
-10. [Analytics Integration](#-analytics-integration)
-11. [Best Practices](#-best-practices)
-12. [FAQ](#-faq)
+8. [Realtime Updates](#-realtime-updates)
+9. [Caching & Offline Mode](#-caching--offline-mode)
+10. [Debug Dashboard](#-debug-dashboard)
+11. [Analytics Integration](#-analytics-integration)
+12. [Web Platform (Kotlin/JS)](#-web-platform-kotlinjs)
+13. [Desktop Platform (Compose Desktop)](#-desktop-platform-compose-desktop)
+14. [Best Practices](#-best-practices)
+15. [FAQ](#-faq)
 
 ---
 
@@ -155,15 +158,15 @@ In your app module's `build.gradle.kts` (or `build.gradle`):
 ```kotlin
 dependencies {
     // Core library (includes Android platform support)
-    implementation("io.maxluxs.flagship:flagship-core:0.1.0")
+    implementation("io.maxluxs.flagship:flagship-core:0.1.1")
     
     // Providers (choose what you need)
-    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.0")
-    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.0")
-    // implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.0")
+    implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")
+    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1")
+    // implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.1")
     
     // Optional: Debug UI
-    // implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.0")
+    // implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.1")
     
     // Required for REST provider
     implementation("io.ktor:ktor-client-android:3.3.2")
@@ -326,13 +329,13 @@ plugins {
 
 1. In Xcode: **File > Add Packages...**
 2. URL: `https://github.com/maxluxs/Flagship`
-3. Version: `0.1.0`
+3. Version: `0.1.1`
 4. Add Package
 
 Or in `Package.swift`:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/maxluxs/Flagship", from: "0.1.0")
+    .package(url: "https://github.com/maxluxs/Flagship", from: "0.1.1")
 ]
 ```
 
@@ -751,6 +754,273 @@ class MyCustomProvider : FlagsProvider {
 
 ---
 
+## 🔄 Realtime Updates
+
+Flagship supports realtime flag updates via Server-Sent Events (SSE) or WebSocket connections. This allows flags to be updated instantly without polling.
+
+### Overview
+
+Realtime providers implement the `RealtimeFlagsProvider` interface and automatically push updates to your app when flags change on the server.
+
+### Architecture
+
+```kotlin
+// RealtimeManager handles connection lifecycle
+val realtimeManager = RealtimeManager(
+    flagsManager = Flags.manager(),
+    scope = lifecycleScope
+)
+
+// Connect to realtime provider
+realtimeManager.connect(realtimeProvider)
+```
+
+### Creating a Realtime Provider
+
+You need to implement `RealtimeFlagsProvider` yourself. Here are complete examples using Ktor:
+
+#### SSE Provider Example
+
+```kotlin
+import io.maxluxs.flagship.core.provider.BaseFlagsProvider
+import io.maxluxs.flagship.core.provider.RealtimeFlagsProvider
+import io.maxluxs.flagship.provider.rest.RestResponse
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.json.Json
+
+class SSEFlagsProvider(
+    private val httpClient: HttpClient,
+    private val baseUrl: String,
+    private val apiKey: String,
+    name: String = "sse"
+) : BaseFlagsProvider(name), RealtimeFlagsProvider {
+    
+    private var connectionJob: Job? = null
+    private val json = Json { ignoreUnknownKeys = true }
+    private var isConnectedState = false
+    
+    override suspend fun fetchSnapshot(currentRevision: String?): ProviderSnapshot {
+        // Initial fetch via REST
+        val response = httpClient.get("$baseUrl/config") {
+            header("Authorization", "Bearer $apiKey")
+            if (currentRevision != null) {
+                parameter("rev", currentRevision)
+            }
+        }.body<RestResponse>()
+        
+        return response.toProviderSnapshot()
+    }
+    
+    override suspend fun connect(): Flow<ProviderSnapshot> = flow {
+        isConnectedState = true
+        try {
+            // Connect to SSE endpoint
+            val response = httpClient.get("$baseUrl/stream") {
+                header("Authorization", "Bearer $apiKey")
+                header("Accept", "text/event-stream")
+            }
+            
+            // Read SSE stream line by line
+            val channel = response.bodyAsChannel()
+            var buffer = ""
+            
+            while (isActive && isConnectedState) {
+                val line = channel.readUTF8Line() ?: break
+                
+                if (line.startsWith("data: ")) {
+                    val data = line.removePrefix("data: ").trim()
+                    if (data.isNotEmpty()) {
+                        try {
+                            val snapshot = json.decodeFromString<RestResponse>(data)
+                            emit(fetchSnapshot(snapshot.revision))
+                        } catch (e: Exception) {
+                            // Invalid JSON - skip
+                        }
+                    }
+                } else if (line.isEmpty()) {
+                    // Empty line indicates end of event
+                    // Continue reading
+                }
+            }
+        } catch (e: Exception) {
+            isConnectedState = false
+            throw e
+        } finally {
+            isConnectedState = false
+        }
+    }
+    
+    override suspend fun disconnect() {
+        isConnectedState = false
+        connectionJob?.cancel()
+        connectionJob = null
+    }
+    
+    override fun isConnected(): Boolean = isConnectedState
+}
+```
+
+#### WebSocket Provider Example
+
+```kotlin
+import io.maxluxs.flagship.core.provider.BaseFlagsProvider
+import io.maxluxs.flagship.core.provider.RealtimeFlagsProvider
+import io.maxluxs.flagship.provider.rest.RestResponse
+import io.ktor.client.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
+import kotlinx.serialization.json.Json
+
+class WebSocketFlagsProvider(
+    private val httpClient: HttpClient,
+    private val wsUrl: String,
+    private val apiKey: String,
+    name: String = "websocket"
+) : BaseFlagsProvider(name), RealtimeFlagsProvider {
+    
+    private var webSocketSession: DefaultWebSocketSession? = null
+    private val json = Json { ignoreUnknownKeys = true }
+    
+    override suspend fun fetchSnapshot(currentRevision: String?): ProviderSnapshot {
+        // Initial fetch via REST (convert ws:// to http://)
+        val httpUrl = wsUrl.replace("ws://", "http://").replace("wss://", "https://")
+        val response = httpClient.get("$httpUrl/config") {
+            header("Authorization", "Bearer $apiKey")
+            if (currentRevision != null) {
+                parameter("rev", currentRevision)
+            }
+        }.body<RestResponse>()
+        
+        return response.toProviderSnapshot()
+    }
+    
+    override suspend fun connect(): Flow<ProviderSnapshot> = flow {
+        httpClient.webSocket(wsUrl) {
+            webSocketSession = this
+            
+            // Send authentication
+            send("""{"type":"auth","apiKey":"$apiKey"}""")
+            
+            // Listen for messages
+            incoming.collect { frame ->
+                if (frame is Frame.Text) {
+                    val text = frame.readText()
+                    try {
+                        val message = json.parseToJsonElement(text).jsonObject
+                        val messageType = message["type"]?.jsonPrimitive?.content
+                        
+                        if (messageType == "snapshot") {
+                            val data = message["data"]?.jsonObject
+                            if (data != null) {
+                                val response = json.decodeFromJsonElement<RestResponse>(data)
+                                emit(response.toProviderSnapshot())
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Invalid message - skip
+                    }
+                }
+            }
+        }
+    }
+    
+    override suspend fun disconnect() {
+        webSocketSession?.close()
+        webSocketSession = null
+    }
+    
+    override fun isConnected(): Boolean {
+        return webSocketSession?.isActive == true
+    }
+    
+}
+```
+
+### Using Realtime Manager
+
+```kotlin
+// In Application class
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        
+        val config = FlagsConfig(
+            appKey = "my-app",
+            environment = "production",
+            providers = listOf(
+                RestFlagsProvider(httpClient, "https://api.example.com/flags")
+            ),
+            cache = PersistentCache(FlagsSerializer()),
+            enableRealtime = true // Enable realtime support
+        )
+        
+        Flags.configure(config)
+        
+        // Setup realtime connection
+        lifecycleScope.launch {
+            val realtimeManager = RealtimeManager(
+                flagsManager = Flags.manager(),
+                scope = lifecycleScope
+            )
+            
+            val sseProvider = SSEFlagsProvider(
+                baseUrl = "https://api.example.com",
+                apiKey = "your-api-key"
+            )
+            
+            realtimeManager.connect(sseProvider)
+        }
+    }
+}
+```
+
+### Automatic Reconnection
+
+`RealtimeManager` automatically handles reconnection with exponential backoff:
+
+- Initial delay: 1 second
+- Max delay: 60 seconds
+- Backoff multiplier: 2.0
+
+Reconnection happens automatically when connection is lost.
+
+### Listening for Updates
+
+```kotlin
+// FlagsListener will be called when realtime updates arrive
+manager.addListener(object : FlagsListener {
+    override fun onSnapshotUpdated(providersCount: Int) {
+        // Flags updated via realtime
+        updateUI()
+    }
+})
+```
+
+### Best Practices
+
+1. **Always provide a fallback**: Use REST provider as primary, realtime as enhancement
+2. **Handle connection state**: Check `isConnected()` before relying on realtime
+3. **Clean up on app close**: Call `realtimeManager.disconnectAll()` in `onDestroy()`
+
+```kotlin
+override fun onDestroy() {
+    super.onDestroy()
+    lifecycleScope.launch {
+        realtimeManager.disconnectAll()
+    }
+}
+```
+
+---
+
 ## 💾 Caching & Offline Mode
 
 ### In-Memory Cache (default)
@@ -1018,6 +1288,300 @@ lifecycleScope.launch {
 
 ---
 
+## 🌐 Web Platform (Kotlin/JS)
+
+Flagship supports web applications via Kotlin/JS compilation. Use the REST provider for web apps.
+
+### Initialization
+
+```kotlin
+import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.platform.JsFlagsInitializer
+import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+import io.ktor.client.*
+import io.ktor.client.engine.js.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+
+fun main() {
+    val httpClient = HttpClient(Js) {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            })
+        }
+    }
+    
+    val config = FlagsConfig(
+        appKey = "web-app",
+        environment = "production",
+        providers = listOf(
+            RestFlagsProvider(
+                client = httpClient,
+                baseUrl = "https://api.example.com/flags"
+            )
+        ),
+        cache = JsFlagsInitializer.createPersistentCache()
+    )
+    
+    Flags.configure(config)
+}
+```
+
+### Using in React/Compose for Web
+
+```kotlin
+import androidx.compose.runtime.*
+import androidx.compose.web.renderComposable
+import kotlinx.coroutines.launch
+
+@Composable
+fun App() {
+    val manager = Flags.manager()
+    var featureEnabled by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        featureEnabled = manager.isEnabled("new_ui")
+    }
+    
+    if (featureEnabled) {
+        NewUI()
+    } else {
+        LegacyUI()
+    }
+}
+
+fun main() {
+    // Initialize Flagship first
+    initializeFlagship()
+    
+    renderComposable(rootElementId = "root") {
+        App()
+    }
+}
+```
+
+### Browser LocalStorage Cache
+
+The `JsFlagsInitializer.createPersistentCache()` uses browser's `localStorage` for persistence:
+
+- Data persists across page reloads
+- Automatically handles device ID generation
+- Extracts app version from `<meta name="flagship-app-version">` tag
+
+### Context for Web
+
+```kotlin
+import io.maxluxs.flagship.core.platform.JsFlagsInitializer
+
+// Create context with browser info
+val context = JsFlagsInitializer.createDefaultContext().copy(
+    userId = "user-123",
+    attributes = mapOf(
+        "subscription_tier" to "premium",
+        "region" to "US"
+    )
+)
+
+manager.setContext(context)
+```
+
+### Example: React Component with Flags
+
+```kotlin
+// Using Kotlin/JS with React
+@JsExport
+fun createCheckoutComponent(): ReactElement {
+    return React.createElement { props ->
+        val manager = Flags.manager()
+        var variant by useState<String?>(null)
+        
+        useEffect {
+            val job = GlobalScope.launch {
+                variant = manager.assign("checkout_flow")?.variant
+            }
+            cleanup { job.cancel() }
+        }
+        
+        when (variant) {
+            "A" -> NewCheckout()
+            "B" -> AlternativeCheckout()
+            else -> LegacyCheckout()
+        }
+    }
+}
+```
+
+---
+
+## 💻 Desktop Platform (Compose Desktop)
+
+Flagship supports desktop applications via Kotlin/JVM with Compose Desktop.
+
+### Initialization
+
+```kotlin
+import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.platform.JvmFlagsInitializer
+import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+
+fun main() = application {
+    // Initialize Flagship before showing UI
+    val httpClient = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            })
+        }
+    }
+    
+    val config = FlagsConfig(
+        appKey = "desktop-app",
+        environment = "production",
+        providers = listOf(
+            RestFlagsProvider(
+                client = httpClient,
+                baseUrl = "https://api.example.com/flags"
+            )
+        ),
+        cache = JvmFlagsInitializer.createPersistentCache()
+    )
+    
+    Flags.configure(config)
+    
+    // Set default context
+    val manager = Flags.manager() as DefaultFlagsManager
+    val defaultContext = JvmFlagsInitializer.createDefaultContext().copy(
+        userId = System.getProperty("user.name")
+    )
+    manager.setDefaultContext(defaultContext)
+    
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "My Desktop App"
+    ) {
+        App()
+    }
+}
+```
+
+### Using in Compose Desktop UI
+
+```kotlin
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import kotlinx.coroutines.launch
+
+@Composable
+fun App() {
+    val manager = Flags.manager()
+    var featureEnabled by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(true) }
+    
+    LaunchedEffect(Unit) {
+        // Ensure flags are loaded
+        manager.ensureBootstrap()
+        featureEnabled = manager.isEnabled("new_feature")
+        loading = false
+    }
+    
+    MaterialTheme {
+        if (loading) {
+            CircularProgressIndicator()
+        } else {
+            if (featureEnabled) {
+                NewFeatureScreen()
+            } else {
+                LegacyScreen()
+            }
+        }
+    }
+}
+```
+
+### File-based Cache
+
+The `JvmFlagsInitializer.createPersistentCache()` stores data in:
+
+- Location: `~/.flagship/cache.json`
+- Device ID: `~/.flagship/device_id.txt`
+- Persists across app restarts
+
+### Context for Desktop
+
+```kotlin
+import io.maxluxs.flagship.core.platform.JvmFlagsInitializer
+
+// Create context with system info
+val context = JvmFlagsInitializer.createDefaultContext().copy(
+    userId = System.getProperty("user.name"),
+    attributes = mapOf(
+        "os" to System.getProperty("os.name"),
+        "java_version" to System.getProperty("java.version")
+    )
+)
+
+manager.setContext(context)
+```
+
+### Example: Settings Screen with Feature Flags
+
+```kotlin
+@Composable
+fun SettingsScreen() {
+    val manager = Flags.manager()
+    var darkModeEnabled by remember { mutableStateOf(false) }
+    var experimentalFeatures by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        darkModeEnabled = manager.isEnabled("dark_mode")
+        experimentalFeatures = manager.isEnabled("experimental_features")
+    }
+    
+    Column {
+        Switch(
+            checked = darkModeEnabled,
+            onCheckedChange = { /* Toggle dark mode */ }
+        )
+        Text("Dark Mode")
+        
+        if (experimentalFeatures) {
+            Switch(
+                checked = false,
+                onCheckedChange = { /* Toggle experimental */ }
+            )
+            Text("Experimental Features")
+        }
+    }
+}
+```
+
+### Platform-Specific Notes
+
+**Desktop:**
+- Use REST provider (Firebase/LaunchDarkly not available on JVM)
+- Cache stored in user home directory
+- Supports all targeting rules (region, version, attributes)
+
+**Web:**
+- Use REST provider
+- Cache stored in browser localStorage
+- Device ID generated and persisted automatically
+- App version can be set via HTML meta tag
+
+---
+
 ## ❓ FAQ
 
 ### Q: How does provider priority work?
@@ -1070,7 +1634,13 @@ manager.addListener(object : FlagsListener {
 
 ### Q: Can I use Flagship in Compose Desktop/Web?
 
-**A:** Currently only Android and iOS are supported. Desktop/Web may be added in the future.
+**A:** Yes! Flagship supports:
+- ✅ **Compose Desktop** via Kotlin/JVM with REST provider
+- ✅ **Web/JS** via Kotlin/JS with REST provider
+- ✅ **Android** via Kotlin Multiplatform
+- ✅ **iOS** via Kotlin Multiplatform
+
+See [Web Platform](#-web-platform-kotlinjs) and [Desktop Platform](#-desktop-platform-compose-desktop) sections for examples.
 
 ---
 
