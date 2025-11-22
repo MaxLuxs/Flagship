@@ -17,13 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.manager.FlagsManager
+import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.core.model.FlagValue
 
 @Composable
 fun OverridesScreen(manager: FlagsManager) {
     var showAddDialog by remember { mutableStateOf(false) }
     var showClearAllDialog by remember { mutableStateOf(false) }
-    val overrides by remember { derivedStateOf { manager.listOverrides() } }
+    var overrides by remember { mutableStateOf<Map<FlagKey, FlagValue>>(emptyMap()) }
+    
+    LaunchedEffect(manager) {
+        overrides = manager.listOverrides()
+    }
 
     Column(
         modifier = Modifier
