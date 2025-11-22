@@ -184,63 +184,60 @@ fun HomeScreen(
     val manager = Flags.manager()
 
     // Feature flags - use state for reactive updates
-    var newFeatureEnabled by remember {
-        mutableStateOf(
-            manager.isEnabled(
-                "new_feature",
-                default = false
-            )
-        )
-    }
-    var darkModeEnabled by remember {
-        mutableStateOf(
-            manager.isEnabled(
-                "dark_mode",
-                default = false
-            )
-        )
-    }
-    var paymentEnabled by remember {
-        mutableStateOf(
-            manager.isEnabled(
-                "payment_enabled",
-                default = false
-            )
-        )
-    }
+    var newFeatureEnabled by remember { mutableStateOf(false) }
+    var darkModeEnabled by remember { mutableStateOf(false) }
+    var paymentEnabled by remember { mutableStateOf(false) }
 
     // Config values
-    var maxRetries by remember { mutableStateOf(manager.value("max_retries", 3)) }
-    var apiTimeout by remember { mutableStateOf(manager.value("api_timeout", 30.0)) }
-    var welcomeMessage by remember { mutableStateOf(manager.value("welcome_message", "Welcome!")) }
+    var maxRetries by remember { mutableStateOf(3) }
+    var apiTimeout by remember { mutableStateOf(30.0) }
+    var welcomeMessage by remember { mutableStateOf("Welcome!") }
 
     // Experiments
-    var testExperiment by remember { mutableStateOf(manager.assign("test_experiment")) }
-    var checkoutFlow by remember { mutableStateOf(manager.assign("checkout_flow")) }
+    var testExperiment by remember { mutableStateOf<io.maxluxs.flagship.core.model.ExperimentAssignment?>(null) }
+    var checkoutFlow by remember { mutableStateOf<io.maxluxs.flagship.core.model.ExperimentAssignment?>(null) }
+    
+    val scope = rememberCoroutineScope()
+    
+    // Load initial data
+    LaunchedEffect(manager) {
+        newFeatureEnabled = manager.isEnabled("new_feature", default = false)
+        darkModeEnabled = manager.isEnabled("dark_mode", default = false)
+        paymentEnabled = manager.isEnabled("payment_enabled", default = false)
+        maxRetries = manager.value("max_retries", 3)
+        apiTimeout = manager.value("api_timeout", 30.0)
+        welcomeMessage = manager.value("welcome_message", "Welcome!")
+        testExperiment = manager.assign("test_experiment")
+        checkoutFlow = manager.assign("checkout_flow")
+    }
 
     // Listen for flag changes
     DisposableEffect(manager) {
         val listener = object : io.maxluxs.flagship.core.manager.FlagsListener {
             override fun onSnapshotUpdated(source: String) {
-                newFeatureEnabled = manager.isEnabled("new_feature", default = false)
-                darkModeEnabled = manager.isEnabled("dark_mode", default = false)
-                paymentEnabled = manager.isEnabled("payment_enabled", default = false)
-                maxRetries = manager.value("max_retries", 3)
-                apiTimeout = manager.value("api_timeout", 30.0)
-                welcomeMessage = manager.value("welcome_message", "Welcome!")
-                testExperiment = manager.assign("test_experiment")
-                checkoutFlow = manager.assign("checkout_flow")
+                scope.launch {
+                    newFeatureEnabled = manager.isEnabled("new_feature", default = false)
+                    darkModeEnabled = manager.isEnabled("dark_mode", default = false)
+                    paymentEnabled = manager.isEnabled("payment_enabled", default = false)
+                    maxRetries = manager.value("max_retries", 3)
+                    apiTimeout = manager.value("api_timeout", 30.0)
+                    welcomeMessage = manager.value("welcome_message", "Welcome!")
+                    testExperiment = manager.assign("test_experiment")
+                    checkoutFlow = manager.assign("checkout_flow")
+                }
             }
 
             override fun onOverrideChanged(key: String) {
-                newFeatureEnabled = manager.isEnabled("new_feature", default = false)
-                darkModeEnabled = manager.isEnabled("dark_mode", default = false)
-                paymentEnabled = manager.isEnabled("payment_enabled", default = false)
-                maxRetries = manager.value("max_retries", 3)
-                apiTimeout = manager.value("api_timeout", 30.0)
-                welcomeMessage = manager.value("welcome_message", "Welcome!")
-                testExperiment = manager.assign("test_experiment")
-                checkoutFlow = manager.assign("checkout_flow")
+                scope.launch {
+                    newFeatureEnabled = manager.isEnabled("new_feature", default = false)
+                    darkModeEnabled = manager.isEnabled("dark_mode", default = false)
+                    paymentEnabled = manager.isEnabled("payment_enabled", default = false)
+                    maxRetries = manager.value("max_retries", 3)
+                    apiTimeout = manager.value("api_timeout", 30.0)
+                    welcomeMessage = manager.value("welcome_message", "Welcome!")
+                    testExperiment = manager.assign("test_experiment")
+                    checkoutFlow = manager.assign("checkout_flow")
+                }
             }
         }
         manager.addListener(listener)

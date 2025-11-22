@@ -262,7 +262,11 @@ suspend fun runProviderTests(
 
     // Test 6: Experiment assignment
     try {
-        val assignment = manager.assign("test_experiment")
+        // Note: assign is now suspend, but we're in a test context
+        // For testing purposes, we'll use runBlocking here
+        val assignment = kotlinx.coroutines.runBlocking {
+            manager.assign("test_experiment")
+        }
         results.add(
             TestResult(
                 "Experiment Assignment",
@@ -282,4 +286,5 @@ suspend fun runProviderTests(
 
     return results
 }
+
 
