@@ -32,7 +32,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-include(":sample")
+include(":flagship-sample")
 include(":flagship-core")
 include(":flagship-provider-rest")
 include(":flagship-provider-firebase")

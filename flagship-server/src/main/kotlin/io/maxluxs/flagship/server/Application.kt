@@ -9,9 +9,23 @@ import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.routing.routing
+import io.ktor.server.routing.get
+import io.ktor.server.response.respondRedirect
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.http.content.resources
 import kotlinx.serialization.json.Json
 import org.slf4j.event.Level
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpHeaders
+import io.maxluxs.flagship.server.database.DatabaseConfig
+import io.maxluxs.flagship.server.auth.AuthService
+import io.maxluxs.flagship.server.auth.authRoutes
+import io.maxluxs.flagship.server.auth.configureAuth
+import io.maxluxs.flagship.server.storage.DatabaseStorage
+import io.maxluxs.flagship.server.admin.adminRoutes
+import io.maxluxs.flagship.server.admin.auditRoutes
+import io.maxluxs.flagship.server.audit.AuditService
+import io.maxluxs.flagship.server.routes.projectRoutes
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
@@ -19,6 +33,9 @@ fun main() {
 }
 
 fun Application.module() {
+    // Initialize database
+    DatabaseConfig.connect()
+    
     install(CallLogging) {
         level = Level.INFO
     }
@@ -42,12 +59,32 @@ fun Application.module() {
         anyHost()
     }
 
-    val storage = InMemoryFlagStorage()
+    // Configure authentication
+    val authService = AuthService()
+    configureAuth(authService)
+
+    // Use database storage
+    val storage = DatabaseStorage()
+    val auditService = AuditService()
 
     routing {
-        flagRoutes(storage)
-        experimentRoutes(storage)
-        configRoutes(storage)
+        // Public auth routes
+        authRoutes(authService)
+        
+        // Admin routes (require auth)
+        adminRoutes(auditService)
+        auditRoutes(auditService)
+        
+        // Project routes (flags, experiments, config)
+        projectRoutes(storage, auditService)
+        
+        // Admin UI - redirect root to index.html
+        get("/") {
+            call.respondRedirect("/admin/")
+        }
+        
+        // Admin UI static files
+        staticResources("/admin", "admin-ui")
     }
 }
 
