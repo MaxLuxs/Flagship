@@ -9,10 +9,17 @@ import io.maxluxs.flagship.core.util.SystemClock
 /**
  * LaunchDarkly provider for Flagship.
  * Integrates with LaunchDarkly SDK for enterprise feature flag management.
+ * 
+ * @param adapter Platform-specific LaunchDarkly adapter
+ * @param name Provider name (default: "launchdarkly")
+ * @param knownFlagKeys Optional list of known flag keys. If provided, these keys will be
+ *                      explicitly fetched in getAllFlags(). Useful when LaunchDarkly SDK
+ *                      doesn't provide a way to enumerate all flags.
  */
 class LaunchDarklyProvider(
     private val adapter: LaunchDarklyAdapter,
-    name: String = "launchdarkly"
+    name: String = "launchdarkly",
+    private val knownFlagKeys: List<String>? = null
 ) : BaseFlagsProvider(name) {
     
     override suspend fun fetchSnapshot(currentRevision: String?): ProviderSnapshot {
@@ -27,7 +34,7 @@ class LaunchDarklyProvider(
     }
 
     private fun parseSnapshot(): ProviderSnapshot {
-        val allFlags = adapter.getAllFlags()
+        val allFlags = adapter.getAllFlags(knownFlagKeys)
         val flags = mutableMapOf<FlagKey, FlagValue>()
         val experiments = mutableMapOf<ExperimentKey, ExperimentDefinition>()
 
@@ -70,7 +77,19 @@ class LaunchDarklyProvider(
 interface LaunchDarklyAdapter {
     suspend fun initialize()
     suspend fun refresh()
-    fun getAllFlags(): Map<String, Any?>
+    
+    /**
+     * Get all flags from LaunchDarkly.
+     * 
+     * Note: LaunchDarkly SDK doesn't provide a direct way to get all flags.
+     * If [knownKeys] is provided, will fetch flags using direct lookups.
+     * Otherwise, returns empty map and provider will rely on direct flag lookups.
+     * 
+     * @param knownKeys Optional list of known flag keys to fetch explicitly
+     * @return Map of flag keys to their values
+     */
+    fun getAllFlags(knownKeys: List<String>? = null): Map<String, Any?>
+    
     fun getRevision(): String?
 }
 

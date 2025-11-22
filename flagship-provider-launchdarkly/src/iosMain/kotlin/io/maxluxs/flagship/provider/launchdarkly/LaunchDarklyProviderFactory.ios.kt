@@ -21,6 +21,9 @@ object LaunchDarklyProviderFactory {
      * @param userId Optional user ID (defaults to bundle identifier or timestamp-based ID)
      * @param userName Optional user name
      * @param name Provider name (default: "launchdarkly")
+     * @param knownFlagKeys Optional list of known flag keys. If provided, these keys will be
+     *                      explicitly fetched in getAllFlags(). Useful when LaunchDarkly SDK
+     *                      doesn't provide a way to enumerate all flags.
      * @return Configured LaunchDarklyProvider instance
      */
     @OptIn(ExperimentalForeignApi::class, ExperimentalTime::class)
@@ -28,7 +31,8 @@ object LaunchDarklyProviderFactory {
         mobileKey: String,
         userId: String? = null,
         userName: String? = null,
-        name: String = "launchdarkly"
+        name: String = "launchdarkly",
+        knownFlagKeys: List<String>? = null
     ): LaunchDarklyProvider {
         // Create config
         val config = LDConfig(mobileKey = mobileKey)
@@ -62,7 +66,7 @@ object LaunchDarklyProviderFactory {
         )
 
         val adapter = IOSLaunchDarklyAdapter()
-        return LaunchDarklyProvider(adapter, name)
+        return LaunchDarklyProvider(adapter, name, knownFlagKeys)
     }
 }
 

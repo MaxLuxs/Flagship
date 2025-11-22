@@ -47,14 +47,27 @@ class IOSLaunchDarklyAdapter : LaunchDarklyAdapter {
         delay(500) // Give it time to sync
     }
 
-    override fun getAllFlags(): Map<String, Any?> {
+    override fun getAllFlags(knownKeys: List<String>?): Map<String, Any?> {
         val result = mutableMapOf<String, Any?>()
+        val client = getClient() ?: return result
 
         // LaunchDarkly iOS SDK doesn't provide easy way to get all flags
-        // We need to know flag keys upfront or use the streaming API
-        // For now, return empty map - provider will rely on direct flag lookups
-        // This matches the Android implementation behavior
+        // If knownKeys are provided, fetch them explicitly using direct lookups
+        // Note: LaunchDarkly SDK limitations make it difficult to detect if flag exists
+        // vs returning default value, so this is a best-effort implementation
+        knownKeys?.forEach { key ->
+            try {
+                // Try string first (works for JSON experiments)
+                val stringValue = client.stringVariationForKey(key = key, defaultValue = "")
+                if (stringValue.isNotEmpty()) {
+                    result[key] = stringValue
+                }
+            } catch (e: Exception) {
+                // Flag doesn't exist or error - skip
+            }
+        }
 
+        // If no knownKeys provided, return empty map - provider will rely on direct flag lookups
         return result
     }
 
