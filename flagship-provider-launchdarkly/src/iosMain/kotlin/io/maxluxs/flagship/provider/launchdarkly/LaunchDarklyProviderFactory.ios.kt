@@ -1,10 +1,12 @@
 package io.maxluxs.flagship.provider.launchdarkly
 
-import cocoapods.LaunchDarkly.*
+import cocoapods.LaunchDarkly.LDClient
+import cocoapods.LaunchDarkly.LDConfig
+import cocoapods.LaunchDarkly.LDContextBuilder
 import kotlinx.cinterop.ExperimentalForeignApi
+import platform.Foundation.NSBundle
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import platform.Foundation.NSBundle
 
 /**
  * Factory for creating LaunchDarkly provider instances on iOS.
@@ -32,21 +34,23 @@ object LaunchDarklyProviderFactory {
         val config = LDConfig(mobileKey = mobileKey)
 
         // Create context
-        val contextKey = userId ?: NSBundle.mainBundle.bundleIdentifier ?: "user-${Clock.System.now().epochSeconds}"
+        val contextKey = userId ?: NSBundle.mainBundle.bundleIdentifier
+        ?: "user-${Clock.System.now().epochSeconds}"
         val contextBuilder = LDContextBuilder(key = contextKey)
 
         userName?.let { contextBuilder.nameWithName(it) }
 
         val buildResult = contextBuilder.build()
         // Extract LDContext from ContextBuilderResult
-        // ContextBuilderResult has a context property or method to get the LDContext
-        val context = if (buildResult.isError()) {
-            // Fallback to simple context if build failed
-            val fallbackBuilder = LDContextBuilder(key = contextKey)
-            val fallbackResult = fallbackBuilder.build()
-            fallbackResult.context ?: throw IllegalStateException("Failed to create LDContext")
-        } else {
-            buildResult.context ?: throw IllegalStateException("Failed to create LDContext")
+        val context = when {
+            buildResult.failure() != null -> {
+                // Fallback to simple context if build failed
+                LDContextBuilder(key = contextKey).build().success()
+                    ?: throw IllegalStateException("Failed to create LDContext")
+            }
+
+            else -> buildResult.success()
+                ?: throw IllegalStateException("Failed to create LDContext")
         }
 
         // Initialize client (this starts the SDK)

@@ -1,6 +1,6 @@
 package io.maxluxs.flagship.provider.launchdarkly
 
-import cocoapods.LaunchDarkly.*
+import cocoapods.LaunchDarkly.LDClient
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.delay
 
@@ -67,23 +67,24 @@ class IOSLaunchDarklyAdapter : LaunchDarklyAdapter {
      * Get a specific flag value by key
      */
     fun getBooleanValue(key: String, default: Boolean = false): Boolean {
-        return getClient()?.boolVariationForKey(forKey = key, defaultValue = default) ?: default
+        return getClient()?.boolVariationForKey(key = key, defaultValue = default) ?: default
     }
 
     fun getIntValue(key: String, default: Int = 0): Int {
-        return getClient()?.integerVariationForKey(forKey = key, defaultValue = default) ?: default
+        return getClient()?.integerVariationForKey(key = key, defaultValue = default.toLong())
+            ?.toInt() ?: default
     }
 
     fun getDoubleValue(key: String, default: Double = 0.0): Double {
-        return getClient()?.doubleVariationForKey(forKey = key, defaultValue = default) ?: default
+        return getClient()?.doubleVariationForKey(key = key, defaultValue = default) ?: default
     }
 
     fun getStringValue(key: String, default: String = ""): String {
-        return getClient()?.stringVariationForKey(forKey = key, defaultValue = default) ?: default
+        return getClient()?.stringVariationForKey(key = key, defaultValue = default) ?: default
     }
 
     fun getJsonValueAsString(key: String): String {
-        return getClient()?.stringVariationForKey(forKey = key, defaultValue = "{}") ?: "{}"
+        return getClient()?.stringVariationForKey(key = key, defaultValue = "{}") ?: "{}"
     }
 }
 
