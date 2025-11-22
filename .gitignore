@@ -43,6 +43,10 @@ build/
 
 # Local configuration (contains sensitive data: API keys, passwords)
 local.properties
+.env
+.env.local
+.env.production
+.env.*.local
 
 # Kotlin Native
 .konan/

@@ -76,21 +76,111 @@ export JWT_SECRET=your-secret-key-here
 
 ## Environment Variables
 
-- `DATABASE_URL` - PostgreSQL connection URL
+### Required Variables
+
+- `DATABASE_URL` - PostgreSQL connection URL (e.g., `jdbc:postgresql://localhost:5432/flagship`)
 - `DATABASE_USER` - Database user
-- `DATABASE_PASSWORD` - Database password
-- `JWT_SECRET` - Secret key for JWT tokens (required in production)
+- `DATABASE_PASSWORD` - Database password (use strong password in production!)
+- `JWT_SECRET` - Secret key for JWT tokens (**REQUIRED in production**, min 32 characters)
+  - Generate with: `openssl rand -base64 32`
+  - **Never use default value in production!**
+
+### Optional Variables
+
 - `SERVER_PORT` - Server port (default: 8080)
 - `SERVER_HOST` - Server host (default: 0.0.0.0)
+- `LOG_LEVEL` - Logging level (default: INFO)
+- `CORS_ORIGINS` - Comma-separated list of allowed CORS origins
+
+### Configuration
+
+1. **Copy `.env.example` to `.env`:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Edit `.env` with your actual values:**
+   ```bash
+   # Use strong passwords and secrets!
+   DATABASE_PASSWORD=your-secure-password-here
+   JWT_SECRET=$(openssl rand -base64 32)
+   ```
+
+3. **Load environment variables:**
+   ```bash
+   export $(cat .env | xargs)
+   ```
+
+**⚠️ Security Notes:**
+- Never commit `.env` file to git (it's in `.gitignore`)
+- Use different secrets for each environment (dev, staging, prod)
+- Rotate secrets regularly in production
+- Use Docker secrets or secret management tools (Vault, AWS Secrets Manager) for production
 
 ## Production Deployment
 
-1. Set strong `JWT_SECRET`
-2. Use environment variables for database credentials
-3. Enable HTTPS
-4. Configure CORS for your domain
-5. Set up database backups
-6. Monitor logs
+### Security Checklist
+
+1. **✅ Set strong secrets:**
+   ```bash
+   # Generate secure JWT secret
+   export JWT_SECRET=$(openssl rand -base64 32)
+   
+   # Use strong database password
+   export DATABASE_PASSWORD=$(openssl rand -base64 24)
+   ```
+
+2. **✅ Use environment variables:**
+   - Never hardcode secrets in code
+   - Use `.env` file (not committed to git) or Docker secrets
+   - Use different secrets for each environment
+
+3. **✅ Enable HTTPS:**
+   - Use reverse proxy (nginx, Traefik) with SSL certificates
+   - Configure TLS/SSL for database connections
+
+4. **✅ Configure CORS:**
+   ```bash
+   export CORS_ORIGINS=https://yourdomain.com,https://admin.yourdomain.com
+   ```
+
+5. **✅ Database security:**
+   - Use strong passwords
+   - Enable SSL/TLS connections
+   - Restrict network access (firewall rules)
+   - Set up regular backups
+   - Use connection pooling
+
+6. **✅ Docker Secrets (recommended):**
+   ```bash
+   # Create Docker secrets
+   echo "your-jwt-secret" | docker secret create jwt_secret -
+   echo "your-db-password" | docker secret create database_password -
+   
+   # Use in docker-compose.prod.yml
+   docker stack deploy -c docker-compose.prod.yml flagship
+   ```
+
+7. **✅ Monitoring:**
+   - Set up log aggregation
+   - Monitor database connections
+   - Track API usage and errors
+   - Set up alerts for security events
+
+### Using Docker Compose for Production
+
+```bash
+# 1. Copy and configure .env file
+cp .env.example .env
+# Edit .env with production values
+
+# 2. Use production compose file
+docker-compose -f docker-compose.prod.yml up -d
+
+# 3. Verify deployment
+docker-compose -f docker-compose.prod.yml ps
+docker-compose -f docker-compose.prod.yml logs -f server
+```
 
 ## Docker Build
 
