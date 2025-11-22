@@ -66,12 +66,12 @@ Main interface for working with flags and experiments.
 
 ```kotlin
 interface FlagsManager {
-    // Feature Flags
-    fun isEnabled(key: FlagKey, default: Boolean = false, ctx: EvalContext? = null): Boolean
-    fun <T> value(key: FlagKey, default: T, ctx: EvalContext? = null): T
+    // Feature Flags (suspend functions)
+    suspend fun isEnabled(key: FlagKey, default: Boolean = false, ctx: EvalContext? = null): Boolean
+    suspend fun <T> value(key: FlagKey, default: T, ctx: EvalContext? = null): T
     
-    // Experiments
-    fun assign(key: ExperimentKey, ctx: EvalContext? = null): ExperimentAssignment?
+    // Experiments (suspend function)
+    suspend fun assign(key: ExperimentKey, ctx: EvalContext? = null): ExperimentAssignment?
     
     // Lifecycle
     suspend fun bootstrap(): Boolean
@@ -81,10 +81,10 @@ interface FlagsManager {
     // Overrides (Debug only)
     fun setOverride(key: FlagKey, value: FlagValue)
     fun clearOverride(key: FlagKey)
-    fun listOverrides(): List<FlagKey>
+    suspend fun listOverrides(): Map<FlagKey, FlagValue>
     
-    // Introspection
-    fun listAllFlags(): Map<FlagKey, FlagValue>
+    // Introspection (suspend function)
+    suspend fun listAllFlags(): Map<FlagKey, FlagValue>
     
     // Listeners
     fun addListener(listener: FlagsListener)
@@ -105,8 +105,11 @@ Checks if a feature flag is enabled.
 
 **Example:**
 ```kotlin
-if (manager.isEnabled("dark_mode")) {
-    enableDarkTheme()
+// Note: isEnabled is a suspend function - use in coroutine scope
+lifecycleScope.launch {
+    if (manager.isEnabled("dark_mode")) {
+        enableDarkTheme()
+    }
 }
 ```
 
@@ -126,8 +129,11 @@ Gets a typed flag value.
 
 **Example:**
 ```kotlin
-val timeout: Int = manager.value("request_timeout", default = 5000)
-val apiUrl: String = manager.value("api_base_url", default = "https://api.example.com")
+// Note: value is a suspend function - use in coroutine scope
+lifecycleScope.launch {
+    val timeout: Int = manager.value("request_timeout", default = 5000)
+    val apiUrl: String = manager.value("api_base_url", default = "https://api.example.com")
+}
 ```
 
 #### `assign(key, ctx): ExperimentAssignment?`
@@ -142,14 +148,17 @@ Assigns a user to an experiment variant.
 
 **Example:**
 ```kotlin
-val assignment = manager.assign(
-    "checkout_test",
-    EvalContext(userId = "user_123")
-)
+// Note: assign is a suspend function - use in coroutine scope
+lifecycleScope.launch {
+    val assignment = manager.assign(
+        "checkout_test",
+        EvalContext(userId = "user_123")
+    )
 
-when (assignment?.variant) {
-    "control" -> OldCheckout()
-    "variant_a" -> NewCheckout()
+    when (assignment?.variant) {
+        "control" -> OldCheckout()
+        "variant_a" -> NewCheckout()
+    }
 }
 ```
 

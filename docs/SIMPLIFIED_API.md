@@ -66,17 +66,21 @@ class MyApp : Application() {
 }
 
 // Использование в любом месте
+// Важно: Все методы доступа к флагам являются suspend функциями
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
         // Прямой доступ без manager()!
-        if (Flags.isEnabled("new_feature")) {
-            showNewFeature()
+        // Используйте lifecycleScope.launch для suspend функций
+        lifecycleScope.launch {
+            if (Flags.isEnabled("new_feature")) {
+                showNewFeature()
+            }
+            
+            val maxRetries = Flags.value("max_retries", default = 3)
+            val welcomeMsg = Flags.value("welcome_message", default = "Hello!")
         }
-        
-        val maxRetries = Flags.value("max_retries", default = 3)
-        val welcomeMsg = Flags.value("welcome_message", default = "Hello!")
     }
 }
 ```
@@ -87,8 +91,10 @@ class MainActivity : AppCompatActivity() {
 // В Application.onCreate()
 Flags.initRest("https://api.example.com/flags")
 
-// Использование
-if (Flags.isEnabled("feature")) { ... }
+// Использование (suspend функция - используйте в coroutine scope)
+lifecycleScope.launch {
+    if (Flags.isEnabled("feature")) { ... }
+}
 ```
 
 ---
@@ -107,33 +113,41 @@ Flags.initRest("https://api.example.com/flags")
 
 ### Проверка флагов
 
-```kotlin
-// Boolean флаг
-if (Flags.isEnabled("dark_mode")) {
-    enableDarkTheme()
-}
+**Важно:** Все методы доступа к флагам являются suspend функциями и должны вызываться в coroutine scope:
 
-// Типизированные значения
-val timeout: Int = Flags.value("api_timeout", default = 30)
-val message: String = Flags.value("welcome_msg", default = "Hello")
-val discount: Double = Flags.value("promo_discount", default = 0.1)
+```kotlin
+// Boolean флаг (suspend функция)
+lifecycleScope.launch {
+    if (Flags.isEnabled("dark_mode")) {
+        enableDarkTheme()
+    }
+    
+    // Типизированные значения (suspend функции)
+    val timeout: Int = Flags.value("api_timeout", default = 30)
+    val message: String = Flags.value("welcome_msg", default = "Hello")
+    val discount: Double = Flags.value("promo_discount", default = 0.1)
+}
 ```
 
 ### Эксперименты
 
-```kotlin
-// Простое назначение
-val variant = Flags.assign("checkout_exp")?.variant
-when (variant) {
-    "control" -> showLegacy()
-    "treatment" -> showNew()
-}
+**Важно:** Метод `assign` является suspend функцией:
 
-// С контекстом
-val assignment = Flags.assign(
-    "premium_exp",
-    context = EvalContext(userId = "user123")
-)
+```kotlin
+// Простое назначение (suspend функция)
+lifecycleScope.launch {
+    val variant = Flags.assign("checkout_exp")?.variant
+    when (variant) {
+        "control" -> showLegacy()
+        "treatment" -> showNew()
+    }
+    
+    // С контекстом
+    val assignment = Flags.assign(
+        "premium_exp",
+        context = EvalContext(userId = "user123")
+    )
+}
 ```
 
 ### Обновление
@@ -180,9 +194,11 @@ val timeout = Firebase.remoteConfig.getLong("api_timeout").toInt()
 // Инициализация
 Flags.initFirebase(application)
 
-// Использование
-val enabled = Flags.isEnabled("new_feature")
-val timeout = Flags.value("api_timeout", default = 30)
+// Использование (suspend функции)
+lifecycleScope.launch {
+    val enabled = Flags.isEnabled("new_feature")
+    val timeout = Flags.value("api_timeout", default = 30)
+}
 ```
 
 **Преимущества Flagship:**
@@ -216,12 +232,16 @@ val timeout = Flags.value("api_timeout", default = 30)
 Старый API продолжает работать! Можно мигрировать постепенно:
 
 ```kotlin
-// Старый код - работает
-val flags = Flags.manager()
-if (flags.isEnabled("feature")) { ... }
+// Старый код - работает (suspend функции)
+lifecycleScope.launch {
+    val flags = Flags.manager()
+    if (flags.isEnabled("feature")) { ... }
+}
 
-// Новый код - проще
-if (Flags.isEnabled("feature")) { ... }
+// Новый код - проще (suspend функции)
+lifecycleScope.launch {
+    if (Flags.isEnabled("feature")) { ... }
+}
 ```
 
 Оба варианта работают одновременно! 🎉

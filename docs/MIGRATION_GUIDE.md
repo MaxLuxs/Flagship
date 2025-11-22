@@ -59,10 +59,12 @@ val config = FlagsConfig(
 )
 Flags.configure(config)
 
-// Get values
+// Get values (suspend functions - use in coroutine scope)
 val manager = Flags.manager()
-val newFeatureEnabled = manager.isEnabled("new_feature")
-val apiTimeout: Int = manager.value("api_timeout", default = 5000)
+lifecycleScope.launch {
+    val newFeatureEnabled = manager.isEnabled("new_feature")
+    val apiTimeout: Int = manager.value("api_timeout", default = 5000)
+}
 
 // Fetch (automatic with coroutines)
 lifecycleScope.launch {
@@ -110,11 +112,14 @@ Flags.configure(config)
 
 // Feature flag
 val manager = Flags.manager()
-val showNewUI = manager.isEnabled("show-new-ui")
-
-// Experiment
-val assignment = manager.assign("button-color-test")
-val buttonColor = assignment?.payload["color"]?.jsonPrimitive?.content ?: "blue"
+// Note: All flag access methods are suspend functions
+lifecycleScope.launch {
+    val showNewUI = manager.isEnabled("show-new-ui")
+    
+    // Experiment
+    val assignment = manager.assign("button-color-test")
+    val buttonColor = assignment?.payload["color"]?.jsonPrimitive?.content ?: "blue"
+}
 ```
 
 ---
@@ -151,8 +156,11 @@ val manager = Flags.manager()
 val ctx = EvalContext(userId = "user123")
 
 // Feature flag
-if (manager.isEnabled("new_checkout")) {
-    // Show new checkout
+// Note: isEnabled is a suspend function
+lifecycleScope.launch {
+    if (manager.isEnabled("new_checkout")) {
+        // Show new checkout
+    }
 }
 ```
 
@@ -206,7 +214,8 @@ Flags.configure(config)
 // Use everywhere
 val manager = Flags.manager()
 
-fun isFeatureEnabled(key: String): Boolean {
+// Note: isEnabled is a suspend function - make the function suspend too
+suspend fun isFeatureEnabled(key: String): Boolean {
     return manager.isEnabled(key)
 }
 

@@ -62,21 +62,26 @@ class MyApp : Application() {
 }
 
 // 2. In your app code
+// Note: All flag access methods are suspend functions - use in coroutine scope
 val flags = Flags.manager()
 
 // Feature flag
-if (flags.isEnabled("new_payment_flow")) {
-    NewPaymentScreen()
-} else {
-    LegacyPaymentScreen()
+lifecycleScope.launch {
+    if (flags.isEnabled("new_payment_flow")) {
+        NewPaymentScreen()
+    } else {
+        LegacyPaymentScreen()
+    }
 }
 
 // A/B experiment
-val assignment = flags.assign("checkout_experiment")
-when (assignment?.variant) {
-    "control" -> OriginalCheckout()
-    "variant_a" -> NewCheckoutA()
-    "variant_b" -> NewCheckoutB()
+lifecycleScope.launch {
+    val assignment = flags.assign("checkout_experiment")
+    when (assignment?.variant) {
+        "control" -> OriginalCheckout()
+        "variant_a" -> NewCheckoutA()
+        "variant_b" -> NewCheckoutB()
+    }
 }
 ```
 
@@ -104,12 +109,18 @@ import Flagship
 
 struct PaymentView: View {
     let flags = Flags.shared.manager()
+    @State private var isNewPaymentEnabled = false
     
     var body: some View {
-        if flags.isEnabled(key: "new_payment_flow", default: false, ctx: nil) {
+        if isNewPaymentEnabled {
             NewPaymentView()
         } else {
             LegacyPaymentView()
+        }
+        .onAppear {
+            Task {
+                isNewPaymentEnabled = await flags.isEnabled(key: "new_payment_flow", default: false, ctx: nil)
+            }
         }
     }
 }
@@ -277,17 +288,20 @@ class MainActivity : AppCompatActivity() {
         
         val flags = Flags.manager()
         
-        // Check boolean flag
-        if (flags.isEnabled("new_payment_flow")) {
-            showNewPaymentScreen()
-        } else {
-            showLegacyPaymentScreen()
+        // Note: All flag access methods are suspend functions - use in coroutine scope
+        lifecycleScope.launch {
+            // Check boolean flag
+            if (flags.isEnabled("new_payment_flow")) {
+                showNewPaymentScreen()
+            } else {
+                showLegacyPaymentScreen()
+            }
+            
+            // Get typed values
+            val maxRetries = flags.value("max_retries", default = 3)
+            val apiTimeout = flags.value("api_timeout", default = 30.0)
+            val welcomeMessage = flags.value("welcome_message", default = "Welcome!")
         }
-        
-        // Get typed values
-        val maxRetries = flags.value("max_retries", default = 3)
-        val apiTimeout = flags.value("api_timeout", default = 30.0)
-        val welcomeMessage = flags.value("welcome_message", default = "Welcome!")
     }
 }
 ```
@@ -955,11 +969,11 @@ val timeout = manager.value<Int?>("request_timeout", default = null) // Dangerou
 class MyRepository {
     private val flags = Flags.manager() // Once
     
-    fun isFeatureEnabled() = flags.isEnabled("feature_x")
+    suspend fun isFeatureEnabled() = flags.isEnabled("feature_x")
 }
 
 // ❌ Bad
-fun checkFeature() {
+suspend fun checkFeature() {
     val flags = Flags.manager() // Creates new instance each time
     return flags.isEnabled("feature_x")
 }
