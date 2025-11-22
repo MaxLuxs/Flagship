@@ -8,6 +8,10 @@ data class ProviderSnapshot(
     val experiments: Map<ExperimentKey, ExperimentDefinition> = emptyMap(),
     val revision: String? = null,
     val fetchedAtMs: Long,
-    val ttlMs: Long? = null
+    val ttlMs: Long? = null,
+    /**
+     * Optional signature/hash for integrity verification.
+     */
+    val signature: String? = null
 )
 

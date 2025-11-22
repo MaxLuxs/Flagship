@@ -1,8 +1,7 @@
 package io.maxluxs.flagship.core.retry
 
+import io.maxluxs.flagship.core.util.BackoffCalculator
 import kotlinx.coroutines.delay
-import kotlin.math.min
-import kotlin.math.pow
 
 /**
  * Retry policy for failed provider operations.
@@ -56,8 +55,12 @@ class ExponentialBackoffRetry(
     private val factor: Double = 2.0
 ) : RetryPolicy {
     override fun getDelayMs(attempt: Int): Long {
-        val delay = initialDelayMs * factor.pow(attempt - 1).toLong()
-        return min(delay, maxDelayMs)
+        return BackoffCalculator.calculateDelay(
+            attempt = attempt,
+            initialDelayMs = initialDelayMs,
+            maxDelayMs = maxDelayMs,
+            factor = factor
+        )
     }
 
     override fun shouldRetry(attempt: Int, error: Throwable): Boolean {
