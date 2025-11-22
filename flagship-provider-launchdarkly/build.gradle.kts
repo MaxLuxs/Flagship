@@ -24,7 +24,7 @@ kotlin {
     cocoapods {
         summary = "Flagship LaunchDarkly Provider"
         homepage = "https://github.com/maxluxs/Flagship"
-        version = "0.1.0"
+        version = "0.1.1"
         ios.deploymentTarget = "14.0"
         
         pod("LaunchDarkly") {
