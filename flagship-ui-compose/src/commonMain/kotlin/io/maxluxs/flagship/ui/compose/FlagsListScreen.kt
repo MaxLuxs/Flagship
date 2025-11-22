@@ -19,6 +19,7 @@ import io.maxluxs.flagship.core.manager.FlagsListener
 import io.maxluxs.flagship.core.manager.FlagsManager
 import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.core.model.FlagValue
+import kotlinx.coroutines.launch
 
 enum class FlagTypeFilter {
     ALL, BOOL, INT, DOUBLE, STRING, JSON
@@ -32,22 +33,34 @@ fun FlagsListScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf(FlagTypeFilter.ALL) }
-    var allFlags by remember { mutableStateOf(manager.listAllFlags()) }
-    var overrides by remember { mutableStateOf(manager.listOverrides()) }
+    var allFlags by remember { mutableStateOf<Map<FlagKey, FlagValue>>(emptyMap()) }
+    var overrides by remember { mutableStateOf<Map<FlagKey, FlagValue>>(emptyMap()) }
     var updateTrigger by remember { mutableStateOf(0) }
+    
+    val scope = rememberCoroutineScope()
+    
+    // Load initial data
+    LaunchedEffect(manager) {
+        allFlags = manager.listAllFlags()
+        overrides = manager.listOverrides()
+    }
     
     // Listen for changes
     DisposableEffect(manager) {
         val listener = object : FlagsListener {
             override fun onSnapshotUpdated(source: String) {
-                allFlags = manager.listAllFlags()
-                overrides = manager.listOverrides()
-                updateTrigger++
+                scope.launch {
+                    allFlags = manager.listAllFlags()
+                    overrides = manager.listOverrides()
+                    updateTrigger++
+                }
             }
             override fun onOverrideChanged(key: FlagKey) {
-                allFlags = manager.listAllFlags()
-                overrides = manager.listOverrides()
-                updateTrigger++
+                scope.launch {
+                    allFlags = manager.listAllFlags()
+                    overrides = manager.listOverrides()
+                    updateTrigger++
+                }
             }
         }
         manager.addListener(listener)

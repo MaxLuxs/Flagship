@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Flagship - Feature Flags & A/B Testing для Kotlin Multiplatform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-icon">🚩</span>
+                    <span class="logo-text">Flagship</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features" data-i18n="nav.features">Возможности</a>
+                    <a href="#pricing" data-i18n="nav.pricing">Тарифы</a>
+                    <a href="#docs" data-i18n="nav.docs">Документация</a>
+                    <a href="#about" data-i18n="nav.about">О проекте</a>
+                    <select id="language-selector" class="language-selector">
+                        <option value="ru">🇷🇺 RU</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                    <a href="/admin" class="btn-primary" data-i18n="nav.admin">Войти в админку</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge" data-i18n="hero.badge">🚧 В стадии активной разработки</div>
+                <h1 class="hero-title" data-i18n="hero.title">Feature Flags & A/B Testing для Kotlin Multiplatform</h1>
+                <p class="hero-subtitle" data-i18n="hero.subtitle">
+                    Простая интеграция, типобезопасность, realtime обновления. 
+                    Self-hosted или облако — выбор за вами.
+                </p>
+                <div class="hero-actions">
+                    <a href="#docs" class="btn-filled" data-i18n="hero.getStarted">Начать работу</a>
+                    <a href="https://github.com/MaxLuxs/Flagship" class="btn-outlined" target="_blank" rel="noopener noreferrer">GitHub</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">KMP</div>
+                        <div class="stat-label" data-i18n="hero.stats.kmp">Kotlin Multiplatform</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">&lt;10 мин</div>
+                        <div class="stat-label" data-i18n="hero.stats.integration">Интеграция</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label" data-i18n="hero.stats.opensource">Open Source SDK</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title" data-i18n="features.title">Возможности</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Плагинная архитектура</h3>
+                    <p>Firebase, REST, LaunchDarkly или ваш собственный провайдер. Легко расширяемая система.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Realtime обновления</h3>
+                    <p>SSE/WebSocket для мгновенных обновлений флагов без перезапуска приложения.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Типобезопасность</h3>
+                    <p>Кодогенерация для typed flags. Никаких магических строк, автодополнение в IDE.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Оффлайн режим</h3>
+                    <p>Кэширование с TTL, работа без интернета, автоматический fallback.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>A/B тестирование</h3>
+                    <p>Deterministic bucketing, сегментация, распределение по вариантам.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Self-hosted</h3>
+                    <p>Один Docker-compose файл — полный контроль над данными и инфраструктурой.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment Options -->
+    <section class="deployment">
+        <div class="container">
+            <h2 class="section-title" data-i18n="deployment.title">Варианты развертывания</h2>
+            <div class="deployment-grid">
+                <div class="deployment-card">
+                    <div class="deployment-icon">☁️</div>
+                    <h3 data-i18n="deployment.cloud.title">Облако (SaaS)</h3>
+                    <p data-i18n="deployment.cloud.desc">Готовое решение без настройки инфраструктуры. Просто подключите SDK и начните работу.</p>
+                    <ul class="deployment-list">
+                        <li data-i18n="deployment.cloud.feature1">✅ Автоматические обновления</li>
+                        <li data-i18n="deployment.cloud.feature2">✅ Масштабирование из коробки</li>
+                        <li data-i18n="deployment.cloud.feature3">✅ Мониторинг и аналитика</li>
+                        <li data-i18n="deployment.cloud.feature4">✅ Техническая поддержка</li>
+                    </ul>
+                    <div class="deployment-status">
+                        <span class="status-badge coming-soon" data-i18n="deployment.cloud.status">Скоро</span>
+                    </div>
+                </div>
+                <div class="deployment-card featured">
+                    <div class="deployment-icon">🏠</div>
+                    <h3 data-i18n="deployment.selfhosted.title">Self-hosted</h3>
+                    <p data-i18n="deployment.selfhosted.desc">Полный контроль над данными. Развертывание на вашей инфраструктуре.</p>
+                    <ul class="deployment-list">
+                        <li data-i18n="deployment.selfhosted.feature1">✅ Docker-compose setup</li>
+                        <li data-i18n="deployment.selfhosted.feature2">✅ PostgreSQL база данных</li>
+                        <li data-i18n="deployment.selfhosted.feature3">✅ Админ-панель</li>
+                        <li data-i18n="deployment.selfhosted.feature4">✅ REST API</li>
+                    </ul>
+                    <div class="deployment-status">
+                        <span class="status-badge available" data-i18n="deployment.selfhosted.status">Доступно</span>
+                    </div>
+                    <a href="#docs" class="btn-outlined" data-i18n="deployment.selfhosted.docs">Документация</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title" data-i18n="pricing.title">Тарифы</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 data-i18n="pricing.free.title">Free</h3>
+                    <div class="price">$0</div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.free.feature1">До 5 флагов</li>
+                        <li data-i18n="pricing.free.feature2">1 проект</li>
+                        <li data-i18n="pricing.free.feature3">10k MAU</li>
+                        <li data-i18n="pricing.free.feature4">REST API</li>
+                        <li data-i18n="pricing.free.feature5">Базовые SDK</li>
+                        <li data-i18n="pricing.free.feature6">Локальный кэш</li>
+                    </ul>
+                    <a href="#docs" class="btn-outlined" data-i18n="pricing.free.button">Начать бесплатно</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="badge" data-i18n="pricing.popular">Популярный</div>
+                    <h3 data-i18n="pricing.pro.title">Pro</h3>
+                    <div class="price">$49<span>/мес</span></div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.pro.feature1">До 50 флагов</li>
+                        <li data-i18n="pricing.pro.feature2">5 проектов</li>
+                        <li data-i18n="pricing.pro.feature3">500k MAU</li>
+                        <li data-i18n="pricing.pro.feature4">Realtime обновления</li>
+                        <li data-i18n="pricing.pro.feature5">Typed flags</li>
+                        <li data-i18n="pricing.pro.feature6">Базовая аналитика</li>
+                    </ul>
+                    <a href="#docs" class="btn-filled" data-i18n="pricing.pro.button">Начать</a>
+                </div>
+                <div class="pricing-card">
+                    <h3 data-i18n="pricing.growth.title">Growth</h3>
+                    <div class="price">$199<span>/мес</span></div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.growth.feature1">До 200 флагов</li>
+                        <li data-i18n="pricing.growth.feature2">20 проектов</li>
+                        <li data-i18n="pricing.growth.feature3">2M MAU</li>
+                        <li data-i18n="pricing.growth.feature4">Расширенная аналитика</li>
+                        <li data-i18n="pricing.growth.feature5">Интеграции</li>
+                        <li data-i18n="pricing.growth.feature6">Audit log</li>
+                    </ul>
+                    <a href="#docs" class="btn-outlined" data-i18n="pricing.growth.button">Связаться</a>
+                </div>
+                <div class="pricing-card">
+                    <h3 data-i18n="pricing.enterprise.title">Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.enterprise.feature1">Без ограничений</li>
+                        <li data-i18n="pricing.enterprise.feature2">SLA</li>
+                        <li data-i18n="pricing.enterprise.feature3">ML алгоритмы</li>
+                        <li data-i18n="pricing.enterprise.feature4">Edge delivery</li>
+                        <li data-i18n="pricing.enterprise.feature5">Compliance</li>
+                        <li data-i18n="pricing.enterprise.feature6">Приоритетная поддержка</li>
+                    </ul>
+                    <a href="#docs" class="btn-outlined" data-i18n="pricing.enterprise.button">Связаться</a>
+                </div>
+            </div>
+            <div class="pricing-note">
+                <p data-i18n="pricing.note">💡 <strong>Self-hosted</strong> доступен для всех тарифов. Лицензия + поддержка.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="docs">
+        <div class="container">
+            <h2 class="section-title" data-i18n="docs.title">Документация</h2>
+            <div class="docs-grid">
+                <a href="https://maxluxs.github.io/Flagship/docs/USAGE_GUIDE.html" class="doc-card" target="_blank" rel="noopener noreferrer">
+                    <div class="doc-icon">📚</div>
+                    <h3 data-i18n="docs.guide">Руководство</h3>
+                    <p data-i18n="docs.guideDesc">Полное руководство по использованию SDK</p>
+                </a>
+                <a href="https://maxluxs.github.io/Flagship/docs/API_REFERENCE.html" class="doc-card" target="_blank" rel="noopener noreferrer">
+                    <div class="doc-icon">🔌</div>
+                    <h3 data-i18n="docs.api">API Reference</h3>
+                    <p data-i18n="docs.apiDesc">Документация REST API</p>
+                </a>
+                <a href="https://maxluxs.github.io/Flagship/docs/MIGRATION_GUIDE.html" class="doc-card" target="_blank" rel="noopener noreferrer">
+                    <div class="doc-icon">🔄</div>
+                    <h3 data-i18n="docs.migration">Migration Guide</h3>
+                    <p data-i18n="docs.migrationDesc">Руководство по миграции</p>
+                </a>
+                <a href="https://github.com/MaxLuxs/Flagship" class="doc-card" target="_blank" rel="noopener noreferrer">
+                    <div class="doc-icon">🐙</div>
+                    <h3>GitHub</h3>
+                    <p data-i18n="docs.githubDesc">Исходный код и issues</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title" data-i18n="about.title">О проекте</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3 data-i18n="about.developerFirst.title">Developer-first подход</h3>
+                    <p data-i18n="about.developerFirst.p1">
+                        Flagship создан разработчиками для разработчиков. Мы понимаем, что feature flags 
+                        должны быть простыми в интеграции, типобезопасными и прозрачными.
+                    </p>
+                    <p data-i18n="about.developerFirst.p2">
+                        Проект находится в активной стадии разработки. Мы работаем над MVP и планируем 
+                        запуск в ближайшие месяцы. Присоединяйтесь к разработке или следите за обновлениями!
+                    </p>
+                    <h3 data-i18n="about.deployment.title">Self-hosted или облако?</h3>
+                    <p data-i18n="about.deployment.selfhosted">
+                        <strong>Self-hosted</strong> — для тех, кому нужен полный контроль над данными 
+                        и инфраструктурой. Один Docker-compose файл, и всё работает.
+                    </p>
+                    <p data-i18n="about.deployment.cloud">
+                        <strong>Облако</strong> — для тех, кто хочет сфокусироваться на разработке, 
+                        а не на поддержке инфраструктуры. Автоматическое масштабирование, мониторинг, 
+                        обновления — всё из коробки.
+                    </p>
+                </div>
+                <div class="about-developer">
+                    <h3 data-i18n="about.developer.title">Разработчик</h3>
+                    <div class="developer-card">
+                        <div class="developer-avatar">👨‍💻</div>
+                        <div class="developer-info">
+                            <h4 data-i18n="about.developer.name">Max Luxs</h4>
+                            <p data-i18n="about.developer.desc">Full-stack разработчик, Kotlin энтузиаст</p>
+                            <div class="developer-links">
+                                <a href="https://github.com/MaxLuxs" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Banner -->
+    <section class="status-banner">
+        <div class="container">
+            <div class="status-content">
+                <div class="status-icon">🚧</div>
+                <div class="status-text">
+                    <h3 data-i18n="status.title">Проект в стадии активной разработки</h3>
+                    <p data-i18n="status.desc">
+                        Мы работаем над MVP. Некоторые функции могут быть недоступны или изменяться. 
+                        Следите за обновлениями в GitHub или присоединяйтесь к разработке!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Flagship</h4>
+                    <p>Feature Flags & A/B Testing для Kotlin Multiplatform</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Ресурсы</h4>
+                    <ul>
+                        <li><a href="https://maxluxs.github.io/Flagship/" target="_blank" rel="noopener noreferrer" data-i18n="footer.docs">Документация</a></li>
+                        <li><a href="https://github.com/MaxLuxs/Flagship" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="/admin" data-i18n="footer.admin">Админ-панель</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.support">Поддержка</h4>
+                    <ul>
+                        <li><a href="https://github.com/MaxLuxs/Flagship/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+                        <li><a href="https://github.com/MaxLuxs/Flagship/discussions" target="_blank" rel="noopener noreferrer">Discussions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="footer.copyright">&copy; 2024 Flagship. Open Source SDK, коммерческий сервер.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

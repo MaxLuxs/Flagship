@@ -43,6 +43,10 @@ build/
 
 # Local configuration (contains sensitive data: API keys, passwords)
 local.properties
+.env
+.env.local
+.env.production
+.env.*.local
 
 # Kotlin Native
 .konan/
@@ -96,5 +100,7 @@ iosApp/**/build/
 **/build/bin/*Framework/
 **/build/bin/*framework/
 
-# Flagship Server (proprietary/commercial)
-/flagship-server/
+# Flagship Server & Commercial Modules (proprietary/commercial)
+# Note: These modules are tracked locally in git but blocked from push via pre-push hook
+# DO NOT add them here - they should be tracked locally but not pushed to GitHub
+# See .git/hooks/pre-push for push blocking logic

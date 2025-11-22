@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'flagship_provider_firebase'
-    spec.version                  = '0.1.0'
+    spec.version                  = '0.1.1'
     spec.homepage                 = 'https://github.com/maxluxs/Flagship'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''

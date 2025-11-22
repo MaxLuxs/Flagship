@@ -37,12 +37,21 @@ interface FlagsManager {
      * 2. Provider values (in order of precedence)
      * 3. Default value
      * 
+     * Example:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     if (flags.isEnabled("new_feature")) {
+     *         showNewFeature()
+     *     }
+     * }
+     * ```
+     * 
      * @param key The flag key to check
      * @param default Default value if flag is not found (defaults to false for safety)
      * @param ctx Optional evaluation context (uses default context if not provided)
      * @return true if the flag is enabled, false otherwise
      */
-    fun isEnabled(key: FlagKey, default: Boolean = false, ctx: EvalContext? = null): Boolean
+    suspend fun isEnabled(key: FlagKey, default: Boolean = false, ctx: EvalContext? = null): Boolean
 
     /**
      * Get a typed flag value.
@@ -51,9 +60,11 @@ interface FlagsManager {
      * 
      * Example:
      * ```kotlin
-     * val maxRetries: Int = flags.value("max_retries", default = 3)
-     * val apiUrl: String = flags.value("api_url", default = "https://api.prod.com")
-     * val threshold: Double = flags.value("threshold", default = 0.75)
+     * lifecycleScope.launch {
+     *     val maxRetries: Int = flags.value("max_retries", default = 3)
+     *     val apiUrl: String = flags.value("api_url", default = "https://api.prod.com")
+     *     val threshold: Double = flags.value("threshold", default = 0.75)
+     * }
      * ```
      * 
      * @param key The flag key
@@ -61,7 +72,7 @@ interface FlagsManager {
      * @param ctx Optional evaluation context
      * @return The flag value, or default if not found or type mismatch
      */
-    fun <T> value(key: FlagKey, default: T, ctx: EvalContext? = null): T
+    suspend fun <T> value(key: FlagKey, default: T, ctx: EvalContext? = null): T
 
     /**
      * Assign user to an experiment variant.
@@ -71,12 +82,14 @@ interface FlagsManager {
      * 
      * Example:
      * ```kotlin
-     * val assignment = flags.assign("checkout_exp")
-     * when (assignment?.variant) {
-     *     "control" -> showLegacyCheckout()
-     *     "treatment_a" -> showNewCheckout()
-     *     "treatment_b" -> showAlternativeCheckout()
-     *     else -> showLegacyCheckout() // fallback
+     * lifecycleScope.launch {
+     *     val assignment = flags.assign("checkout_exp")
+     *     when (assignment?.variant) {
+     *         "control" -> showLegacyCheckout()
+     *         "treatment_a" -> showNewCheckout()
+     *         "treatment_b" -> showAlternativeCheckout()
+     *         else -> showLegacyCheckout() // fallback
+     *     }
      * }
      * ```
      * 
@@ -84,7 +97,7 @@ interface FlagsManager {
      * @param ctx Optional evaluation context (required for targeting and bucketing)
      * @return ExperimentAssignment with variant and payload, or null if user doesn't qualify
      */
-    fun assign(key: ExperimentKey, ctx: EvalContext? = null): ExperimentAssignment?
+    suspend fun assign(key: ExperimentKey, ctx: EvalContext? = null): ExperimentAssignment?
 
     /**
      * Ensure flags are bootstrapped before first use.
@@ -167,9 +180,17 @@ interface FlagsManager {
     /**
      * List all currently active overrides.
      * 
+     * Example:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     val overrides = flags.listOverrides()
+     *     // Use overrides
+     * }
+     * ```
+     * 
      * @return Map of flag keys to their override values
      */
-    fun listOverrides(): Map<FlagKey, FlagValue>
+    suspend fun listOverrides(): Map<FlagKey, FlagValue>
     
     /**
      * List all available flags from all providers.
@@ -177,8 +198,16 @@ interface FlagsManager {
      * Returns a map of all flag keys to their current values.
      * Useful for debugging and displaying all available flags in a dashboard.
      * 
+     * Example:
+     * ```kotlin
+     * lifecycleScope.launch {
+     *     val allFlags = flags.listAllFlags()
+     *     // Use allFlags
+     * }
+     * ```
+     * 
      * @return Map of all flag keys to their values
      */
-    fun listAllFlags(): Map<FlagKey, FlagValue>
+    suspend fun listAllFlags(): Map<FlagKey, FlagValue>
 }
 

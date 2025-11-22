@@ -15,7 +15,7 @@ A ready-to-use adapter for **Firebase Remote Config**. Allows you to use Firebas
 ## Installation
 
 ```kotlin
-implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.0")
+implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1")
 ```
 
 ## Usage

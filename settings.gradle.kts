@@ -32,12 +32,13 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-include(":sample")
+include(":flagship-sample")
 include(":flagship-core")
 include(":flagship-provider-rest")
 include(":flagship-provider-firebase")
 include(":flagship-provider-launchdarkly")
 include(":flagship-ui-compose")
-include(":flagship-platform-android")
-include(":flagship-platform-ios")
 include(":flagship-server")
+include(":flagship-codegen")
+include(":flagship-spring-boot-starter")
+include(":flagship-ktor-plugin")

@@ -5,6 +5,7 @@ import io.maxluxs.flagship.core.cache.InMemoryCache
 import io.maxluxs.flagship.core.model.*
 import io.maxluxs.flagship.core.provider.FlagsProvider
 import io.maxluxs.flagship.core.util.DefaultLogger
+import io.maxluxs.flagship.core.util.currentTimeMillis
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -167,7 +168,7 @@ class FlagsManagerIntegrationTest {
                 flags = flags,
                 experiments = experiments,
                 revision = "test_rev",
-                fetchedAtMs = System.currentTimeMillis()
+                fetchedAtMs = currentTimeMillis()
             )
         }
 

@@ -16,7 +16,7 @@ Enterprise-grade feature flag provider powered by **LaunchDarkly**. Supports rea
 ## Installation
 
 ```kotlin
-implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.0")
+implementation("io.maxluxs.flagship:flagship-provider-launchdarkly:0.1.1")
 ```
 
 ## Usage
@@ -33,7 +33,8 @@ val provider = LaunchDarklyProviderFactory.create(
     mobileKey = "mob-YOUR-MOBILE-KEY",
     userId = "user-123",
     userName = "User Name",
-    name = "launchdarkly"
+    name = "launchdarkly",
+    knownFlagKeys = listOf("new_feature", "dark_mode", "exp_checkout_flow") // Optional: improves getAllFlags()
 )
 
 val config = FlagsConfig(
@@ -72,10 +73,57 @@ val provider = LaunchDarklyProvider(
 )
 ```
 
-### iOS
+### iOS (Recommended - using Factory)
+
+The easiest way to create a LaunchDarkly provider on iOS:
 
 ```kotlin
-// Coming soon - iOS native SDK integration
+import io.maxluxs.flagship.provider.launchdarkly.LaunchDarklyProviderFactory
+
+val provider = LaunchDarklyProviderFactory.create(
+    mobileKey = "mob-YOUR-MOBILE-KEY",
+    userId = "user-123",
+    userName = "User Name",
+    name = "launchdarkly",
+    knownFlagKeys = listOf("new_feature", "dark_mode", "exp_checkout_flow") // Optional: improves getAllFlags()
+)
+
+val config = FlagsConfig(
+    appKey = "your-app",
+    environment = "production",
+    providers = listOf(provider),
+    cache = IOSFlagsInitializer.createPersistentCache()
+)
+
+Flags.configure(config)
+```
+
+The factory handles:
+- LaunchDarkly SDK initialization via Cocoapods
+- LDConfig and LDContext setup
+- Client initialization (waits until ready)
+
+### iOS Manual Setup (Advanced)
+
+If you need more control, you can create the provider manually:
+
+```kotlin
+import cocoapods.LaunchDarkly.LDClient
+import cocoapods.LaunchDarkly.LDConfig
+import cocoapods.LaunchDarkly.LDContextBuilder
+
+val config = LDConfig(mobileKey = "mob-YOUR-MOBILE-KEY")
+val context = LDContextBuilder(key = "user-id", kind = "user").build().success()
+    ?: throw IllegalStateException("Failed to create LDContext")
+
+LDClient.startWithConfiguration(
+    configuration = config,
+    context = context,
+    completion = null
+)
+
+val adapter = IOSLaunchDarklyAdapter()
+val provider = LaunchDarklyProvider(adapter)
 ```
 
 ## LaunchDarkly Setup
@@ -112,6 +160,25 @@ exp_checkout_flow: {
   ]
 }
 ```
+
+## Known Flag Keys
+
+LaunchDarkly SDK doesn't provide a direct way to enumerate all flags. To improve `getAllFlags()` performance, you can provide a list of known flag keys:
+
+```kotlin
+val provider = LaunchDarklyProviderFactory.create(
+    application = application,
+    mobileKey = "mob-YOUR-MOBILE-KEY",
+    knownFlagKeys = listOf(
+        "new_feature",
+        "dark_mode",
+        "api_timeout",
+        "exp_checkout_flow"
+    )
+)
+```
+
+When `knownFlagKeys` is provided, the provider will explicitly fetch these flags during bootstrap/refresh, improving snapshot completeness. Without it, the provider relies on direct flag lookups when needed.
 
 ## Testing
 

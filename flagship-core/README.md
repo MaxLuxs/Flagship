@@ -51,22 +51,28 @@ Flags.configure(config)
 // Get manager
 val manager = Flags.manager()
 
-// Feature flag
-if (manager.isEnabled("new_checkout")) {
-    // Show new checkout
+// Feature flag (suspend function - use in coroutine scope)
+lifecycleScope.launch {
+    if (manager.isEnabled("new_checkout")) {
+        // Show new checkout
+    }
 }
 
-// Experiment
-val assignment = manager.assign("checkout_experiment")
-when (assignment?.variant) {
-    "control" -> // Original
-    "variant_a" -> // Test A
-    "variant_b" -> // Test B
+// Experiment (suspend function)
+lifecycleScope.launch {
+    val assignment = manager.assign("checkout_experiment")
+    when (assignment?.variant) {
+        "control" -> // Original
+        "variant_a" -> // Test A
+        "variant_b" -> // Test B
+    }
 }
 
-// Type-safe values
-val timeout: Int = manager.value("request_timeout", default = 5000)
-val apiUrl: String = manager.value("api_base_url", default = "https://api.example.com")
+// Type-safe values (suspend function)
+lifecycleScope.launch {
+    val timeout: Int = manager.value("request_timeout", default = 5000)
+    val apiUrl: String = manager.value("api_base_url", default = "https://api.example.com")
+}
 ```
 
 ## 🧪 Testing

@@ -1,8 +1,12 @@
 package io.maxluxs.flagship.core.manager
 
 import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.analytics.ExposureTracker
 import io.maxluxs.flagship.core.evaluator.FlagsEvaluator
 import io.maxluxs.flagship.core.model.*
+import io.maxluxs.flagship.core.provider.RealtimeFlagsProvider
+import io.maxluxs.flagship.core.realtime.RealtimeManager
+import io.maxluxs.flagship.core.security.SignatureValidator
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,24 +24,38 @@ class DefaultFlagsManager(
     private val listeners = mutableListOf<FlagsListener>()
     
     private val mutex = Mutex()
-    private val exposureTracker = io.maxluxs.flagship.core.analytics.ExposureTracker()
+    private val exposureTracker = ExposureTracker()
     
     private var defaultContext: EvalContext? = null
     private var bootstrapped = false
     private val bootstrapMutex = Mutex()
+    
+    private val realtimeManager: RealtimeManager? = if (config.enableRealtime) {
+        RealtimeManager(this, scope, coroutineContext)
+    } else {
+        null
+    }
+    
+    private val signatureValidator: SignatureValidator? = config.crypto?.let {
+        SignatureValidator(it, config.serializer)
+    }
+    
+    private val snapshotVerifier: SnapshotVerifier? = signatureValidator?.let {
+        SnapshotVerifier(it, config.logger)
+    }
 
     fun setDefaultContext(context: EvalContext) {
         defaultContext = context
     }
 
-    override fun isEnabled(key: FlagKey, default: Boolean, ctx: EvalContext?): Boolean {
+    override suspend fun isEnabled(key: FlagKey, default: Boolean, ctx: EvalContext?): Boolean {
         val context = ctx ?: defaultContext ?: return default
         val value = evaluateInternal(key, FlagValue.Bool(default))
         return value?.asBoolean() ?: default
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> value(key: FlagKey, default: T, ctx: EvalContext?): T {
+    override suspend fun <T> value(key: FlagKey, default: T, ctx: EvalContext?): T {
         val context = ctx ?: defaultContext ?: return default
         val flagDefault = when (default) {
             is Boolean -> FlagValue.Bool(default)
@@ -57,12 +75,15 @@ class DefaultFlagsManager(
         }
     }
 
-    override fun assign(key: ExperimentKey, ctx: EvalContext?): ExperimentAssignment? {
+    override suspend fun assign(key: ExperimentKey, ctx: EvalContext?): ExperimentAssignment? {
         val context = ctx ?: defaultContext ?: return null
         // Snapshots are read-only list copies in evaluateExperiment, so no lock needed there if passed correctly
         // But we need lock to get snapshots values safely
-        val currentSnapshots = runBlocking { 
-            mutex.withLock { snapshots.values.toList() } 
+        // Preserve provider order by iterating config.providers
+        val currentSnapshots = mutex.withLock { 
+            config.providers.mapNotNull { provider ->
+                snapshots[provider.name]
+            }
         }
         
         val assignment = evaluator.evaluateExperiment(key, context, currentSnapshots)
@@ -127,12 +148,12 @@ class DefaultFlagsManager(
         }
     }
 
-    override fun listOverrides(): Map<FlagKey, FlagValue> = runBlocking {
-        mutex.withLock { overrides.toMap() }
+    override suspend fun listOverrides(): Map<FlagKey, FlagValue> {
+        return mutex.withLock { overrides.toMap() }
     }
     
-    override fun listAllFlags(): Map<FlagKey, FlagValue> = runBlocking {
-        mutex.withLock {
+    override suspend fun listAllFlags(): Map<FlagKey, FlagValue> {
+        return mutex.withLock {
             val allFlags = mutableMapOf<FlagKey, FlagValue>()
             snapshots.values.forEach { snapshot ->
                 allFlags.putAll(snapshot.flags)
@@ -141,11 +162,13 @@ class DefaultFlagsManager(
         }
     }
 
-    private fun evaluateInternal(key: FlagKey, default: FlagValue?): FlagValue? {
-        val (currentOverrides, currentSnapshots) = runBlocking {
-            mutex.withLock {
-                overrides.toMap() to snapshots.values.toList()
+    private suspend fun evaluateInternal(key: FlagKey, default: FlagValue?): FlagValue? {
+        val (currentOverrides, currentSnapshots) = mutex.withLock {
+            // Preserve provider order by iterating config.providers
+            val orderedSnapshots = config.providers.mapNotNull { provider ->
+                snapshots[provider.name]
             }
+            overrides.toMap() to orderedSnapshots
         }
         
         return evaluator.evaluateFlag(
@@ -171,6 +194,10 @@ class DefaultFlagsManager(
                     async {
                         try {
                             val snapshot = provider.bootstrap()
+                            
+                            // Verify signature if present
+                            snapshotVerifier?.verifyOrThrow(snapshot, provider.name)
+                            
                             mutex.withLock {
                                 snapshots[provider.name] = snapshot
                             }
@@ -188,6 +215,16 @@ class DefaultFlagsManager(
             }
             bootstrapped = true
             notifySnapshotUpdated("bootstrap")
+            
+            // Connect realtime providers if enabled
+            if (config.enableRealtime && realtimeManager != null) {
+                config.providers.forEach { provider ->
+                    if (provider is RealtimeFlagsProvider) {
+                        realtimeManager.connect(provider)
+                        config.logger.info("FlagsManager", "Connected realtime provider: ${provider.name}")
+                    }
+                }
+            }
         }
     }
 
@@ -196,20 +233,24 @@ class DefaultFlagsManager(
         
         coroutineScope {
             val results = config.providers.map { provider ->
-                async {
-                    try {
-                        val snapshot = provider.refresh()
-                        mutex.withLock {
-                            snapshots[provider.name] = snapshot
+                    async {
+                        try {
+                            val snapshot = provider.refresh()
+                            
+                            // Verify signature if present
+                            snapshotVerifier?.verifyOrThrow(snapshot, provider.name)
+                            
+                            mutex.withLock {
+                                snapshots[provider.name] = snapshot
+                            }
+                            config.cache.save(provider.name, snapshot)
+                            config.logger.info("FlagsManager", "Refreshed from ${provider.name}")
+                            provider.name to snapshot
+                        } catch (e: Exception) {
+                            config.logger.error("FlagsManager", "Refresh failed for ${provider.name}", e)
+                            null
                         }
-                        config.cache.save(provider.name, snapshot)
-                        config.logger.info("FlagsManager", "Refreshed from ${provider.name}")
-                        provider.name to snapshot
-                    } catch (e: Exception) {
-                        config.logger.error("FlagsManager", "Refresh failed for ${provider.name}", e)
-                        null
                     }
-                }
             }
             
             results.awaitAll()
@@ -221,6 +262,12 @@ class DefaultFlagsManager(
         config.providers.forEach { provider ->
             try {
                 config.cache.load(provider.name)?.let { snapshot ->
+                    // Verify signature if present
+                    if (!(snapshotVerifier?.verify(snapshot, provider.name) ?: true)) {
+                        config.logger.warn("FlagsManager", "Invalid signature in cache for ${provider.name}, ignoring")
+                        return@let
+                    }
+                    
                     mutex.withLock {
                         snapshots[provider.name] = snapshot
                     }
@@ -244,6 +291,19 @@ class DefaultFlagsManager(
             val listenersCopy = mutex.withLock { listeners.toList() }
             listenersCopy.forEach { it.onOverrideChanged(key) }
         }
+    }
+    
+    /**
+     * Update snapshot from realtime provider.
+     * Internal method for RealtimeManager to update snapshots.
+     */
+    internal suspend fun updateSnapshotFromRealtime(providerName: String, snapshot: ProviderSnapshot) {
+        mutex.withLock {
+            snapshots[providerName] = snapshot
+        }
+        config.cache.save(providerName, snapshot)
+        config.logger.info("FlagsManager", "Updated from realtime: $providerName")
+        notifySnapshotUpdated("realtime")
     }
 }
 

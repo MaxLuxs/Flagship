@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
+    kotlin("native.cocoapods")
     // Publishing: uncomment when ready
     // `maven-publish`
     // signing
@@ -20,6 +21,22 @@ kotlin {
         }
     }
 
+    cocoapods {
+        summary = "Flagship LaunchDarkly Provider"
+        homepage = "https://github.com/maxluxs/Flagship"
+        version = "0.1.1"
+        ios.deploymentTarget = "14.0"
+        
+        pod("LaunchDarkly") {
+            version = "8.0.0"
+        }
+        
+        framework {
+            baseName = "FlagshipProviderLaunchDarkly"
+            isStatic = true
+        }
+    }
+    
     listOf(
         iosX64(),
         iosArm64(),

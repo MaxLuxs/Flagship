@@ -50,6 +50,7 @@ import io.maxluxs.flagship.core.util.*
  * @property analytics Analytics tracker for flag events (default: no-op)
  * @property performanceMonitor Performance monitoring (default: no-op)
  * @property retryPolicy Retry policy for failed provider operations (default: no retry)
+ * @property enableRealtime Enable realtime updates for RealtimeFlagsProvider instances (default: false)
  */
 data class FlagsConfig(
     val appKey: String,
@@ -63,6 +64,7 @@ data class FlagsConfig(
     val crypto: Crypto? = null,
     val analytics: FlagsAnalytics = NoopAnalytics,
     val performanceMonitor: PerformanceMonitor = NoopPerformanceMonitor,
-    val retryPolicy: RetryPolicy = NoRetryPolicy
+    val retryPolicy: RetryPolicy = NoRetryPolicy,
+    val enableRealtime: Boolean = false
 )
 

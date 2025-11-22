@@ -11,6 +11,16 @@ plugins {
 // apply(from = rootProject.file("gradle/publish.gradle.kts"))
 
 kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+
+    js(IR) {
+        browser()
+    }
+
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -44,6 +54,14 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.cio)
+        }
+
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
 
         androidMain.dependencies {

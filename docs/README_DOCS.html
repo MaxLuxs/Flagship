@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>README DOCS - Flagship</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        .header {
+            background: #f7f7f7;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo { width: 40px; height: 40px; }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .header-title:hover { color: #00d687; }
+
+        .back-link {
+            margin-left: auto;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover { color: #00d687; }
+
+        .content {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 50px 0 20px;
+            color: #1a1a1a;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 40px 0 16px;
+            color: #1a1a1a;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 30px 0 12px;
+            color: #333;
+        }
+
+        p {
+            margin: 16px 0;
+            color: #333;
+        }
+
+        a {
+            color: #00d687;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            background: #f7f7f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            color: #ef7200;
+        }
+
+        pre {
+            background: #f7f7f7;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #1a1a1a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        ul, ol {
+            margin: 16px 0 16px 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 60px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f7f7f7;
+            font-weight: 600;
+        }
+
+        blockquote {
+            border-left: 3px solid #00d687;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        footer {
+            max-width: 900px;
+            margin: 80px auto 40px;
+            padding: 40px 40px 0;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #00d687;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .content, .header-content, footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            h1 { font-size: 32px; }
+            h2 { font-size: 26px; }
+            h3 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="images/flagship_icon.svg" alt="Flagship Logo" class="logo">
+            <a href="index.html" class="header-title">Flagship</a>
+            <a href="index.html" class="back-link">← Back to Documentation</a>
+        </div>
+    </header>
+    <div class="content">
+<h1>Документация Flagship</h1>
+
+<h2>Генерация HTML из Markdown</h2>
+
+<p>Все HTML файлы в папке <code>docs/</code> автоматически генерируются из соответствующих Markdown файлов.</p>
+
+<h3>Как это работает</h3>
+
+<p>1. <strong>Источник истины</strong>: Все содержимое находится в <code>.md</code> файлах (например, <code>MIGRATION_GUIDE.md</code>)</p>
+<p>2. <strong>Автоматическая генерация</strong>: HTML файлы (например, <code>MIGRATION_GUIDE.html</code>) генерируются из Markdown</p>
+<p>3. <strong>Единый стиль</strong>: Все HTML файлы используют единый шаблон с одинаковым дизайном</p>
+
+<h3>Команды</h3>
+
+<pre><code class="language-bash"># Сгенерировать все HTML файлы из Markdown
+./gradlew generateDocsHtml
+
+# Или просто обновить один файл - измените .md файл и запустите:
+./gradlew generateDocsHtml
+</code></pre>
+
+<h3>Правила работы</h3>
+
+<ul>
+<li>✅ <strong>Редактируйте только <code>.md</code> файлы</strong> - это источник истины</li>
+<li>✅ <strong>Не редактируйте <code>.html</code> файлы вручную</strong> - они будут перезаписаны при следующей генерации</li>
+<li>✅ <strong>Коммитьте оба файла</strong> (<code>.md</code> и <code>.html</code>) - HTML нужен для GitHub Pages</li>
+<li>✅ <strong>Проверяйте результат</strong> после изменений: <code>./gradlew generateDocsHtml</code></li>
+</ul>
+
+<h3>Поддерживаемые Markdown элементы</h3>
+
+<ul>
+<li>Заголовки (<code>#</code>, <code>##</code>, <code>###</code>, <code>####</code>)</li>
+<li>Параграфы</li>
+<li>Списки (нумерованные и маркированные)</li>
+<li>Блоки кода (<code>`</code>)</li>
+<li>Inline код (<code>code</code>)</li>
+<li>Ссылки <code><a href="url">text</a></code></li>
+<li>Изображения <code>!<a href="url">alt</a></code></li>
+<li>Жирный текст <code>&lt;strong&gt;bold&lt;/strong&gt;</code></li>
+<li>Курсив <code>&lt;em&gt;italic&lt;/em&gt;</code></li>
+<li>Цитаты <code>&gt; quote</code></li>
+<li>Горизонтальные линии <code>---</code></li>
+</ul>
+
+<h3>CI/CD</h3>
+
+<p>HTML файлы автоматически генерируются в GitHub Actions при каждом push в <code>main</code> ветку.</p>
+
+
+
+    </div>
+    <footer>
+        <p>Made with ❤️ by <a href="https://github.com/maxluxs" target="_blank">@maxluxs</a> • Licensed under MIT</p>
+    </footer>
+</body>
+</html>

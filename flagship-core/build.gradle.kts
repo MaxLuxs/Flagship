@@ -12,6 +12,23 @@ plugins {
 // apply(from = rootProject.file("gradle/publish.gradle.kts"))
 
 kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+    
+    js(IR) {
+        browser()
+        nodejs {
+            generateTypeScriptDefinitions()
+        }
+        compilerOptions {
+            moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
+            sourceMap.set(true)
+        }
+    }
+    
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -44,11 +61,15 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
+        jvmMain.dependencies {}
+        
+        jsMain.dependencies {}
+        
         androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
         }
 
-        iosMain.dependencies {
-        }
+        iosMain.dependencies {}
     }
 }
 

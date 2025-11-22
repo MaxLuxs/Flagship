@@ -1,0 +1,31 @@
+{
+  "name": "@flagship/nodejs-sdk",
+  "version": "0.1.1",
+  "description": "Flagship feature flags SDK for Node.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:kotlin": "cd ../flagship-core && ./gradlew jsNodeProductionLibraryDistribution && cd ../flagship-nodejs-sdk && mkdir -p kotlin && cp -r ../flagship-core/build/js/packages/flagship-core/kotlin/* kotlin/ 2>/dev/null || true",
+    "build": "npm run build:kotlin && tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "feature-flags",
+    "feature-toggles",
+    "ab-testing",
+    "flagship"
+  ],
+  "author": "Flagship",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0"
+  }
+}
+

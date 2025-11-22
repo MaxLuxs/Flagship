@@ -2,6 +2,7 @@ package io.maxluxs.flagship.core.cache
 
 import io.maxluxs.flagship.core.model.FlagValue
 import io.maxluxs.flagship.core.model.ProviderSnapshot
+import io.maxluxs.flagship.core.util.currentTimeMillis
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +14,7 @@ class CacheTest {
         val cache = InMemoryCache()
         val snapshot = ProviderSnapshot(
             flags = mapOf("flag1" to FlagValue.Bool(true)),
-            fetchedAtMs = System.currentTimeMillis()
+            fetchedAtMs = currentTimeMillis()
         )
 
         cache.save("provider1", snapshot)
@@ -27,7 +28,7 @@ class CacheTest {
         val cache = InMemoryCache()
         val snapshot = ProviderSnapshot(
             flags = mapOf("flag1" to FlagValue.Bool(true)),
-            fetchedAtMs = System.currentTimeMillis()
+            fetchedAtMs = currentTimeMillis()
         )
 
         cache.save("provider1", snapshot)
@@ -42,11 +43,11 @@ class CacheTest {
         val cache = InMemoryCache()
         val snapshot1 = ProviderSnapshot(
             flags = mapOf("flag1" to FlagValue.Bool(true)),
-            fetchedAtMs = System.currentTimeMillis()
+            fetchedAtMs = currentTimeMillis()
         )
         val snapshot2 = ProviderSnapshot(
             flags = mapOf("flag2" to FlagValue.Bool(false)),
-            fetchedAtMs = System.currentTimeMillis()
+            fetchedAtMs = currentTimeMillis()
         )
 
         cache.save("provider1", snapshot1)

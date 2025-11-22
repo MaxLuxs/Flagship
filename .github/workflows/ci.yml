@@ -31,8 +31,7 @@ jobs:
       with:
         path: |
           ~/.konan
-          ~/.gradle/caches
-        key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-konan-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-konan-
         
