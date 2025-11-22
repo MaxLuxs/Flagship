@@ -1,5 +1,7 @@
 package io.maxluxs.flagship.core.security
 
+import io.maxluxs.flagship.core.util.currentTimeMillis
+
 /**
  * API key with permissions for Flagship.
  * 
@@ -45,7 +47,7 @@ data class ApiKey(
     /**
      * Check if this API key is expired.
      */
-    fun isExpired(currentTime: Long = System.currentTimeMillis()): Boolean {
+    fun isExpired(currentTime: Long = currentTimeMillis()): Boolean {
         return expiresAt != null && currentTime > expiresAt
     }
     

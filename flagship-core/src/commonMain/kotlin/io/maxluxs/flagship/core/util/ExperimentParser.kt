@@ -79,6 +79,23 @@ object ExperimentParser {
         return Variant(name, weight, payload)
     }
     
+    /**
+     * Parse targeting rule from JSON string.
+     * 
+     * @param jsonString JSON string containing targeting rule
+     * @return TargetingRule or null if parsing fails
+     */
+    fun parseTargetingFromJson(jsonString: String): TargetingRule? {
+        if (jsonString.isBlank()) return null
+        
+        return try {
+            val json = Json.parseToJsonElement(jsonString).jsonObject
+            parseTargeting(json)
+        } catch (e: Exception) {
+            null
+        }
+    }
+    
     private fun parseTargeting(json: JsonObject): TargetingRule? {
         val type = json["type"]?.jsonPrimitive?.content ?: return null
         
@@ -87,6 +104,14 @@ object ExperimentParser {
                 val key = json["key"]?.jsonPrimitive?.content ?: return null
                 val value = json["value"]?.jsonPrimitive?.content ?: return null
                 TargetingRule.AttributeEquals(key, value)
+            }
+            
+            "attribute_in" -> {
+                val key = json["key"]?.jsonPrimitive?.content ?: return null
+                val values = json["values"]?.jsonArray
+                    ?.mapNotNull { it.jsonPrimitive.contentOrNull }
+                    ?.toSet() ?: return null
+                TargetingRule.AttributeIn(key, values)
             }
             
             "region_in" -> {
@@ -99,6 +124,28 @@ object ExperimentParser {
             "app_version_gte" -> {
                 val version = json["version"]?.jsonPrimitive?.content ?: return null
                 TargetingRule.AppVersionGte(version)
+            }
+            
+            "app_version_lt" -> {
+                val version = json["version"]?.jsonPrimitive?.content ?: return null
+                TargetingRule.AppVersionLt(version)
+            }
+            
+            "os_version_gte" -> {
+                val version = json["version"]?.jsonPrimitive?.content ?: return null
+                TargetingRule.OsVersionGte(version)
+            }
+            
+            "user_id_in" -> {
+                val userIds = json["userIds"]?.jsonArray
+                    ?.mapNotNull { it.jsonPrimitive.contentOrNull }
+                    ?.toSet() ?: return null
+                TargetingRule.UserIdIn(userIds)
+            }
+            
+            "percentage_rollout" -> {
+                val percent = json["percent"]?.jsonPrimitive?.intOrNull ?: return null
+                TargetingRule.PercentageRollout(percent)
             }
             
             "composite" -> {

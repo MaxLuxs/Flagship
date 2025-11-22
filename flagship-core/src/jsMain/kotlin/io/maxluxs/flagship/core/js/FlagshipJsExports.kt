@@ -5,6 +5,7 @@ import io.maxluxs.flagship.core.model.EvalContext
 import io.maxluxs.flagship.core.model.ExperimentDefinition
 import io.maxluxs.flagship.core.model.Variant
 import io.maxluxs.flagship.core.util.BackoffCalculator
+import io.maxluxs.flagship.core.util.ExperimentParser
 import kotlin.js.JsExport
 
 /**
@@ -107,11 +108,15 @@ object FlagshipJsExports {
             attributes = contextData.attributes ?: emptyMap()
         )
         
-        // TODO: Parse targeting rules from JSON if needed
+        // Parse targeting rules from JSON if provided
+        val targetingRule = targeting?.let { 
+            ExperimentParser.parseTargetingFromJson(it) 
+        }
+        
         val experiment = ExperimentDefinition(
             key = experimentKey,
             variants = kotlinVariants,
-            targeting = null // Targeting parsing can be added later
+            targeting = targetingRule
         )
         
         val assignment = BucketingEngine.assign(experiment, context)
