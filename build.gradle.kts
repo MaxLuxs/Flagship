@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.dokka)
 }
 
+// Apply markdown to HTML conversion script
+apply(from = "gradle/markdown-to-html.gradle.kts")
+
 tasks.withType<org.jetbrains.dokka.gradle.DokkaMultiModuleTask>().configureEach {
     moduleName.set("Flagship")
     outputDirectory.set(file("$rootDir/docs/dokka"))

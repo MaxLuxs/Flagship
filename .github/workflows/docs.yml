@@ -33,6 +33,9 @@ jobs:
     - name: Generate Dokka documentation
       run: ./gradlew dokkaHtmlMultiModule --no-daemon
       
+    - name: Generate HTML from Markdown
+      run: ./gradlew generateDocsHtml --no-daemon
+      
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
