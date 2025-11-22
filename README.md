@@ -93,15 +93,18 @@ class MyApp : Application() {
 }
 
 // Use flags directly without calling manager()
-if (Flags.isEnabled("new_payment_flow")) {
-    ShowNewPayment()
-} else {
-    ShowLegacyPayment()
+// Note: All flag access methods are suspend functions
+lifecycleScope.launch {
+    if (Flags.isEnabled("new_payment_flow")) {
+        ShowNewPayment()
+    } else {
+        ShowLegacyPayment()
+    }
+    
+    // Typed values
+    val maxUploadSize = Flags.value("max_upload_mb", default = 10)
+    val apiTimeout = Flags.value("api_timeout", default = 30)
 }
-
-// Typed values
-val maxUploadSize = Flags.value("max_upload_mb", default = 10)
-val apiTimeout = Flags.value("api_timeout", default = 30)
 ```
 
 See [Simplified API Guide](docs/SIMPLIFIED_API.md) for more details.
@@ -129,9 +132,12 @@ val config = FlagsConfig(
 Flags.configure(config)
 
 // Use flags via manager
+// Note: All flag access methods are suspend functions
 val flags = Flags.manager()
-if (flags.isEnabled("new_payment_flow")) {
-    ShowNewPayment()
+lifecycleScope.launch {
+    if (flags.isEnabled("new_payment_flow")) {
+        ShowNewPayment()
+    }
 }
 ```
 
@@ -141,16 +147,18 @@ Both methods support A/B testing:
 
 ```kotlin
 // Simplified API
-val variant = Flags.assign("checkout_optimization_exp")?.variant
-
-// Full API
-val assignment = Flags.manager().assign("checkout_optimization_exp")
-
-when (variant ?: assignment?.variant) {
-    "control" -> ShowStandardCheckout()
-    "treatment_a" -> ShowOnePageCheckout()
-    "treatment_b" -> ShowModalCheckout()
-    else -> ShowStandardCheckout()
+lifecycleScope.launch {
+    val variant = Flags.assign("checkout_optimization_exp")?.variant
+    
+    // Full API
+    val assignment = Flags.manager().assign("checkout_optimization_exp")
+    
+    when (variant ?: assignment?.variant) {
+        "control" -> ShowStandardCheckout()
+        "treatment_a" -> ShowOnePageCheckout()
+        "treatment_b" -> ShowModalCheckout()
+        else -> ShowStandardCheckout()
+    }
 }
 ```
 
@@ -340,13 +348,20 @@ import Flagship
 struct PaymentView: View {
     // Access the shared manager
     let flags = Flags.shared.manager()
+    @State private var isNewPaymentEnabled = false
     
     var body: some View {
         VStack {
-            if flags.isEnabled(key: "new_payment_flow", default: false, ctx: nil) {
+            if isNewPaymentEnabled {
                 NewPaymentView()
             } else {
                 LegacyPaymentView()
+            }
+        }
+        .onAppear {
+            // Note: Swift suspend functions are called via async/await
+            Task {
+                isNewPaymentEnabled = await flags.isEnabled(key: "new_payment_flow", default: false, ctx: nil)
             }
         }
     }
@@ -356,15 +371,17 @@ struct PaymentView: View {
 #### A/B Experiments
 
 ```swift
-let assignment = flags.assign(key: "checkout_optimization_exp", ctx: nil)
-
-switch assignment?.variant {
-case "control":
-    print("Show Control")
-case "treatment_a":
-    print("Show A")
-default:
-    print("Fallback")
+Task {
+    let assignment = await flags.assign(key: "checkout_optimization_exp", ctx: nil)
+    
+    switch assignment?.variant {
+    case "control":
+        print("Show Control")
+    case "treatment_a":
+        print("Show A")
+    default:
+        print("Fallback")
+    }
 }
 ```
 
