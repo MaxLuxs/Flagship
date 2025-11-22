@@ -97,4 +97,5 @@ iosApp/**/build/
 **/build/bin/*framework/
 
 # Flagship Server (proprietary/commercial)
-/flagship-server/
+# Note: /flagship-server/ is tracked locally but blocked from push via pre-push hook
+# /flagship-server/
