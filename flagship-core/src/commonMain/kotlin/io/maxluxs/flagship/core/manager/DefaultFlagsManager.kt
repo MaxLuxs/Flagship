@@ -79,8 +79,11 @@ class DefaultFlagsManager(
         val context = ctx ?: defaultContext ?: return null
         // Snapshots are read-only list copies in evaluateExperiment, so no lock needed there if passed correctly
         // But we need lock to get snapshots values safely
+        // Preserve provider order by iterating config.providers
         val currentSnapshots = mutex.withLock { 
-            snapshots.values.toList() 
+            config.providers.mapNotNull { provider ->
+                snapshots[provider.name]
+            }
         }
         
         val assignment = evaluator.evaluateExperiment(key, context, currentSnapshots)
@@ -161,7 +164,11 @@ class DefaultFlagsManager(
 
     private suspend fun evaluateInternal(key: FlagKey, default: FlagValue?): FlagValue? {
         val (currentOverrides, currentSnapshots) = mutex.withLock {
-            overrides.toMap() to snapshots.values.toList()
+            // Preserve provider order by iterating config.providers
+            val orderedSnapshots = config.providers.mapNotNull { provider ->
+                snapshots[provider.name]
+            }
+            overrides.toMap() to orderedSnapshots
         }
         
         return evaluator.evaluateFlag(
