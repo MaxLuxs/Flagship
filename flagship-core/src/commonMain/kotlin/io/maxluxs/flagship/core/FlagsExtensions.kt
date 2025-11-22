@@ -24,8 +24,10 @@ import io.maxluxs.flagship.core.model.FlagValue
  * 
  * Example:
  * ```kotlin
- * if (Flags.isEnabled("dark_mode")) {
- *     enableDarkTheme()
+ * lifecycleScope.launch {
+ *     if (Flags.isEnabled("dark_mode")) {
+ *         enableDarkTheme()
+ *     }
  * }
  * ```
  * 
@@ -33,7 +35,7 @@ import io.maxluxs.flagship.core.model.FlagValue
  * @param default Default value if flag not found (default: false)
  * @return true if flag is enabled
  */
-fun Flags.isEnabled(
+suspend fun Flags.isEnabled(
     key: FlagKey,
     default: Boolean = false
 ): Boolean {
@@ -45,15 +47,17 @@ fun Flags.isEnabled(
  *
  * Example:
  * ```kotlin
- * val timeout: Int = Flags.value("api_timeout", default = 30)
- * val message: String = Flags.value("welcome_msg", default = "Hello")
+ * lifecycleScope.launch {
+ *     val timeout: Int = Flags.value("api_timeout", default = 30)
+ *     val message: String = Flags.value("welcome_msg", default = "Hello")
+ * }
  * ```
  *
  * @param key Flag key
  * @param default Default value
  * @return Flag value or default
  */
-fun <T> Flags.value(
+suspend fun <T> Flags.value(
     key: FlagKey,
     default: T
 ): T {
@@ -75,7 +79,7 @@ fun <T> Flags.value(
  * @param key Experiment key
  * @return Experiment assignment or null
  */
-fun Flags.assign(key: ExperimentKey): ExperimentAssignment? {
+suspend fun Flags.assign(key: ExperimentKey): ExperimentAssignment? {
     return manager().assign(key)
 }
 
@@ -86,7 +90,7 @@ fun Flags.assign(key: ExperimentKey): ExperimentAssignment? {
  * @param context Evaluation context
  * @return Experiment assignment or null
  */
-fun Flags.assign(
+suspend fun Flags.assign(
     key: ExperimentKey,
     context: EvalContext
 ): ExperimentAssignment? {
