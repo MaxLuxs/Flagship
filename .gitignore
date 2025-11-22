@@ -96,6 +96,7 @@ iosApp/**/build/
 **/build/bin/*Framework/
 **/build/bin/*framework/
 
-# Flagship Server (proprietary/commercial)
-# Note: /flagship-server/ is tracked locally but blocked from push via pre-push hook
-# /flagship-server/
+# Flagship Server & Commercial Modules (proprietary/commercial)
+# Note: These modules are tracked locally in git but blocked from push via pre-push hook
+# DO NOT add them here - they should be tracked locally but not pushed to GitHub
+# See .git/hooks/pre-push for push blocking logic
