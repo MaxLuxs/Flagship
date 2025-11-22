@@ -210,29 +210,30 @@
         </div>
     </header>
     <div class="content">
-<p align="center">
-<img src="images/flagship_icon.svg" width="120" height="120" alt="Flagship Logo">
-</p>
-<h1 align="center">
-🔄 Migration Guide
-</h1>
+<p><p align="center"></p>
+<p><img src="images/flagship_icon.svg" width="120" height="120" alt="Flagship Logo"></p>
+<p></p></p>
+
+<p><h1 align="center">🔄 Migration Guide</h1></p>
+
 <p>Guide for migrating from other solutions to Flagship.</p>
+
 <hr />
-<h2 id="table-of-contents">📋 Table of Contents</h2>
-<ol type="1">
-<li><a href="#migration-from-firebase-remote-config">Migration from
-Firebase Remote Config</a></li>
-<li><a href="#migration-from-launchdarkly">Migration from
-LaunchDarkly</a></li>
-<li><a href="#migration-from-splitio">Migration from Split.io</a></li>
-<li><a href="#migration-from-custom-solution">Migration from Custom
-Solution</a></li>
-</ol>
+
+<h2>📋 Table of Contents</h2>
+
+<p>1. <a href="#migration-from-firebase-remote-config">Migration from Firebase Remote Config</a></p>
+<p>2. <a href="#migration-from-launchdarkly">Migration from LaunchDarkly</a></p>
+<p>3. <a href="#migration-from-splitio">Migration from Split.io</a></p>
+<p>4. <a href="#migration-from-custom-solution">Migration from Custom Solution</a></p>
+
 <hr />
-<h2 id="migration-from-firebase-remote-config">Migration from Firebase
-Remote Config</h2>
-<h3 id="before-pure-firebase">Before (Pure Firebase)</h3>
-<pre class="kotlin"><code>// Initialization
+
+<h2>Migration from Firebase Remote Config</h2>
+
+<h3>Before (Pure Firebase)</h3>
+
+<pre><code class="language-kotlin">// Initialization
 val remoteConfig = Firebase.remoteConfig
 remoteConfig.setConfigSettingsAsync(
     remoteConfigSettings {
@@ -249,10 +250,12 @@ remoteConfig.fetchAndActivate().addOnCompleteListener { task -&gt;
     if (task.isSuccessful) {
         // Updated
     }
-}</code></pre>
-<h3 id="after-flagship-firebase-provider">After (Flagship + Firebase
-Provider)</h3>
-<pre class="kotlin"><code>// Initialization
+}
+</code></pre>
+
+<h3>After (Flagship + Firebase Provider)</h3>
+
+<pre><code class="language-kotlin">// Initialization
 val config = FlagsConfig(
     appKey = &quot;my-app&quot;,
     environment = &quot;production&quot;,
@@ -266,33 +269,45 @@ val config = FlagsConfig(
 )
 Flags.configure(config)
 
-// Get values
+// Get values (suspend functions - use in coroutine scope)
 val manager = Flags.manager()
-val newFeatureEnabled = manager.isEnabled(&quot;new_feature&quot;)
-val apiTimeout: Int = manager.value(&quot;api_timeout&quot;, default = 5000)
+lifecycleScope.launch {
+    val newFeatureEnabled = manager.isEnabled(&quot;new_feature&quot;)
+    val apiTimeout: Int = manager.value(&quot;api_timeout&quot;, default = 5000)
+}
 
 // Fetch (automatic with coroutines)
 lifecycleScope.launch {
     manager.refresh()
-}</code></pre>
-<h3 id="benefits">Benefits</h3>
-<p>✅ <strong>Type-safe API</strong> - no manual type casting<br />
-✅ <strong>Kotlin Coroutines</strong> - instead of callbacks<br />
-✅ <strong>Offline-first</strong> - automatic caching<br />
-✅ <strong>Multi-provider</strong> - add REST fallback<br />
-✅ <strong>A/B Testing</strong> - built-in experiment support</p>
+}
+</code></pre>
+
+<h3>Benefits</h3>
+
+<p>✅ <strong>Type-safe API</strong> - no manual type casting</p>
+<p>✅ <strong>Kotlin Coroutines</strong> - instead of callbacks</p>
+<p>✅ <strong>Offline-first</strong> - automatic caching</p>
+<p>✅ <strong>Multi-provider</strong> - add REST fallback</p>
+<p>✅ <strong>A/B Testing</strong> - built-in experiment support</p>
+
 <hr />
-<h2 id="migration-from-launchdarkly">Migration from LaunchDarkly</h2>
-<h3 id="before-launchdarkly">Before (LaunchDarkly)</h3>
-<pre class="kotlin"><code>val client = LDClient.init(application, ldConfig, ldUser)
+
+<h2>Migration from LaunchDarkly</h2>
+
+<h3>Before (LaunchDarkly)</h3>
+
+<pre><code class="language-kotlin">val client = LDClient.init(application, ldConfig, ldUser)
 
 // Feature flag
 val showNewUI = client.boolVariation(&quot;show-new-ui&quot;, false)
 
 // Experiment
-val buttonColor = client.stringVariation(&quot;button-color-test&quot;, &quot;blue&quot;)</code></pre>
-<h3 id="after-flagship">After (Flagship)</h3>
-<pre class="kotlin"><code>// Initialization
+val buttonColor = client.stringVariation(&quot;button-color-test&quot;, &quot;blue&quot;)
+</code></pre>
+
+<h3>After (Flagship)</h3>
+
+<pre><code class="language-kotlin">// Initialization
 val config = FlagsConfig(
     appKey = &quot;my-app&quot;,
     environment = &quot;production&quot;,
@@ -305,24 +320,35 @@ Flags.configure(config)
 
 // Feature flag
 val manager = Flags.manager()
-val showNewUI = manager.isEnabled(&quot;show-new-ui&quot;)
+// Note: All flag access methods are suspend functions
+lifecycleScope.launch {
+    val showNewUI = manager.isEnabled(&quot;show-new-ui&quot;)
+    
+    // Experiment
+    val assignment = manager.assign(&quot;button-color-test&quot;)
+    val buttonColor = assignment?.payload[&quot;color&quot;]?.jsonPrimitive?.content ?: &quot;blue&quot;
+}
+</code></pre>
 
-// Experiment
-val assignment = manager.assign(&quot;button-color-test&quot;)
-val buttonColor = assignment?.payload[&quot;color&quot;]?.jsonPrimitive?.content ?: &quot;blue&quot;</code></pre>
 <hr />
-<h2 id="migration-from-split.io">Migration from Split.io</h2>
-<h3 id="before-split.io">Before (Split.io)</h3>
-<pre class="kotlin"><code>val factory = SplitFactoryBuilder.build(&quot;YOUR_SDK_KEY&quot;, applicationContext)
+
+<h2>Migration from Split.io</h2>
+
+<h3>Before (Split.io)</h3>
+
+<pre><code class="language-kotlin">val factory = SplitFactoryBuilder.build(&quot;YOUR_SDK_KEY&quot;, applicationContext)
 val client = factory.client()
 
 // Feature flag
 val treatment = client.getTreatment(&quot;user123&quot;, &quot;new_checkout&quot;)
 if (treatment == &quot;on&quot;) {
     // Show new checkout
-}</code></pre>
-<h3 id="after-flagship-1">After (Flagship)</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+}
+</code></pre>
+
+<h3>After (Flagship)</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     appKey = &quot;my-app&quot;,
     environment = &quot;production&quot;,
     providers = listOf(
@@ -336,15 +362,21 @@ val manager = Flags.manager()
 val ctx = EvalContext(userId = &quot;user123&quot;)
 
 // Feature flag
-if (manager.isEnabled(&quot;new_checkout&quot;)) {
-    // Show new checkout
-}</code></pre>
+// Note: isEnabled is a suspend function
+lifecycleScope.launch {
+    if (manager.isEnabled(&quot;new_checkout&quot;)) {
+        // Show new checkout
+    }
+}
+</code></pre>
+
 <hr />
-<h2 id="migration-from-custom-solution">Migration from Custom
-Solution</h2>
-<h3 id="before-custom-sharedpreferences">Before (Custom
-SharedPreferences)</h3>
-<pre class="kotlin"><code>val prefs = context.getSharedPreferences(&quot;feature_flags&quot;, Context.MODE_PRIVATE)
+
+<h2>Migration from Custom Solution</h2>
+
+<h3>Before (Custom SharedPreferences)</h3>
+
+<pre><code class="language-kotlin">val prefs = context.getSharedPreferences(&quot;feature_flags&quot;, Context.MODE_PRIVATE)
 
 fun isFeatureEnabled(key: String): Boolean {
     return prefs.getBoolean(key, false)
@@ -367,9 +399,12 @@ fun updateFlags() {
             // Handle error
         }
     })
-}</code></pre>
-<h3 id="after-flagship-2">After (Flagship)</h3>
-<pre class="kotlin"><code>// One-time setup
+}
+</code></pre>
+
+<h3>After (Flagship)</h3>
+
+<pre><code class="language-kotlin">// One-time setup
 val config = FlagsConfig(
     appKey = &quot;my-app&quot;,
     environment = &quot;production&quot;,
@@ -383,39 +418,47 @@ Flags.configure(config)
 // Use everywhere
 val manager = Flags.manager()
 
-fun isFeatureEnabled(key: String): Boolean {
+// Note: isEnabled is a suspend function - make the function suspend too
+suspend fun isFeatureEnabled(key: String): Boolean {
     return manager.isEnabled(key)
 }
 
 // Update is automatic based on TTL, or manually:
 suspend fun updateFlags() {
     manager.refresh()
-}</code></pre>
-<h3 id="benefits-1">Benefits</h3>
-<p>✅ <strong>Less code</strong> - no manual SharedPreferences
-management<br />
-✅ <strong>Type-safe</strong> - automatic type checking<br />
-✅ <strong>Coroutines</strong> - modern async approach<br />
-✅ <strong>TTL</strong> - automatic scheduled updates<br />
-✅ <strong>Multi-provider</strong> - easy to add Firebase/other
-sources<br />
-✅ <strong>A/B Testing</strong> - built-in experiment support</p>
+}
+</code></pre>
+
+<h3>Benefits</h3>
+
+<p>✅ <strong>Less code</strong> - no manual SharedPreferences management</p>
+<p>✅ <strong>Type-safe</strong> - automatic type checking</p>
+<p>✅ <strong>Coroutines</strong> - modern async approach</p>
+<p>✅ <strong>TTL</strong> - automatic scheduled updates</p>
+<p>✅ <strong>Multi-provider</strong> - easy to add Firebase/other sources</p>
+<p>✅ <strong>A/B Testing</strong> - built-in experiment support</p>
+
 <hr />
-<h2 id="step-by-step-migration">Step-by-Step Migration</h2>
-<h3 id="step-1-add-flagship-in-parallel">Step 1: Add Flagship in
-Parallel</h3>
-<p>Don’t remove the old solution immediately! Use both in parallel:</p>
-<pre class="kotlin"><code>// Old
+
+<h2>Step-by-Step Migration</h2>
+
+<h3>Step 1: Add Flagship in Parallel</h3>
+
+<p>Don't remove the old solution immediately! Use both in parallel:</p>
+
+<pre><code class="language-kotlin">// Old
 val oldFlag = remoteConfig.getBoolean(&quot;new_feature&quot;)
 
 // New (Flagship)
 val newFlag = Flags.manager().isEnabled(&quot;new_feature&quot;)
 
 // Use new flag, fallback to old if needed
-val featureEnabled = if (flagshipInitialized) newFlag else oldFlag</code></pre>
-<h3 id="step-2-switch-flags-gradually">Step 2: Switch Flags
-Gradually</h3>
-<pre class="kotlin"><code>// Week 1: 10% users
+val featureEnabled = if (flagshipInitialized) newFlag else oldFlag
+</code></pre>
+
+<h3>Step 2: Switch Flags Gradually</h3>
+
+<pre><code class="language-kotlin">// Week 1: 10% users
 if (userId.hashCode() % 100 &lt; 10) {
     useFlagship = true
 }
@@ -426,9 +469,12 @@ if (userId.hashCode() % 100 &lt; 50) {
 }
 
 // Week 3: 100% users
-useFlagship = true</code></pre>
-<h3 id="step-3-monitor-errors">Step 3: Monitor Errors</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+useFlagship = true
+</code></pre>
+
+<h3>Step 3: Monitor Errors</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     // ...
     logger = object : FlagsLogger {
         override fun log(level: LogLevel, message: String, error: Throwable?) {
@@ -438,15 +484,23 @@ useFlagship = true</code></pre>
             }
         }
     }
-)</code></pre>
-<h3 id="step-4-remove-old-code">Step 4: Remove Old Code</h3>
-<p>After successful migration (2-4 weeks): 1. Remove old SDK
-dependencies 2. Remove old solution code 3. Update documentation</p>
+)
+</code></pre>
+
+<h3>Step 4: Remove Old Code</h3>
+
+<p>After successful migration (2-4 weeks):</p>
+<p>1. Remove old SDK dependencies</p>
+<p>2. Remove old solution code</p>
+<p>3. Update documentation</p>
+
 <hr />
-<p align="center">
-<b>Need migration help? Create an Issue on
-<a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b>
-</p>
+
+<p><p align="center"></p>
+<p><b>Need migration help? Create an Issue on <a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b></p>
+<p></p></p>
+
+
     </div>
     <footer>
         <p>Made with ❤️ by <a href="https://github.com/maxluxs" target="_blank">@maxluxs</a> • Licensed under MIT</p>

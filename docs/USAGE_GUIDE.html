@@ -210,73 +210,95 @@
         </div>
     </header>
     <div class="content">
-<p align="center">
-<img src="images/flagship_icon.svg" width="150" height="150" alt="Flagship Logo">
-</p>
-<h1 align="center">
-📖 Flagship Usage Guide
-</h1>
-<p>Complete guide for using the Flagship library in your Android and iOS
-applications.</p>
+<p><p align="center"></p>
+<p><img src="images/flagship_icon.svg" width="150" height="150" alt="Flagship Logo"></p>
+<p></p></p>
+
+<p><h1 align="center">📖 Flagship Usage Guide</h1></p>
+
+<p>Complete guide for using the Flagship library in your Android and iOS applications.</p>
+
 <hr />
-<h2 id="table-of-contents">📋 Table of Contents</h2>
-<ol type="1">
-<li><a href="#-quick-start">Quick Start</a></li>
-<li><a href="#-installation">Installation</a></li>
-<li><a href="#-initialization">Initialization</a></li>
-<li><a href="#-feature-flags">Feature Flags</a></li>
-<li><a href="#-ab-testing-experiments">A/B Testing
-(Experiments)</a></li>
-<li><a href="#-targeting-rules">Targeting Rules</a></li>
-<li><a href="#-providers">Providers</a></li>
-<li><a href="#-caching--offline-mode">Caching &amp; Offline
-Mode</a></li>
-<li><a href="#-debug-dashboard">Debug Dashboard</a></li>
-<li><a href="#-analytics-integration">Analytics Integration</a></li>
-<li><a href="#-best-practices">Best Practices</a></li>
-<li><a href="#-faq">FAQ</a></li>
-</ol>
+
+<h2>📋 Table of Contents</h2>
+
+<p>1. <a href="#-quick-start">Quick Start</a></p>
+<p>2. <a href="#-installation">Installation</a></p>
+<p>3. <a href="#-initialization">Initialization</a></p>
+<p>4. <a href="#-feature-flags">Feature Flags</a></p>
+<p>5. <a href="#-ab-testing-experiments">A/B Testing (Experiments)</a></p>
+<p>6. <a href="#-targeting-rules">Targeting Rules</a></p>
+<p>7. <a href="#-providers">Providers</a></p>
+<p>8. <a href="#-caching--offline-mode">Caching & Offline Mode</a></p>
+<p>9. <a href="#-debug-dashboard">Debug Dashboard</a></p>
+<p>10. <a href="#-analytics-integration">Analytics Integration</a></p>
+<p>11. <a href="#-best-practices">Best Practices</a></p>
+<p>12. <a href="#-faq">FAQ</a></p>
+
 <hr />
-<h2 id="quick-start">🚀 Quick Start</h2>
-<h3 id="android-kotlin">Android (Kotlin)</h3>
-<pre class="kotlin"><code>// 1. In Application class
+
+<h2>🚀 Quick Start</h2>
+
+<h3>Android (Kotlin)</h3>
+
+<pre><code class="language-kotlin">// 1. In Application class
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         
+        // Recommended: Use factory for easy setup
         val config = FlagsConfig(
             appKey = &quot;my-banking-app&quot;,
             environment = &quot;production&quot;,
             providers = listOf(
-                FirebaseRemoteConfigProvider(Firebase.remoteConfig)
+                FirebaseProviderFactory.create(application)
             ),
             cache = PersistentCache(FlagsSerializer()),
             logger = DefaultLogger()
         )
+        
+        // Alternative: Manual setup (for advanced use cases)
+        // val config = FlagsConfig(
+        //     appKey = &quot;my-banking-app&quot;,
+        //     environment = &quot;production&quot;,
+        //     providers = listOf(
+        //         FirebaseRemoteConfigProvider(AndroidFirebaseAdapter(Firebase.remoteConfig))
+        //     ),
+        //     cache = PersistentCache(FlagsSerializer()),
+        //     logger = DefaultLogger()
+        // )
         
         Flags.configure(config)
     }
 }
 
 // 2. In your app code
+// Note: All flag access methods are suspend functions - use in coroutine scope
 val flags = Flags.manager()
 
 // Feature flag
-if (flags.isEnabled(&quot;new_payment_flow&quot;)) {
-    NewPaymentScreen()
-} else {
-    LegacyPaymentScreen()
+lifecycleScope.launch {
+    if (flags.isEnabled(&quot;new_payment_flow&quot;)) {
+        NewPaymentScreen()
+    } else {
+        LegacyPaymentScreen()
+    }
 }
 
 // A/B experiment
-val assignment = flags.assign(&quot;checkout_experiment&quot;)
-when (assignment?.variant) {
-    &quot;control&quot; -&gt; OriginalCheckout()
-    &quot;variant_a&quot; -&gt; NewCheckoutA()
-    &quot;variant_b&quot; -&gt; NewCheckoutB()
-}</code></pre>
-<h3 id="ios-swift">iOS (Swift)</h3>
-<pre class="swift"><code>// 1. In AppDelegate or App.swift
+lifecycleScope.launch {
+    val assignment = flags.assign(&quot;checkout_experiment&quot;)
+    when (assignment?.variant) {
+        &quot;control&quot; -&gt; OriginalCheckout()
+        &quot;variant_a&quot; -&gt; NewCheckoutA()
+        &quot;variant_b&quot; -&gt; NewCheckoutB()
+    }
+}
+</code></pre>
+
+<h3>iOS (Swift)</h3>
+
+<pre><code class="language-swift">// 1. In AppDelegate or App.swift
 import Flagship
 
 @main
@@ -297,39 +319,51 @@ import Flagship
 
 struct PaymentView: View {
     let flags = Flags.shared.manager()
+    @State private var isNewPaymentEnabled = false
     
     var body: some View {
-        if flags.isEnabled(key: &quot;new_payment_flow&quot;, default: false, ctx: nil) {
+        if isNewPaymentEnabled {
             NewPaymentView()
         } else {
             LegacyPaymentView()
         }
+        .onAppear {
+            Task {
+                isNewPaymentEnabled = await flags.isEnabled(key: &quot;new_payment_flow&quot;, default: false, ctx: nil)
+            }
+        }
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="installation">📦 Installation</h2>
-<h3 id="android">Android</h3>
-<h4 id="step-1-add-repository">Step 1: Add Repository</h4>
-<p>Add Maven repository to <code>settings.gradle.kts</code> (or
-<code>settings.gradle</code>):</p>
-<pre class="kotlin"><code>dependencyResolutionManagement {
+
+<h2>📦 Installation</h2>
+
+<h3>Android</h3>
+
+<h4>Step 1: Add Repository</h4>
+
+<p>Add Maven repository to <code>settings.gradle.kts</code> (or <code>settings.gradle</code>):</p>
+
+<pre><code class="language-kotlin">dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
         // Add Flagship repository if published to custom Maven repo
-        // maven { url = uri(&quot;https://jitpack.io") }
+        // maven { url = uri(&quot;https://jitpack.io&quot;) }
     }
-}</code></pre>
-<h4 id="step-2-add-dependencies">Step 2: Add Dependencies</h4>
-<p>In your app module's <code>build.gradle.kts</code> (or
-<code>build.gradle</code>):</p>
-<pre class="kotlin"><code>dependencies {
-    // Core library
+}
+</code></pre>
+
+<h4>Step 2: Add Dependencies</h4>
+
+<p>In your app module's <code>build.gradle.kts</code> (or <code>build.gradle</code>):</p>
+
+<pre><code class="language-kotlin">dependencies {
+    // Core library (includes Android platform support)
     implementation(&quot;io.maxluxs.flagship:flagship-core:0.1.0&quot;)
-    
-    // Android platform support
-    implementation(&quot;io.maxluxs.flagship:flagship-platform-android:0.1.0&quot;)
     
     // Providers (choose what you need)
     implementation(&quot;io.maxluxs.flagship:flagship-provider-rest:0.1.0&quot;)
@@ -346,17 +380,25 @@ struct PaymentView: View {
     
     // Serialization
     implementation(&quot;org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0&quot;)
-}</code></pre>
-<h4 id="step-3-enable-kotlin-serialization">Step 3: Enable Kotlin Serialization</h4>
+}
+</code></pre>
+
+<h4>Step 3: Enable Kotlin Serialization</h4>
+
 <p>In your app's <code>build.gradle.kts</code>:</p>
-<pre class="kotlin"><code>plugins {
+
+<pre><code class="language-kotlin">plugins {
     id(&quot;com.android.application&quot;)
     kotlin(&quot;android&quot;)
     kotlin(&quot;plugin.serialization&quot;) // Add this
-}</code></pre>
-<h4 id="step-4-initialize-in-application-class">Step 4: Initialize in Application Class</h4>
+}
+</code></pre>
+
+<h4>Step 4: Initialize in Application Class</h4>
+
 <p>Create or update your <code>Application</code> class:</p>
-<pre class="kotlin"><code>package com.example.myapp
+
+<pre><code class="language-kotlin">package com.example.myapp
 
 import android.app.Application
 import io.ktor.client.*
@@ -426,17 +468,23 @@ class MyApplication : Application() {
         val defaultContext = AndroidFlagsInitializer.createDefaultContext(this)
         manager.setDefaultContext(defaultContext)
     }
-}</code></pre>
-<h4 id="step-5-register-application-in-androidmanifestxml">Step 5: Register Application in AndroidManifest.xml</h4>
-<pre class="xml"><code>&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+}
+</code></pre>
+
+<h4>Step 5: Register Application in AndroidManifest.xml</h4>
+
+<pre><code class="language-xml">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
     &lt;application
         android:name=&quot;.MyApplication&quot;
         ...&gt;
         ...
     &lt;/application&gt;
-&lt;/manifest&gt;</code></pre>
-<h4 id="step-6-use-in-your-code">Step 6: Use in Your Code</h4>
-<pre class="kotlin"><code>import io.maxluxs.flagship.core.Flags
+&lt;/manifest&gt;
+</code></pre>
+
+<h4>Step 6: Use in Your Code</h4>
+
+<pre><code class="language-kotlin">import io.maxluxs.flagship.core.Flags
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -444,50 +492,59 @@ class MainActivity : AppCompatActivity() {
         
         val flags = Flags.manager()
         
-        // Check boolean flag
-        if (flags.isEnabled(&quot;new_payment_flow&quot;)) {
-            showNewPaymentScreen()
-        } else {
-            showLegacyPaymentScreen()
+        // Note: All flag access methods are suspend functions - use in coroutine scope
+        lifecycleScope.launch {
+            // Check boolean flag
+            if (flags.isEnabled(&quot;new_payment_flow&quot;)) {
+                showNewPaymentScreen()
+            } else {
+                showLegacyPaymentScreen()
+            }
+            
+            // Get typed values
+            val maxRetries = flags.value(&quot;max_retries&quot;, default = 3)
+            val apiTimeout = flags.value(&quot;api_timeout&quot;, default = 30.0)
+            val welcomeMessage = flags.value(&quot;welcome_message&quot;, default = &quot;Welcome!&quot;)
         }
-        
-        // Get typed values
-        val maxRetries = flags.value(&quot;max_retries&quot;, default = 3)
-        val apiTimeout = flags.value(&quot;api_timeout&quot;, default = 30.0)
-        val welcomeMessage = flags.value(&quot;welcome_message&quot;, default = &quot;Welcome!&quot;)
     }
-}</code></pre>
-<h4 id="firebase-setup-optional">Firebase Setup (Optional)</h4>
+}
+</code></pre>
+
+<h4>Firebase Setup (Optional)</h4>
+
 <p>If using Firebase Remote Config:</p>
-<ol type="1">
-<li>Add Firebase to your project following <a
-href="https://firebase.google.com/docs/android/setup">official
-documentation</a></li>
-<li>Add <code>google-services.json</code> to <code>app/</code>
-directory</li>
-<li>Add plugin to <code>build.gradle.kts</code>:</li>
-</ol>
-<pre class="kotlin"><code>plugins {
+
+<p>1. Add Firebase to your project following <a href="https://firebase.google.com/docs/android/setup">official documentation</a></p>
+<p>2. Add <code>google-services.json</code> to <code>app/</code> directory</p>
+<p>3. Add plugin to <code>build.gradle.kts</code>:</p>
+
+<pre><code class="language-kotlin">plugins {
     id(&quot;com.google.gms.google-services&quot;)
-}</code></pre>
-<ol start="4" type="1">
-<li>FirebaseProviderFactory will handle initialization automatically</li>
-</ol>
-<h3 id="ios-swift-package-manager">iOS (Swift Package Manager)</h3>
-<ol type="1">
-<li>In Xcode: <strong>File &gt; Add Packages…</strong></li>
-<li>URL: <code>https://github.com/maxluxs/Flagship</code></li>
-<li>Version: <code>1.0.0</code></li>
-<li>Add Package</li>
-</ol>
+}
+</code></pre>
+
+<p>4. FirebaseProviderFactory will handle initialization automatically</p>
+
+<h3>iOS (Swift Package Manager)</h3>
+
+<p>1. In Xcode: <strong>File > Add Packages...</strong></p>
+<p>2. URL: <code>https://github.com/maxluxs/Flagship</code></p>
+<p>3. Version: <code>0.1.0</code></p>
+<p>4. Add Package</p>
+
 <p>Or in <code>Package.swift</code>:</p>
-<pre class="swift"><code>dependencies: [
-    .package(url: &quot;https://github.com/maxluxs/Flagship&quot;, from: &quot;1.0.0&quot;)
-]</code></pre>
+<pre><code class="language-swift">dependencies: [
+    .package(url: &quot;https://github.com/maxluxs/Flagship&quot;, from: &quot;0.1.0&quot;)
+]
+</code></pre>
+
 <hr />
-<h2 id="initialization">⚙️ Initialization</h2>
-<h3 id="basic-configuration">Basic Configuration</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+
+<h2>⚙️ Initialization</h2>
+
+<h3>Basic Configuration</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     appKey = &quot;my-app&quot;,           // Unique app ID
     environment = &quot;production&quot;,   // production, staging, dev
     providers = listOf(/* ... */),
@@ -495,22 +552,31 @@ directory</li>
     logger = DefaultLogger()
 )
 
-Flags.configure(config)</code></pre>
-<h3 id="with-multiple-providers">With Multiple Providers</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+Flags.configure(config)
+</code></pre>
+
+<h3>With Multiple Providers</h3>
+
+<pre><code class="language-kotlin">// Using factories (recommended)
+val config = FlagsConfig(
     appKey = &quot;my-app&quot;,
     environment = &quot;production&quot;,
     providers = listOf(
-        FirebaseRemoteConfigProvider(Firebase.remoteConfig), // Priority 1
+        FirebaseProviderFactory.create(application), // Priority 1
         RestFlagsProvider(httpClient, &quot;https://api.example.com/flags&quot;) // Fallback
     ),
     cache = PersistentCache(FlagsSerializer()),
     logger = DefaultLogger()
-)</code></pre>
-<p><strong>Important:</strong> Providers are processed in order. The
-first successful result is used.</p>
-<h3 id="async-loading">Async Loading</h3>
-<pre class="kotlin"><code>// In a coroutine
+)
+</code></pre>
+
+<blockquote><strong>Note</strong>: <code>FirebaseProviderFactory</code> handles Firebase initialization automatically. For manual setup, see the <a href="#firebase-remote-config">Firebase Provider section</a>.</blockquote>
+
+<p><strong>Important:</strong> Providers are processed in order. The first successful result is used.</p>
+
+<h3>Async Loading</h3>
+
+<pre><code class="language-kotlin">// In a coroutine
 lifecycleScope.launch {
     val manager = Flags.manager()
     
@@ -522,17 +588,25 @@ lifecycleScope.launch {
     } else {
         // Using cache or default values
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="feature-flags">🎯 Feature Flags</h2>
-<h3 id="simple-boolean-flag">Simple Boolean Flag</h3>
-<pre class="kotlin"><code>val manager = Flags.manager()
+
+<h2>🎯 Feature Flags</h2>
+
+<h3>Simple Boolean Flag</h3>
+
+<pre><code class="language-kotlin">val manager = Flags.manager()
 
 if (manager.isEnabled(&quot;dark_mode&quot;)) {
     // Enable dark theme
-}</code></pre>
-<h3 id="typed-values">Typed Values</h3>
-<pre class="kotlin"><code>// String
+}
+</code></pre>
+
+<h3>Typed Values</h3>
+
+<pre><code class="language-kotlin">// String
 val apiUrl: String = manager.value(&quot;api_base_url&quot;, default = &quot;https://api.example.com&quot;)
 
 // Int
@@ -542,12 +616,18 @@ val timeout: Int = manager.value(&quot;request_timeout&quot;, default = 5000)
 val discount: Double = manager.value(&quot;promo_discount&quot;, default = 0.1)
 
 // JSON
-val config: JsonObject = manager.value(&quot;feature_config&quot;, default = buildJsonObject {})</code></pre>
-<h3 id="type-safety">Type Safety</h3>
-<pre class="kotlin"><code>// If type doesn&#39;t match, default value is returned
-val value: String = manager.value(&quot;some_int_flag&quot;, default = &quot;fallback&quot;) // &quot;fallback&quot;</code></pre>
-<h3 id="reactive-updates-in-compose">Reactive Updates in Compose</h3>
-<pre class="kotlin"><code>@Composable
+val config: JsonObject = manager.value(&quot;feature_config&quot;, default = buildJsonObject {})
+</code></pre>
+
+<h3>Type Safety</h3>
+
+<pre><code class="language-kotlin">// If type doesn&#39;t match, default value is returned
+val value: String = manager.value(&quot;some_int_flag&quot;, default = &quot;fallback&quot;) // &quot;fallback&quot;
+</code></pre>
+
+<h3>Reactive Updates in Compose</h3>
+
+<pre><code class="language-kotlin">@Composable
 fun FeatureScreen() {
     val manager = Flags.manager()
     var featureEnabled by remember { mutableStateOf(manager.isEnabled(&quot;new_feature&quot;)) }
@@ -568,11 +648,16 @@ fun FeatureScreen() {
     } else {
         OldFeatureUI()
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="ab-testing-experiments">🧪 A/B Testing (Experiments)</h2>
-<h3 id="basic-usage">Basic Usage</h3>
-<pre class="kotlin"><code>val assignment = manager.assign(
+
+<h2>🧪 A/B Testing (Experiments)</h2>
+
+<h3>Basic Usage</h3>
+
+<pre><code class="language-kotlin">val assignment = manager.assign(
     key = &quot;checkout_experiment&quot;,
     ctx = EvalContext(
         userId = &quot;user_12345&quot;,
@@ -597,9 +682,12 @@ when (assignment?.variant) {
         // Fallback (if experiment is disabled)
         OriginalCheckout()
     }
-}</code></pre>
-<h3 id="with-payload-data">With Payload Data</h3>
-<pre class="kotlin"><code>val assignment = manager.assign(&quot;button_color_test&quot;)
+}
+</code></pre>
+
+<h3>With Payload Data</h3>
+
+<pre><code class="language-kotlin">val assignment = manager.assign(&quot;button_color_test&quot;)
 
 assignment?.let {
     val buttonColor = it.payload[&quot;color&quot;]?.jsonPrimitive?.content ?: &quot;#007AFF&quot;
@@ -608,19 +696,29 @@ assignment?.let {
             containerColor = Color(parseColor(buttonColor))
         )
     ) { Text(&quot;Buy Now&quot;) }
-}</code></pre>
-<h3 id="deterministic-bucketing">Deterministic Bucketing</h3>
-<p>Flagship uses <strong>MurmurHash3</strong> for deterministic
-distribution: - Same <code>userId</code> always falls into the same
-group - Uniform distribution (50/50, 33/33/34, etc.) - Cross-platform
-consistency (Android ↔︎ iOS)</p>
-<pre class="kotlin"><code>// Same user always gets the same variant
+}
+</code></pre>
+
+<h3>Deterministic Bucketing</h3>
+
+<p>Flagship uses <strong>MurmurHash3</strong> for deterministic distribution:</p>
+<ul>
+<li>Same <code>userId</code> always falls into the same group</li>
+<li>Uniform distribution (50/50, 33/33/34, etc.)</li>
+<li>Cross-platform consistency (Android ↔ iOS)</li>
+</ul>
+
+<pre><code class="language-kotlin">// Same user always gets the same variant
 val user1 = manager.assign(&quot;exp&quot;, EvalContext(userId = &quot;user_123&quot;))
 val user2 = manager.assign(&quot;exp&quot;, EvalContext(userId = &quot;user_123&quot;))
-// user1.variant == user2.variant ✅</code></pre>
-<h3 id="exposure-tracking">Exposure Tracking</h3>
+// user1.variant == user2.variant ✅
+</code></pre>
+
+<h3>Exposure Tracking</h3>
+
 <p>Flagship automatically sends exposure events for A/B tests:</p>
-<pre class="kotlin"><code>val config = FlagsConfig(
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     // ...
     analytics = object : AnalyticsAdapter {
         override fun trackEvent(event: AnalyticsEvent) {
@@ -635,11 +733,16 @@ val user2 = manager.assign(&quot;exp&quot;, EvalContext(userId = &quot;user_123&
             }
         }
     }
-)</code></pre>
+)
+</code></pre>
+
 <hr />
-<h2 id="targeting-rules">🎯 Targeting Rules</h2>
-<h3 id="region-based-targeting">Region-based Targeting</h3>
-<pre class="kotlin"><code>// Server returns experiment with targeting:
+
+<h2>🎯 Targeting Rules</h2>
+
+<h3>Region-based Targeting</h3>
+
+<pre><code class="language-kotlin">// Server returns experiment with targeting:
 // &quot;targeting&quot;: {
 //   &quot;type&quot;: &quot;region_in&quot;,
 //   &quot;regions&quot;: [&quot;US&quot;, &quot;CA&quot;, &quot;GB&quot;]
@@ -652,9 +755,12 @@ val assignment = manager.assign(
         attributes = mapOf(&quot;region&quot; to &quot;US&quot;) // User from US
     )
 )
-// assignment != null ✅ (if user is from US, CA or GB)</code></pre>
-<h3 id="app-version-targeting">App Version Targeting</h3>
-<pre class="kotlin"><code>// &quot;targeting&quot;: {
+// assignment != null ✅ (if user is from US, CA or GB)
+</code></pre>
+
+<h3>App Version Targeting</h3>
+
+<pre><code class="language-kotlin">// &quot;targeting&quot;: {
 //   &quot;type&quot;: &quot;app_version_gte&quot;,
 //   &quot;version&quot;: &quot;2.5.0&quot;
 // }
@@ -666,13 +772,19 @@ val assignment = manager.assign(
         attributes = mapOf(&quot;app_version&quot; to &quot;2.6.1&quot;)
     )
 )
-// assignment != null ✅ (2.6.1 &gt;= 2.5.0)</code></pre>
-<p>Supports <strong>Semantic Versioning</strong> (SemVer): -
-<code>1.0.0</code> &gt; <code>1.0.0-beta</code> - <code>2.1.0</code>
-&gt; <code>2.0.9</code> - <code>1.0.0-rc.2</code> &gt;
-<code>1.0.0-beta.1</code></p>
-<h3 id="custom-attributes">Custom Attributes</h3>
-<pre class="kotlin"><code>// &quot;targeting&quot;: {
+// assignment != null ✅ (2.6.1 &gt;= 2.5.0)
+</code></pre>
+
+<p>Supports <strong>Semantic Versioning</strong> (SemVer):</p>
+<ul>
+<li><code>1.0.0</code> > <code>1.0.0-beta</code></li>
+<li><code>2.1.0</code> > <code>2.0.9</code></li>
+<li><code>1.0.0-rc.2</code> > <code>1.0.0-beta.1</code></li>
+</ul>
+
+<h3>Custom Attributes</h3>
+
+<pre><code class="language-kotlin">// &quot;targeting&quot;: {
 //   &quot;type&quot;: &quot;attribute_equals&quot;,
 //   &quot;key&quot;: &quot;subscription_tier&quot;,
 //   &quot;value&quot;: &quot;premium&quot;
@@ -688,9 +800,12 @@ val assignment = manager.assign(
         )
     )
 )
-// assignment != null ✅ (if subscription_tier == &quot;premium&quot;)</code></pre>
-<h3 id="composite-rules-andor">Composite Rules (AND/OR)</h3>
-<pre class="kotlin"><code>// &quot;targeting&quot;: {
+// assignment != null ✅ (if subscription_tier == &quot;premium&quot;)
+</code></pre>
+
+<h3>Composite Rules (AND/OR)</h3>
+
+<pre><code class="language-kotlin">// &quot;targeting&quot;: {
 //   &quot;type&quot;: &quot;composite&quot;,
 //   &quot;operator&quot;: &quot;AND&quot;,
 //   &quot;rules&quot;: [
@@ -699,17 +814,28 @@ val assignment = manager.assign(
 //   ]
 // }
 
-// User must be from US AND have version &gt;= 3.0.0</code></pre>
+// User must be from US AND have version &gt;= 3.0.0
+</code></pre>
+
 <hr />
-<h2 id="providers">🔌 Providers</h2>
-<h3 id="firebase-remote-config">Firebase Remote Config</h3>
-<pre class="kotlin"><code>// build.gradle.kts
+
+<h2>🔌 Providers</h2>
+
+<h3>Firebase Remote Config</h3>
+
+<pre><code class="language-kotlin">// build.gradle.kts
 implementation(project(&quot;:flagship-provider-firebase&quot;))
 
-// Code
-val provider = FirebaseRemoteConfigProvider(
-    remoteConfig = Firebase.remoteConfig,
-    fetchIntervalSeconds = 3600 // Refresh every hour
+// Recommended: Using factory (Android)
+import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+
+val provider = FirebaseProviderFactory.create(
+    application = application,
+    defaults = mapOf(
+        &quot;new_feature&quot; to false,
+        &quot;dark_mode&quot; to false
+    ),
+    name = &quot;firebase&quot;
 )
 
 val config = FlagsConfig(
@@ -717,9 +843,18 @@ val config = FlagsConfig(
     environment = &quot;production&quot;,
     providers = listOf(provider),
     cache = PersistentCache(FlagsSerializer())
-)</code></pre>
+)
+</code></pre>
+
+<p><strong>Alternative: Manual Setup</strong></p>
+
+<pre><code class="language-kotlin">// For advanced use cases or iOS
+val adapter = AndroidFirebaseAdapter(Firebase.remoteConfig)
+val provider = FirebaseRemoteConfigProvider(adapter, name = &quot;firebase&quot;)
+</code></pre>
+
 <p><strong>Firebase Console structure:</strong></p>
-<pre class="json"><code>{
+<pre><code class="language-json">{
   &quot;flagship_flags&quot;: {
     &quot;new_payment_flow&quot;: true,
     &quot;dark_mode_enabled&quot;: false
@@ -732,9 +867,12 @@ val config = FlagsConfig(
       ]
     }
   }
-}</code></pre>
-<h3 id="rest-provider">REST Provider</h3>
-<pre class="kotlin"><code>// build.gradle.kts
+}
+</code></pre>
+
+<h3>REST Provider</h3>
+
+<pre><code class="language-kotlin">// build.gradle.kts
 implementation(project(&quot;:flagship-provider-rest&quot;))
 
 // Code
@@ -747,9 +885,11 @@ val httpClient = HttpClient(CIO) {
 val provider = RestFlagsProvider(
     httpClient = httpClient,
     baseUrl = &quot;https://api.example.com/flags&quot;
-)</code></pre>
+)
+</code></pre>
+
 <p><strong>REST API format:</strong></p>
-<pre class="json"><code>{
+<pre><code class="language-json">{
   &quot;revision&quot;: &quot;abc123&quot;,
   &quot;fetchedAt&quot;: 1699999999999,
   &quot;ttlMs&quot;: 900000,
@@ -769,9 +909,12 @@ val provider = RestFlagsProvider(
       }
     }
   }
-}</code></pre>
-<h3 id="custom-provider">Custom Provider</h3>
-<pre class="kotlin"><code>class MyCustomProvider : FlagsProvider {
+}
+</code></pre>
+
+<h3>Custom Provider</h3>
+
+<pre><code class="language-kotlin">class MyCustomProvider : FlagsProvider {
     override val name: String = &quot;MyBackend&quot;
     
     override suspend fun fetch(context: EvalContext): ProviderSnapshot {
@@ -788,47 +931,69 @@ val provider = RestFlagsProvider(
             experiments = emptyMap()
         )
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="caching-offline-mode">💾 Caching &amp; Offline Mode</h2>
-<h3 id="in-memory-cache-default">In-Memory Cache (default)</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+
+<h2>💾 Caching & Offline Mode</h2>
+
+<h3>In-Memory Cache (default)</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     // ...
     cache = InMemoryCache() // Fast but not persistent
-)</code></pre>
-<p><strong>Pros:</strong> Very fast<br />
-<strong>Cons:</strong> Data lost on app restart</p>
-<h3 id="persistent-cache">Persistent Cache</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+)
+</code></pre>
+
+<p><strong>Pros:</strong> Very fast</p>
+<p><strong>Cons:</strong> Data lost on app restart</p>
+
+<h3>Persistent Cache</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     // ...
     cache = PersistentCache(FlagsSerializer())
-)</code></pre>
-<p><strong>Android:</strong> Uses <code>SharedPreferences</code><br />
-<strong>iOS:</strong> Uses <code>NSUserDefaults</code></p>
-<p><strong>Pros:</strong> Works offline, persists between launches<br />
-<strong>Cons:</strong> Slightly slower</p>
-<h3 id="ttl-time-to-live">TTL (Time-To-Live)</h3>
-<p>Each snapshot has a TTL. After expiration, Flagship will attempt to
-refresh:</p>
-<pre class="kotlin"><code>// In provider
+)
+</code></pre>
+
+<p><strong>Android:</strong> Uses <code>SharedPreferences</code></p>
+<p><strong>iOS:</strong> Uses <code>NSUserDefaults</code></p>
+
+<p><strong>Pros:</strong> Works offline, persists between launches</p>
+<p><strong>Cons:</strong> Slightly slower</p>
+
+<h3>TTL (Time-To-Live)</h3>
+
+<p>Each snapshot has a TTL. After expiration, Flagship will attempt to refresh:</p>
+
+<pre><code class="language-kotlin">// In provider
 ProviderSnapshot(
     revision = &quot;v123&quot;,
     fetchedAt = Clock.System.now().toEpochMilliseconds(),
     ttlMs = 1800_000, // 30 minutes
     flags = myFlags,
     experiments = myExperiments
-)</code></pre>
-<h3 id="offline-first-architecture">Offline-first Architecture</h3>
-<pre class="kotlin"><code>// 1. Flagship tries to load data from providers
+)
+</code></pre>
+
+<h3>Offline-first Architecture</h3>
+
+<pre><code class="language-kotlin">// 1. Flagship tries to load data from providers
 manager.bootstrap()
 
 // 2. If network unavailable, uses cache
 // 3. If no cache, uses default values
-val enabled = manager.isEnabled(&quot;feature&quot;, default = false)</code></pre>
+val enabled = manager.isEnabled(&quot;feature&quot;, default = false)
+</code></pre>
+
 <hr />
-<h2 id="debug-dashboard">🛠️ Debug Dashboard</h2>
-<h3 id="enable-in-android">Enable in Android</h3>
-<pre class="kotlin"><code>// In debug build
+
+<h2>🛠️ Debug Dashboard</h2>
+
+<h3>Enable in Android</h3>
+
+<pre><code class="language-kotlin">// In debug build
 @Composable
 fun DebugMenu() {
     val manager = Flags.manager()
@@ -839,19 +1004,20 @@ fun DebugMenu() {
         allowEnvSwitch = false,  // Disable environment switching
         useDarkTheme = false
     )
-}</code></pre>
-<h3 id="dashboard-features">Dashboard Features</h3>
-<ol type="1">
-<li><strong>All Flags List</strong> - current values and types</li>
-<li><strong>Overrides</strong> - force enable/disable flags</li>
-<li><strong>Experiment Assignments</strong> - view assigned
-variants</li>
-<li><strong>Provider Status</strong> - loading status from each
-provider</li>
-<li><strong>Cache Info</strong> - when data was loaded, TTL</li>
-</ol>
-<h3 id="local-overrides">Local Overrides</h3>
-<pre class="kotlin"><code>// Programmatically
+}
+</code></pre>
+
+<h3>Dashboard Features</h3>
+
+<p>1. <strong>All Flags List</strong> - current values and types</p>
+<p>2. <strong>Overrides</strong> - force enable/disable flags</p>
+<p>3. <strong>Experiment Assignments</strong> - view assigned variants</p>
+<p>4. <strong>Provider Status</strong> - loading status from each provider</p>
+<p>5. <strong>Cache Info</strong> - when data was loaded, TTL</p>
+
+<h3>Local Overrides</h3>
+
+<pre><code class="language-kotlin">// Programmatically
 manager.setOverride(&quot;new_feature&quot;, FlagValue.Bool(true))
 
 // Check
@@ -861,13 +1027,18 @@ manager.isEnabled(&quot;new_feature&quot;) // true (override)
 manager.clearOverride(&quot;new_feature&quot;)
 
 // Remove all overrides
-manager.listOverrides().forEach { manager.clearOverride(it) }</code></pre>
-<p><strong>⚠️ Important:</strong> Overrides are local only and don’t
-affect other users!</p>
+manager.listOverrides().forEach { manager.clearOverride(it) }
+</code></pre>
+
+<p><strong>⚠️ Important:</strong> Overrides are local only and don't affect other users!</p>
+
 <hr />
-<h2 id="analytics-integration">📊 Analytics Integration</h2>
-<h3 id="firebase-analytics">Firebase Analytics</h3>
-<pre class="kotlin"><code>val config = FlagsConfig(
+
+<h2>📊 Analytics Integration</h2>
+
+<h3>Firebase Analytics</h3>
+
+<pre><code class="language-kotlin">val config = FlagsConfig(
     // ...
     analytics = object : AnalyticsAdapter {
         override fun trackEvent(event: AnalyticsEvent) {
@@ -882,9 +1053,12 @@ affect other users!</p>
             }
         }
     }
-)</code></pre>
-<h3 id="amplitude">Amplitude</h3>
-<pre class="kotlin"><code>analytics = object : AnalyticsAdapter {
+)
+</code></pre>
+
+<h3>Amplitude</h3>
+
+<pre><code class="language-kotlin">analytics = object : AnalyticsAdapter {
     override fun trackEvent(event: AnalyticsEvent) {
         when (event) {
             is AnalyticsEvent.ExperimentExposure -&gt; {
@@ -898,9 +1072,12 @@ affect other users!</p>
             }
         }
     }
-}</code></pre>
-<h3 id="mixpanel">Mixpanel</h3>
-<pre class="kotlin"><code>analytics = object : AnalyticsAdapter {
+}
+</code></pre>
+
+<h3>Mixpanel</h3>
+
+<pre><code class="language-kotlin">analytics = object : AnalyticsAdapter {
     override fun trackEvent(event: AnalyticsEvent) {
         when (event) {
             is AnalyticsEvent.ExperimentExposure -&gt; {
@@ -914,11 +1091,16 @@ affect other users!</p>
             }
         }
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="best-practices">✅ Best Practices</h2>
-<h3 id="use-meaningful-flag-names">1. Use Meaningful Flag Names</h3>
-<pre class="kotlin"><code>// ✅ Good
+
+<h2>✅ Best Practices</h2>
+
+<h3>1. Use Meaningful Flag Names</h3>
+
+<pre><code class="language-kotlin">// ✅ Good
 &quot;new_payment_flow&quot;
 &quot;dark_mode_enabled&quot;
 &quot;premium_features_unlock&quot;
@@ -926,9 +1108,12 @@ affect other users!</p>
 // ❌ Bad
 &quot;flag1&quot;
 &quot;test&quot;
-&quot;temp_feature&quot;</code></pre>
-<h3 id="remove-old-flags">2. Remove Old Flags</h3>
-<pre class="kotlin"><code>// After full rollout, remove the flag and simplify code:
+&quot;temp_feature&quot;
+</code></pre>
+
+<h3>2. Remove Old Flags</h3>
+
+<pre><code class="language-kotlin">// After full rollout, remove the flag and simplify code:
 
 // Before
 if (manager.isEnabled(&quot;new_checkout&quot;)) {
@@ -938,28 +1123,37 @@ if (manager.isEnabled(&quot;new_checkout&quot;)) {
 }
 
 // After (when new_checkout = 100%)
-NewCheckout()</code></pre>
-<h3 id="always-provide-defaults">3. Always Provide Defaults</h3>
-<pre class="kotlin"><code>// ✅ Always provide defaults
+NewCheckout()
+</code></pre>
+
+<h3>3. Always Provide Defaults</h3>
+
+<pre><code class="language-kotlin">// ✅ Always provide defaults
 val timeout = manager.value(&quot;request_timeout&quot;, default = 5000)
 
 // ❌ Avoid nulls
-val timeout = manager.value&lt;Int?&gt;(&quot;request_timeout&quot;, default = null) // Dangerous!</code></pre>
-<h3 id="cache-manager-instance">4. Cache Manager Instance</h3>
-<pre class="kotlin"><code>// ✅ Good
+val timeout = manager.value&lt;Int?&gt;(&quot;request_timeout&quot;, default = null) // Dangerous!
+</code></pre>
+
+<h3>4. Cache Manager Instance</h3>
+
+<pre><code class="language-kotlin">// ✅ Good
 class MyRepository {
     private val flags = Flags.manager() // Once
     
-    fun isFeatureEnabled() = flags.isEnabled(&quot;feature_x&quot;)
+    suspend fun isFeatureEnabled() = flags.isEnabled(&quot;feature_x&quot;)
 }
 
 // ❌ Bad
-fun checkFeature() {
+suspend fun checkFeature() {
     val flags = Flags.manager() // Creates new instance each time
     return flags.isEnabled(&quot;feature_x&quot;)
-}</code></pre>
-<h3 id="test-with-overrides">5. Test with Overrides</h3>
-<pre class="kotlin"><code>@Test
+}
+</code></pre>
+
+<h3>5. Test with Overrides</h3>
+
+<pre><code class="language-kotlin">@Test
 fun testNewPaymentFlow() {
     val manager = Flags.manager()
     
@@ -971,9 +1165,12 @@ fun testNewPaymentFlow() {
     
     // Cleanup
     manager.clearOverride(&quot;new_payment_flow&quot;)
-}</code></pre>
-<h3 id="handle-errors">6. Handle Errors</h3>
-<pre class="kotlin"><code>lifecycleScope.launch {
+}
+</code></pre>
+
+<h3>6. Handle Errors</h3>
+
+<pre><code class="language-kotlin">lifecycleScope.launch {
     try {
         val manager = Flags.manager()
         val success = manager.ensureBootstrap(5000)
@@ -986,53 +1183,69 @@ fun testNewPaymentFlow() {
         Log.e(&quot;Flags&quot;, &quot;Failed to initialize&quot;, e)
         // Graceful degradation
     }
-}</code></pre>
+}
+</code></pre>
+
 <hr />
-<h2 id="faq">❓ FAQ</h2>
-<h3 id="q-how-does-provider-priority-work">Q: How does provider priority
-work?</h3>
-<p><strong>A:</strong> Providers are processed in order in the list. The
-first successful result is used.</p>
-<pre class="kotlin"><code>providers = listOf(
+
+<h2>❓ FAQ</h2>
+
+<h3>Q: How does provider priority work?</h3>
+
+<p><strong>A:</strong> Providers are processed in order in the list. The first successful result is used.</p>
+
+<pre><code class="language-kotlin">providers = listOf(
     FirebaseProvider(),  // Priority 1
     RestProvider(),      // Fallback 1
     LocalProvider()      // Fallback 2
-)</code></pre>
-<h3 id="q-what-happens-when-offline">Q: What happens when offline?</h3>
-<p><strong>A:</strong> Flagship uses the last cached snapshot. If no
-cache, uses default values.</p>
-<h3 id="q-can-i-use-flagship-without-internet">Q: Can I use Flagship
-without internet?</h3>
-<p><strong>A:</strong> Yes! Use <code>PersistentCache()</code> and
-preload data once. Then the app works offline.</p>
-<h3 id="q-how-often-are-flags-updated">Q: How often are flags
-updated?</h3>
-<p><strong>A:</strong> Depends on TTL in snapshot (default 15 minutes).
-You can force refresh:</p>
-<pre class="kotlin"><code>manager.refresh()</code></pre>
-<h3 id="q-is-hot-reload-supported">Q: Is Hot Reload supported?</h3>
-<p><strong>A:</strong> Yes! Use <code>FlagsListener</code> for reactive
-updates:</p>
-<pre class="kotlin"><code>manager.addListener(object : FlagsListener {
+)
+</code></pre>
+
+<h3>Q: What happens when offline?</h3>
+
+<p><strong>A:</strong> Flagship uses the last cached snapshot. If no cache, uses default values.</p>
+
+<h3>Q: Can I use Flagship without internet?</h3>
+
+<p><strong>A:</strong> Yes! Use <code>PersistentCache()</code> and preload data once. Then the app works offline.</p>
+
+<h3>Q: How often are flags updated?</h3>
+
+<p><strong>A:</strong> Depends on TTL in snapshot (default 15 minutes). You can force refresh:</p>
+
+<pre><code class="language-kotlin">manager.refresh()
+</code></pre>
+
+<h3>Q: Is Hot Reload supported?</h3>
+
+<p><strong>A:</strong> Yes! Use <code>FlagsListener</code> for reactive updates:</p>
+
+<pre><code class="language-kotlin">manager.addListener(object : FlagsListener {
     override fun onSnapshotUpdated(providersCount: Int) {
         // Update UI
     }
-})</code></pre>
-<h3 id="q-how-to-test-experiments">Q: How to test experiments?</h3>
-<p><strong>A:</strong> Use debug dashboard to override variants or use
-<code>setOverride()</code>.</p>
-<h3 id="q-is-local-storage-safe">Q: Is local storage safe?</h3>
-<p><strong>A:</strong> Yes. Flagship doesn’t store sensitive data
-(tokens, keys). Only public flag settings.</p>
-<h3 id="q-can-i-use-flagship-in-compose-desktopweb">Q: Can I use
-Flagship in Compose Desktop/Web?</h3>
-<p><strong>A:</strong> Currently only Android and iOS are supported.
-Desktop/Web may be added in the future.</p>
+})
+</code></pre>
+
+<h3>Q: How to test experiments?</h3>
+
+<p><strong>A:</strong> Use debug dashboard to override variants or use <code>setOverride()</code>.</p>
+
+<h3>Q: Is local storage safe?</h3>
+
+<p><strong>A:</strong> Yes. Flagship doesn't store sensitive data (tokens, keys). Only public flag settings.</p>
+
+<h3>Q: Can I use Flagship in Compose Desktop/Web?</h3>
+
+<p><strong>A:</strong> Currently only Android and iOS are supported. Desktop/Web may be added in the future.</p>
+
 <hr />
-<p align="center">
-<b>Need help? Create an Issue on
-<a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b>
-</p>
+
+<p><p align="center"></p>
+<p><b>Need help? Create an Issue on <a href="https://github.com/maxluxs/Flagship/issues">GitHub</a>!</b></p>
+<p></p></p>
+
+
     </div>
     <footer>
         <p>Made with ❤️ by <a href="https://github.com/maxluxs" target="_blank">@maxluxs</a> • Licensed under MIT</p>
