@@ -78,8 +78,16 @@ fun Application.module() {
         // Project routes (flags, experiments, config)
         projectRoutes(storage, auditService)
         
-        // Admin UI - redirect root to index.html
+        // Landing page
         get("/") {
+            call.respondRedirect("/landing/")
+        }
+        
+        // Landing page static files
+        staticResources("/landing", "landing")
+        
+        // Admin UI - redirect /admin to admin panel
+        get("/admin") {
             call.respondRedirect("/admin/")
         }
         
