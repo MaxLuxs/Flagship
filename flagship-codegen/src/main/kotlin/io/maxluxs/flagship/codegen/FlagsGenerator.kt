@@ -1,5 +1,8 @@
 package io.maxluxs.flagship.codegen
 
+import io.maxluxs.flagship.codegen.FlagType.JSON
+import io.maxluxs.flagship.codegen.FlagType.BOOL
+
 class FlagsGenerator(private val packageName: String) {
     fun generate(config: FlagsConfig): String {
         val builder = StringBuilder()
@@ -8,6 +11,9 @@ class FlagsGenerator(private val packageName: String) {
         builder.appendLine()
         builder.appendLine("import io.maxluxs.flagship.core.Flagship")
         builder.appendLine("import io.maxluxs.flagship.core.model.ExperimentAssignment")
+        builder.appendLine("import kotlinx.serialization.json.Json")
+        builder.appendLine("import kotlinx.serialization.Serializable")
+        builder.appendLine("import kotlinx.serialization.decodeFromString")
         builder.appendLine()
         builder.appendLine("/**")
         builder.appendLine(" * Auto-generated typed flags.")
@@ -21,7 +27,7 @@ class FlagsGenerator(private val packageName: String) {
         // Generate flag objects
         config.flags.forEach { flag ->
             val className = toPascalCase(flag.key)
-            val kotlinType = flag.type.toKotlinType()
+            val kotlinType = if (flag.enumType != null) flag.enumType else flag.type.toKotlinType()
             
             builder.appendLine("    /**")
             if (flag.description != null) {
@@ -29,11 +35,42 @@ class FlagsGenerator(private val packageName: String) {
             }
             builder.appendLine("     * ")
             builder.appendLine("     * Key: `${flag.key}`")
+            if (flag.enumType != null) {
+                builder.appendLine("     * Type: Enum ($kotlinType)")
+            }
             builder.appendLine("     */")
             builder.appendLine("    object $className {")
             
-            when (flag.type) {
-                FlagType.BOOL -> {
+            when {
+                flag.enumType != null -> {
+                    // Generate enum accessor
+                    val enumType = flag.enumType
+                    val defaultValue = flag.defaultValue?.trim('"') ?: flag.enumValues?.firstOrNull() ?: "null"
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Get the value of this flag as enum.")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                    builder.appendLine("         * Returns null if value doesn't match any enum value.")
+                    builder.appendLine("         */")
+                    builder.appendLine("        suspend fun value(): $enumType? {")
+                    builder.appendLine("            val stringValue = Flagship.get(\"${flag.key}\", default = \"$defaultValue\")")
+                    builder.appendLine("            return try {")
+                    builder.appendLine("                $enumType.valueOf(stringValue.uppercase())")
+                    builder.appendLine("            } catch (e: IllegalArgumentException) {")
+                    builder.appendLine("                null")
+                    builder.appendLine("            }")
+                    builder.appendLine("        }")
+                    builder.appendLine()
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Get the value of this flag as enum with default.")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                    builder.appendLine("         */")
+                    builder.appendLine("        suspend fun valueOrDefault(default: $enumType): $enumType {")
+                    builder.appendLine("            return value() ?: default")
+                    builder.appendLine("        }")
+                }
+                flag.type == BOOL -> {
                     val defaultValue = flag.defaultValue?.toBoolean() ?: false
                     builder.appendLine("        /**")
                     builder.appendLine("         * Check if this flag is enabled.")
@@ -44,6 +81,50 @@ class FlagsGenerator(private val packageName: String) {
                     builder.appendLine("        suspend fun enabled(): Boolean {")
                     builder.appendLine("            return Flagship.isEnabled(\"${flag.key}\", default = $defaultValue)")
                     builder.appendLine("        }")
+                }
+                flag.type == JSON -> {
+                    val jsonType = flag.jsonType
+                    if (jsonType != null) {
+                        // Generate typed JSON accessor
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the value of this flag as typed JSON object.")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                        builder.appendLine("         * Requires: $jsonType must be @Serializable")
+                        builder.appendLine("         */")
+                        builder.appendLine("        suspend fun value(): $jsonType? {")
+                        builder.appendLine("            val jsonString = Flagship.get(\"${flag.key}\", default = \"\")")
+                        builder.appendLine("            return if (jsonString.isBlank()) null else {")
+                        builder.appendLine("                try {")
+                        builder.appendLine("                    Json.decodeFromString<$jsonType>(jsonString)")
+                        builder.appendLine("                } catch (e: Exception) {")
+                        builder.appendLine("                    null")
+                        builder.appendLine("                }")
+                        builder.appendLine("            }")
+                        builder.appendLine("        }")
+                        builder.appendLine()
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the raw JSON string value of this flag.")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                        builder.appendLine("         */")
+                        builder.appendLine("        suspend fun valueAsString(): String {")
+                        val defaultValue = flag.defaultValue ?: "\"\""
+                        builder.appendLine("            return Flagship.get(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("        }")
+                    } else {
+                        // Fallback to String for JSON without type
+                        val defaultValue = flag.defaultValue ?: "\"\""
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the value of this flag as JSON string.")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                        builder.appendLine("         * Tip: Specify 'jsonType' in config to get typed accessor")
+                        builder.appendLine("         */")
+                        builder.appendLine("        suspend fun value(): String {")
+                        builder.appendLine("            return Flagship.get(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("        }")
+                    }
                 }
                 else -> {
                     val defaultValue = flag.defaultValue ?: flag.type.defaultValue()
