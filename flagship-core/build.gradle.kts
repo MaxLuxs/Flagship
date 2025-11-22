@@ -18,6 +18,17 @@ kotlin {
         }
     }
     
+    js(IR) {
+        browser()
+        nodejs {
+            generateTypeScriptDefinitions()
+        }
+        compilerOptions {
+            moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
+            sourceMap.set(true)
+        }
+    }
+    
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -51,6 +62,8 @@ kotlin {
         }
 
         jvmMain.dependencies {}
+        
+        jsMain.dependencies {}
         
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)

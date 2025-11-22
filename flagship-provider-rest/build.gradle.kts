@@ -17,6 +17,10 @@ kotlin {
         }
     }
 
+    js(IR) {
+        browser()
+    }
+
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -50,6 +54,14 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.cio)
+        }
+
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
 
         androidMain.dependencies {

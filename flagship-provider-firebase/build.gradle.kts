@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
+    kotlin("native.cocoapods")
     // Skip Dokka due to Firebase dependencies
     // alias(libs.plugins.dokka)
-    kotlin("native.cocoapods")
     // Publishing: uncomment when ready to publish
     // `maven-publish`
     // signing
@@ -13,6 +13,16 @@ plugins {
 // apply(from = rootProject.file("gradle/publish.gradle.kts"))
 
 kotlin {
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+
+    js(IR) {
+        browser()
+    }
+
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -56,6 +66,10 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
         }
+        
+        jvmMain.dependencies {}
+
+        jsMain.dependencies {}
         
         androidMain.dependencies {
             implementation(projects.flagshipCore)
