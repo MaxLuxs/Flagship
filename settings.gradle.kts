@@ -37,6 +37,21 @@ include(":flagship-core")
 include(":flagship-provider-rest")
 include(":flagship-provider-firebase")
 include(":flagship-provider-launchdarkly")
+include(":flagship-ui-components")
 include(":flagship-ui-compose")
 include(":flagship-platform-android")
 include(":flagship-platform-ios")
+include(":flagship-ktor-plugin")
+include(":flagship-spring-boot-starter")
+
+// Internal modules from submodule (only available if submodule is initialized)
+if (file("internal/flagship-server").exists()) {
+    include(":flagship-server")
+    project(":flagship-server").projectDir = file("internal/flagship-server")
+    
+    include(":flagship-admin-ui-compose")
+    project(":flagship-admin-ui-compose").projectDir = file("internal/flagship-admin-ui-compose")
+    
+    include(":flagship-shared")
+    project(":flagship-shared").projectDir = file("internal/flagship-shared")
+}
