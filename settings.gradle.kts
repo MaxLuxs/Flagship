@@ -48,10 +48,16 @@ include(":flagship-spring-boot-starter")
 if (file("internal/flagship-server").exists()) {
     include(":flagship-server")
     project(":flagship-server").projectDir = file("internal/flagship-server")
-    
+}
+
+if (file("internal/flagship-admin-ui-compose").exists()) {
     include(":flagship-admin-ui-compose")
     project(":flagship-admin-ui-compose").projectDir = file("internal/flagship-admin-ui-compose")
-    
+}
+
+if (file("internal/flagship-shared").exists()) {
     include(":flagship-shared")
     project(":flagship-shared").projectDir = file("internal/flagship-shared")
+} else {
+    include(":flagship-shared")
 }
