@@ -1,12 +1,10 @@
 package io.maxluxs.flagship.core.util
 
-import platform.Foundation.NSDate
-import platform.Foundation.timeIntervalSince1970
-import kotlin.concurrent.AtomicReference
-import kotlin.native.concurrent.freeze
-
-actual fun currentTimeMillis(): Long = 
-    (NSDate().timeIntervalSince1970 * 1000).toLong()
+actual fun getEnvironmentVariables(): Map<String, String> {
+    // iOS doesn't have direct access to environment variables
+    // Return empty map - can be extended with platform-specific implementation
+    return emptyMap()
+}
 
 actual inline fun <T> synchronized(lock: Any, block: () -> T): T {
     // iOS/Native doesn't have direct synchronized, but we can use freeze

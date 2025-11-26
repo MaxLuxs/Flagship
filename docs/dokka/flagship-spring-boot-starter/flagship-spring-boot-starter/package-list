@@ -1,0 +1,20 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.maxluxs.flagship.spring////PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/index.html
+$dokka.location:io.maxluxs.flagship.spring/Flag///PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flag/index.html
+$dokka.location:io.maxluxs.flagship.spring/Flag/defaultValue/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flag/default-value.html
+$dokka.location:io.maxluxs.flagship.spring/Flag/value/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flag/value.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipAutoConfiguration///PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-auto-configuration/index.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipAutoConfiguration/FlagshipAutoConfiguration/#io.maxluxs.flagship.spring.FlagshipProperties/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-auto-configuration/-flagship-auto-configuration.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipAutoConfiguration/flagsManager/#kotlin.collections.List[io.maxluxs.flagship.core.provider.FlagsProvider]/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-auto-configuration/flags-manager.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController///PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/index.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController/FlagshipController/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/-flagship-controller.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController/getAllFlags/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/get-all-flags.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController/getExperiment/#kotlin.String/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/get-experiment.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController/getFlag/#kotlin.String#kotlin.Boolean/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/get-flag.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipController/getFlagValue/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-controller/get-flag-value.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipProperties///PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-properties/index.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipProperties/FlagshipProperties/#kotlin.String?#kotlin.String?/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-properties/-flagship-properties.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipProperties/appKey/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-properties/app-key.html
+$dokka.location:io.maxluxs.flagship.spring/FlagshipProperties/environment/#/PointingToDeclaration/flagship-spring-boot-starter/io.maxluxs.flagship.spring/-flagship-properties/environment.html
+io.maxluxs.flagship.spring

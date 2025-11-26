@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.manager.FlagsManager
 import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.core.model.FlagValue
+import io.maxluxs.flagship.ui.components.components.BrandedTopBar
 
 /**
  * Main dashboard for managing and debugging feature flags.
@@ -70,6 +71,13 @@ fun FlagsDashboard(
             color = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
+                // Branded top bar with logo
+                BrandedTopBar(
+                    title = "Flags Debug",
+                    showLogo = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                
                 // Modern PrimaryTabRow with custom indicator
                 PrimaryTabRow(
                     selectedTabIndex = selectedTab,

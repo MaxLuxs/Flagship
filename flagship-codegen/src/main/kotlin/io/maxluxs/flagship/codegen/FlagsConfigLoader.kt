@@ -4,12 +4,31 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
+/**
+ * Configuration model for flags and experiments.
+ * 
+ * This is the root data class that represents the entire flags.json configuration file.
+ * 
+ * @param flags List of flag definitions
+ * @param experiments List of experiment definitions
+ */
 @Serializable
 data class FlagsConfig(
     val flags: List<FlagDefinition> = emptyList(),
     val experiments: List<ExperimentDefinition> = emptyList()
 )
 
+/**
+ * Definition of a single feature flag.
+ * 
+ * @param key Flag key (must be snake_case or kebab-case, e.g., "new_feature", "api-timeout")
+ * @param type Type of the flag value (BOOL, INT, DOUBLE, STRING, JSON)
+ * @param description Optional description of the flag
+ * @param defaultValue Optional default value as string (must match the type)
+ * @param jsonType Optional fully qualified class name for JSON type (e.g., "com.example.MyData")
+ * @param enumType Optional fully qualified enum class name (e.g., "com.example.PaymentMethod")
+ * @param enumValues Optional list of enum values (required if enumType is specified)
+ */
 @Serializable
 data class FlagDefinition(
     val key: String,
@@ -21,6 +40,13 @@ data class FlagDefinition(
     val enumValues: List<String>? = null // Optional: list of enum values (required if enumType is specified)
 )
 
+/**
+ * Definition of a single A/B test experiment.
+ * 
+ * @param key Experiment key (must be snake_case or kebab-case)
+ * @param description Optional description of the experiment
+ * @param variants List of variant names (must have at least one)
+ */
 @Serializable
 data class ExperimentDefinition(
     val key: String,
@@ -28,25 +54,50 @@ data class ExperimentDefinition(
     val variants: List<String> = emptyList()
 )
 
+/**
+ * Supported flag value types.
+ */
 @Serializable
 enum class FlagType {
+    /** Boolean flag (true/false) */
     BOOL,
+    /** Integer flag */
     INT,
+    /** Double precision floating point flag */
     DOUBLE,
+    /** String flag */
     STRING,
+    /** JSON flag (stored as string, can be parsed to typed object) */
     JSON
 }
 
+/**
+ * Loader and validator for flags configuration files.
+ * 
+ * This object provides functionality to load and validate flags.json configuration files.
+ * It performs comprehensive validation including:
+ * - Duplicate key detection
+ * - Type validation for default values
+ * - Format validation for keys and types
+ * - Enum and JSON type validation
+ */
 object FlagsConfigLoader {
     private val json = Json { ignoreUnknownKeys = true }
     
+    /**
+     * Load and validate a flags configuration file.
+     * 
+     * @param file The flags.json file to load
+     * @return Parsed and validated FlagsConfig
+     * @throws IllegalArgumentException if the file doesn't exist, is invalid, or validation fails
+     */
     fun load(file: File): FlagsConfig {
         if (!file.exists()) {
             throw IllegalArgumentException("Config file not found: ${file.absolutePath}")
         }
         
         val content = file.readText()
-        val config = json.decodeFromString(FlagsConfig.serializer(), content)
+        val config = json.decodeFromString<FlagsConfig>(content)
         
         // Validate configuration
         validateConfig(config)
@@ -54,6 +105,21 @@ object FlagsConfigLoader {
         return config
     }
     
+    /**
+     * Validate the configuration for errors.
+     * 
+     * Performs comprehensive validation including:
+     * - Duplicate key detection (flags and experiments)
+     * - Key conflicts between flags and experiments
+     * - Flag key format validation (snake_case or kebab-case)
+     * - Default value type validation
+     * - Enum type and values validation
+     * - JSON type format validation
+     * - Experiment variants validation
+     * 
+     * @param config The configuration to validate
+     * @throws IllegalArgumentException if validation fails with detailed error messages
+     */
     private fun validateConfig(config: FlagsConfig) {
         val errors = mutableListOf<String>()
         

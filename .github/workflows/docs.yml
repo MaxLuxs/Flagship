@@ -31,7 +31,7 @@ jobs:
       run: chmod +x ./gradlew
       
     - name: Generate Dokka documentation
-      run: ./gradlew dokkaHtmlMultiModule --no-daemon
+      run: ./gradlew collectDokkaDocs --no-daemon
       
     - name: Generate HTML from Markdown
       run: ./gradlew generateDocsHtml --no-daemon

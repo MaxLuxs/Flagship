@@ -7,16 +7,14 @@ actual class PersistentCache actual constructor(
     private val serializer: FlagsSerializer
 ) : FlagsCache {
     // In-memory cache for Node.js (can be extended with filesystem/Redis in production)
-    private val cache = js("typeof localStorage !== 'undefined'") as Boolean
-        .let { useLocalStorage ->
-            if (useLocalStorage) {
-                // Browser environment - use localStorage
-                BrowserCache()
-            } else {
-                // Node.js environment - use in-memory cache
-                NodeCache()
-            }
-        }
+    private val useLocalStorage = js("typeof localStorage !== 'undefined'") as Boolean
+    private val cache: CacheBackend = if (useLocalStorage) {
+        // Browser environment - use localStorage
+        BrowserCache()
+    } else {
+        // Node.js environment - use in-memory cache
+        NodeCache()
+    }
     
     actual override suspend fun save(providerName: String, snapshot: ProviderSnapshot) {
         val data = serializer.serialize(snapshot)
@@ -31,16 +29,16 @@ actual class PersistentCache actual constructor(
     actual override suspend fun clear(providerName: String) {
         cache.clear("flagship_cache_$providerName")
     }
-
-    actual override suspend fun clearAll() {
-        cache.clearAll()
-    }
     
     private interface CacheBackend {
         fun save(key: String, value: String)
         fun load(key: String): String?
         fun clear(key: String)
         fun clearAll()
+    }
+
+    actual override suspend fun clearAll() {
+        cache.clearAll()
     }
     
     private class BrowserCache : CacheBackend {

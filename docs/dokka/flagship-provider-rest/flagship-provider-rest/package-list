@@ -1,0 +1,18 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.maxluxs.flagship.provider.rest////PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest//initRest/io.maxluxs.flagship.core.Flagship#kotlin.String#kotlin.String#io.ktor.client.HttpClient?#io.maxluxs.flagship.core.provider.ProviderMetricsTracker?/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/init-rest.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestExperiment///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-experiment/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestFlagValue///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-flag-value/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestFlagsProvider///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-flags-provider/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestFlagsProvider/RestFlagsProvider/#io.ktor.client.HttpClient#kotlin.String#kotlin.String#io.maxluxs.flagship.core.retry.RetryPolicy#io.maxluxs.flagship.core.circuit.CircuitBreaker#kotlin.Long#io.maxluxs.flagship.core.util.FlagsLogger#kotlin.Boolean#io.maxluxs.flagship.core.provider.ProviderMetricsTracker?/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-flags-provider/-rest-flags-provider.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestFlagsProvider/fetchSnapshot/#kotlin.String?/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-flags-provider/fetch-snapshot.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestResponse///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-response/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestTargeting///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-targeting/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/RestVariant///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-rest-variant/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/WebSocketFlagsProvider///PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-web-socket-flags-provider/index.html
+$dokka.location:io.maxluxs.flagship.provider.rest/WebSocketFlagsProvider/WebSocketFlagsProvider/#io.ktor.client.HttpClient#kotlin.String#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-web-socket-flags-provider/-web-socket-flags-provider.html
+$dokka.location:io.maxluxs.flagship.provider.rest/WebSocketFlagsProvider/connect/#/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-web-socket-flags-provider/connect.html
+$dokka.location:io.maxluxs.flagship.provider.rest/WebSocketFlagsProvider/disconnect/#/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-web-socket-flags-provider/disconnect.html
+$dokka.location:io.maxluxs.flagship.provider.rest/WebSocketFlagsProvider/isConnected/#/PointingToDeclaration/flagship-provider-rest/io.maxluxs.flagship.provider.rest/-web-socket-flags-provider/is-connected.html
+io.maxluxs.flagship.provider.rest

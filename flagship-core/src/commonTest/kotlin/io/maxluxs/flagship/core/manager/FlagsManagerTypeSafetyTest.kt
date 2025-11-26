@@ -37,6 +37,9 @@ class FlagsManagerTypeSafetyTest {
         override suspend fun refresh(): ProviderSnapshot = bootstrap()
         override fun evaluateFlag(key: FlagKey, context: EvalContext): FlagValue? = null
         override fun evaluateExperiment(key: ExperimentKey, context: EvalContext): ExperimentAssignment? = null
+        override fun isHealthy(): Boolean = true
+        override fun getLastSuccessfulFetchMs(): Long? = System.currentTimeMillis()
+        override fun getConsecutiveFailures(): Int = 0
     }
 
     @Test

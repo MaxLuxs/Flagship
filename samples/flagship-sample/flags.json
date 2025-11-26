@@ -1,0 +1,47 @@
+{
+  "flags": [
+    {
+      "key": "new_ui",
+      "type": "BOOL",
+      "description": "Enable new UI design",
+      "defaultValue": "false"
+    },
+    {
+      "key": "api_timeout",
+      "type": "INT",
+      "description": "API timeout in milliseconds",
+      "defaultValue": "5000"
+    },
+    {
+      "key": "max_retries",
+      "type": "INT",
+      "description": "Maximum number of retry attempts",
+      "defaultValue": "3"
+    },
+    {
+      "key": "threshold",
+      "type": "DOUBLE",
+      "description": "Threshold value for calculations",
+      "defaultValue": "0.75"
+    },
+    {
+      "key": "welcome_message",
+      "type": "STRING",
+      "description": "Welcome message for users",
+      "defaultValue": "\"Welcome!\""
+    }
+  ],
+  "experiments": [
+    {
+      "key": "checkout_flow",
+      "description": "A/B test for checkout flow",
+      "variants": ["control", "A", "B"]
+    },
+    {
+      "key": "payment_method",
+      "description": "Test different payment methods",
+      "variants": ["control", "new_method"]
+    }
+  ]
+}
+

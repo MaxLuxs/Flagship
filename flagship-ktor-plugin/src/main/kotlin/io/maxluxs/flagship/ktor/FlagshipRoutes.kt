@@ -1,6 +1,5 @@
 package io.maxluxs.flagship.ktor
 
-import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
@@ -24,13 +23,15 @@ fun Routing.flagshipRoutes(flagsManager: FlagsManager) {
             val key = call.parameters["key"] as FlagKey
             val default = call.request.queryParameters["default"]?.toBoolean() ?: false
             val enabled = Flagship.isEnabled(key, default)
-            
-            call.respond(mapOf(
-                "key" to key,
-                "enabled" to enabled
-            ))
+
+            call.respond(
+                mapOf(
+                    "key" to key,
+                    "enabled" to enabled
+                )
+            )
         }
-        
+
         /**
          * Get a typed flag value.
          * GET /api/flagship/flags/{key}/value?default=0&type=int
@@ -39,17 +40,19 @@ fun Routing.flagshipRoutes(flagsManager: FlagsManager) {
             val key = call.parameters["key"] as FlagKey
             val default = call.request.queryParameters["default"] ?: ""
             val type = call.request.queryParameters["type"] ?: "string"
-            
+
             val parsedDefault = FlagValueUtils.parseTypedValue(type, default)
             val value = Flagship.get(key, parsedDefault)
-            
-            call.respond(mapOf(
-                "key" to key,
-                "value" to value,
-                "type" to type
-            ))
+
+            call.respond(
+                mapOf(
+                    "key" to key,
+                    "value" to value,
+                    "type" to type
+                )
+            )
         }
-        
+
         /**
          * Get experiment assignment.
          * GET /api/flagship/experiments/{key}
@@ -57,14 +60,16 @@ fun Routing.flagshipRoutes(flagsManager: FlagsManager) {
         get("/experiments/{key}") {
             val key = call.parameters["key"] as ExperimentKey
             val assignment = Flagship.experiment(key)
-            
-            call.respond(mapOf(
-                "key" to key,
-                "variant" to assignment?.variant,
-                "payload" to assignment?.payload
-            ))
+
+            call.respond(
+                mapOf(
+                    "key" to key,
+                    "variant" to assignment?.variant,
+                    "payload" to assignment?.payload
+                )
+            )
         }
-        
+
         /**
          * Get all flags.
          * GET /api/flagship/flags
@@ -72,7 +77,7 @@ fun Routing.flagshipRoutes(flagsManager: FlagsManager) {
         get("/flags") {
             val allFlags = flagsManager.listAllFlags()
             val result = FlagValueUtils.flagsToJson(allFlags)
-            
+
             call.respond(result)
         }
     }

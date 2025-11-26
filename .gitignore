@@ -29,6 +29,8 @@
 .gradle/
 build/
 **/build/
+bin/
+**/bin/
 !gradle-wrapper.jar
 
 # IDE
@@ -51,10 +53,17 @@ local.properties
 # Kotlin Native
 .konan/
 
+# Logs and temporary files
+logs/
+**/logs/
+*.log
+kotlin-js-store/
+
 # Internal documentation (not for public)
 /presentation/
 /DEV_LOG.md
 /PUBLISHING.md
+# Note: SERVER_PROTECTION.md is tracked in git but protected from push by pre-push hook
 
 # SPM build artifacts
 /spm-build/
@@ -99,8 +108,3 @@ iosApp/**/build/
 **/build/bin/ios*/
 **/build/bin/*Framework/
 **/build/bin/*framework/
-
-# Flagship Server & Commercial Modules (proprietary/commercial)
-# Note: These modules are tracked locally in git but blocked from push via pre-push hook
-# DO NOT add them here - they should be tracked locally but not pushed to GitHub
-# See .git/hooks/pre-push for push blocking logic

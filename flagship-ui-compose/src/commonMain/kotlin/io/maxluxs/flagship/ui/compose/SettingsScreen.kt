@@ -8,6 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.manager.FlagsManager
+import io.maxluxs.flagship.ui.components.components.BrandedCard
+import io.maxluxs.flagship.ui.components.components.BrandedButton
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,12 +30,8 @@ fun SettingsScreen(manager: FlagsManager) {
             color = MaterialTheme.colorScheme.onBackground
         )
         
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+        BrandedCard(
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier
@@ -73,7 +71,7 @@ fun SettingsScreen(manager: FlagsManager) {
             }
         }
         
-        Button(
+        BrandedButton(
             onClick = {
                 scope.launch {
                     isRefreshing = true
@@ -87,8 +85,7 @@ fun SettingsScreen(manager: FlagsManager) {
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isRefreshing,
-            shape = RoundedCornerShape(12.dp)
+            enabled = !isRefreshing
         ) {
             if (isRefreshing) {
                 CircularProgressIndicator(

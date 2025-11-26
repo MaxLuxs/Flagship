@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flagship - Kotlin Multiplatform Feature Flags</title>
+    <meta name="description" content="Powerful, type-safe feature flags and A/B testing library for Kotlin Multiplatform. Works on Android & iOS out of the box with Firebase, REST, and custom providers.">
+    <meta name="keywords" content="kotlin multiplatform, feature flags, A/B testing, KMP, Android, iOS, Firebase Remote Config">
+    <meta name="author" content="maxluxs">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://maxluxs.github.io/Flagship/">
+    <meta property="og:title" content="Flagship - Kotlin Multiplatform Feature Flags">
+    <meta property="og:description" content="Powerful, type-safe feature flags and A/B testing library for Kotlin Multiplatform.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://maxluxs.github.io/Flagship/">
+    <meta property="twitter:title" content="Flagship - Kotlin Multiplatform Feature Flags">
+    <meta property="twitter:description" content="Powerful, type-safe feature flags and A/B testing library for Kotlin Multiplatform.">
+    
+    <link rel="icon" type="image/svg+xml" href="images/flagship_icon.svg">
     <style>
         * {
             margin: 0;
@@ -16,12 +33,60 @@
             line-height: 1.6;
             color: #1a1a1a;
             background: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, 
+                rgba(0, 214, 135, 0.03) 0%, 
+                rgba(239, 114, 0, 0.03) 50%, 
+                rgba(0, 214, 135, 0.03) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Animated blobs */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 214, 135, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            animation: blobFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, 50px) scale(1.1); }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
 
         .header {
-            background: #f7f7f7;
-            border-bottom: 1px solid #e0e0e0;
+            background: rgba(247, 247, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.5);
             padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         }
 
         .header-content {
@@ -71,16 +136,60 @@
         .hero {
             max-width: 1200px;
             margin: 80px auto 60px;
-            padding: 0 40px;
+            padding: 60px 40px;
             text-align: center;
+            position: relative;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(0, 214, 135, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, 
+                rgba(0, 214, 135, 0.2) 0%, 
+                rgba(239, 114, 0, 0.2) 50%, 
+                rgba(0, 214, 135, 0.2) 100%);
+            border-radius: 24px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .hero:hover::before {
+            opacity: 1;
         }
 
         .hero h1 {
             font-size: 56px;
             font-weight: 700;
             margin-bottom: 20px;
-            color: #1a1a1a;
             line-height: 1.2;
+            background: linear-gradient(135deg, #1a1a1a 0%, #00d687 50%, #ef7200 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .version-badge {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, rgba(0, 214, 135, 0.1), rgba(239, 114, 0, 0.1));
+            border: 1px solid rgba(0, 214, 135, 0.3);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00d687;
+            vertical-align: middle;
         }
 
         .hero p {
@@ -137,6 +246,30 @@
             font-weight: 600;
             margin-bottom: 40px;
             color: #1a1a1a;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                #00d687 20%, 
+                #ef7200 50%, 
+                #00d687 80%, 
+                transparent 100%);
+            border-radius: 2px;
+            opacity: 0.6;
+        }
+
+        .section-title.center {
+            text-align: center;
         }
 
         .docs-grid {
@@ -152,13 +285,33 @@
             padding: 30px;
             text-decoration: none;
             color: #1a1a1a;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 214, 135, 0.1), 
+                transparent);
+            transition: left 0.5s;
+        }
+
+        .doc-card:hover::before {
+            left: 100%;
         }
 
         .doc-card:hover {
             border-color: #00d687;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 214, 135, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 214, 135, 0.15);
         }
 
         .doc-card-icon {
@@ -181,9 +334,42 @@
         }
 
         .features {
-            background: #f7f7f7;
+            background: linear-gradient(180deg, 
+                rgba(247, 247, 247, 0.5) 0%, 
+                rgba(255, 255, 255, 0.8) 50%, 
+                rgba(247, 247, 247, 0.5) 100%);
             padding: 80px 0;
             margin: 80px 0 0;
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(239, 114, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .features::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(0, 214, 135, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
         .features-grid {
@@ -226,6 +412,24 @@
             text-align: center;
             color: #666;
             font-size: 14px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                #00d687 20%, 
+                #ef7200 50%, 
+                #00d687 80%, 
+                transparent 100%);
+            border-radius: 1px;
         }
 
         footer a {
@@ -244,6 +448,386 @@
             font-family: 'SF Mono', Monaco, 'Courier New', monospace;
             font-size: 13px;
             color: #ef7200;
+        }
+
+        .code-examples {
+            background: linear-gradient(180deg, 
+                rgba(247, 247, 247, 0.8) 0%, 
+                rgba(255, 255, 255, 0.9) 50%, 
+                rgba(247, 247, 247, 0.8) 100%);
+            padding: 80px 0;
+            margin: 80px 0 0;
+            position: relative;
+        }
+
+        .code-tabs {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 40px;
+            display: flex;
+            gap: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .code-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .code-tab:hover {
+            color: #00d687;
+        }
+
+        .code-tab.active {
+            color: #00d687;
+            border-bottom-color: #00d687;
+        }
+
+        .code-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .code-block {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .code-block.active {
+            display: block;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 0;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .code-block code {
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .code-block .keyword {
+            color: #c792ea;
+        }
+
+        .code-block .string {
+            color: #c3e88d;
+        }
+
+        .code-block .comment {
+            color: #546e7a;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #82aaff;
+        }
+
+        .code-block .number {
+            color: #f78c6c;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .copy-btn {
+            background: rgba(0, 214, 135, 0.2);
+            border: 1px solid rgba(0, 214, 135, 0.3);
+            color: #00d687;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 214, 135, 0.3);
+            border-color: #00d687;
+        }
+
+        .copy-btn.copied {
+            background: rgba(0, 214, 135, 0.4);
+            border-color: #00d687;
+        }
+
+        /* Scroll to top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00d687, #ef7200);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 214, 135, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 214, 135, 0.4);
+        }
+
+        /* Feature card improvements */
+        .feature {
+            text-align: left;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Smooth scroll animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Code block improvements */
+        .code-block {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d687, #ef7200);
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Loading state for buttons */
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Improved focus states for accessibility */
+        .btn:focus,
+        .code-tab:focus,
+        .copy-btn:focus,
+        .scroll-to-top:focus {
+            outline: 2px solid #00d687;
+            outline-offset: 2px;
+        }
+
+        /* Platform examples section */
+        .platform-examples {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .platform-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .platform-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .platform-tab:hover {
+            color: #00d687;
+        }
+
+        .platform-tab.active {
+            color: #00d687;
+            border-bottom-color: #00d687;
+        }
+
+        .platform-code-block {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .platform-code-block.active {
+            display: block;
+        }
+
+        .platform-code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d687, #ef7200);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .platform-code-block pre {
+            margin: 0;
+            padding: 0;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .platform-code-block code {
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .platform-code-block .keyword {
+            color: #c792ea;
+        }
+
+        .platform-code-block .string {
+            color: #c3e88d;
+        }
+
+        .platform-code-block .comment {
+            color: #546e7a;
+            font-style: italic;
+        }
+
+        .platform-code-block .function {
+            color: #82aaff;
+        }
+
+        .platform-code-block .number {
+            color: #f78c6c;
+        }
+
+        .platform-code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .platform-code-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Better mobile experience */
+        @media (max-width: 768px) {
+            .scroll-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .platform-tabs {
+                padding: 0 20px;
+            }
+
+            .platform-examples {
+                padding: 0 20px;
+            }
+
+            .platform-code-block {
+                padding: 16px;
+            }
+
+            .platform-code-block pre {
+                font-size: 12px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -273,6 +857,37 @@
                 width: 100%;
                 text-align: center;
             }
+
+            .code-tabs {
+                padding: 0 20px;
+                overflow-x: auto;
+            }
+
+            .code-content {
+                padding: 0 20px;
+            }
+
+            .code-block {
+                padding: 16px;
+            }
+
+            .code-block pre {
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .version-badge {
+                display: block;
+                margin: 12px auto 0;
+                width: fit-content;
+            }
         }
     </style>
 </head>
@@ -285,18 +900,315 @@
                 <div class="header-subtitle">Kotlin Multiplatform Feature Flags</div>
             </div>
             <nav>
-                <a href="https://github.com/maxluxs/Flagship">GitHub</a>
-                <a href="dokka/index.html">API Docs</a>
+                <a href="https://github.com/maxluxs/Flagship" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">GitHub</a>
+                <a href="dokka/index.html" aria-label="API Documentation">API Docs</a>
             </nav>
         </div>
     </header>
 
     <section class="hero">
-        <h1>Feature Flags & A/B Testing<br>for Kotlin Multiplatform</h1>
+        <h1>Feature Flags & A/B Testing<br>for Kotlin Multiplatform<span class="version-badge">v0.1.1</span></h1>
         <p>Powerful, type-safe feature flags with built-in A/B testing.<br>Works on Android & iOS out of the box.</p>
         <div class="cta-buttons">
-            <a href="USAGE_GUIDE.html" class="btn btn-primary">Get Started</a>
-            <a href="https://github.com/maxluxs/Flagship" class="btn btn-secondary">View on GitHub</a>
+            <a href="USAGE_GUIDE.html" class="btn btn-primary" aria-label="Get Started Guide">Get Started</a>
+            <a href="https://github.com/maxluxs/Flagship" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">View on GitHub</a>
+        </div>
+    </section>
+
+    <section class="platform-examples">
+        <h2 class="section-title center">Quick Start Examples</h2>
+        
+        <div class="platform-tabs" role="tablist" aria-label="Platform examples">
+            <button class="platform-tab active" onclick="showPlatform('android')" role="tab" aria-selected="true" aria-controls="platform-android">Android</button>
+            <button class="platform-tab" onclick="showPlatform('ios')" role="tab" aria-selected="false" aria-controls="platform-ios">iOS</button>
+            <button class="platform-tab" onclick="showPlatform('kmp')" role="tab" aria-selected="false" aria-controls="platform-kmp">KMP</button>
+        </div>
+
+        <!-- Android Example -->
+        <div id="platform-android" class="platform-code-block active" role="tabpanel" aria-hidden="false">
+            <div class="platform-code-header">
+                <div class="platform-code-title">Android Application Setup</div>
+                <button class="copy-btn" onclick="copyCode('platform-android')">Copy</button>
+            </div>
+            <pre><code>dependencies {
+    implementation(<span class="string">"io.maxluxs.flagship:flagship-core:0.1.1"</span>)
+    implementation(<span class="string">"io.maxluxs.flagship:flagship-provider-firebase:0.1.1"</span>)
+}
+
+<span class="keyword">import</span> android.app.Application
+<span class="keyword">import</span> io.maxluxs.flagship.core.Flagship
+<span class="keyword">import</span> io.maxluxs.flagship.core.FlagsConfig
+<span class="keyword">import</span> io.maxluxs.flagship.core.manager.DefaultFlagsManager
+<span class="keyword">import</span> io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
+<span class="keyword">import</span> io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+<span class="keyword">import</span> kotlinx.coroutines.CoroutineScope
+<span class="keyword">import</span> kotlinx.coroutines.Dispatchers
+<span class="keyword">import</span> kotlinx.coroutines.launch
+
+<span class="keyword">class</span> <span class="function">MyApp</span> : <span class="function">Application</span>() {
+    <span class="keyword">override fun</span> <span class="function">onCreate</span>() {
+        <span class="keyword">super</span>.<span class="function">onCreate</span>()
+        
+        <span class="keyword">val</span> firebaseDefaults = <span class="function">mapOf</span>(
+            <span class="string">"new_ui"</span> <span class="keyword">to</span> <span class="keyword">false</span>,
+            <span class="string">"api_timeout"</span> <span class="keyword">to</span> <span class="number">5000</span>,
+            <span class="string">"welcome_message"</span> <span class="keyword">to</span> <span class="string">"Hello"</span>
+        )
+        
+        <span class="keyword">val</span> config = <span class="function">FlagsConfig</span>(
+            appKey = <span class="string">"my-app"</span>,
+            environment = <span class="string">"production"</span>,
+            providers = <span class="function">listOf</span>(
+                <span class="function">FirebaseProviderFactory.create</span>(
+                    application = <span class="keyword">this</span>,
+                    defaults = firebaseDefaults
+                )
+            ),
+            cache = <span class="function">AndroidFlagsInitializer.createPersistentCache</span>(<span class="keyword">this</span>)
+        )
+        
+        <span class="function">Flagship.configure</span>(config)
+        
+        <span class="keyword">val</span> manager = <span class="function">Flagship.manager</span>() <span class="keyword">as</span> <span class="function">DefaultFlagsManager</span>
+        <span class="keyword">val</span> defaultContext = <span class="function">AndroidFlagsInitializer.createDefaultContext</span>(<span class="keyword">this</span>)
+        manager.<span class="function">setDefaultContext</span>(defaultContext)
+        
+        <span class="function">CoroutineScope</span>(<span class="function">Dispatchers.Default</span>).<span class="function">launch</span> {
+            manager.<span class="function">ensureBootstrap</span>(timeoutMs = <span class="number">3000</span>)
+        }
+    }
+}
+
+<span class="keyword">import</span> androidx.lifecycle.lifecycleScope
+<span class="keyword">import</span> kotlinx.coroutines.launch
+
+<span class="keyword">class</span> <span class="function">MainActivity</span> : <span class="function">AppCompatActivity</span>() {
+    <span class="keyword">override fun</span> <span class="function">onCreate</span>(savedInstanceState: <span class="keyword">Bundle?</span>) {
+        <span class="keyword">super</span>.<span class="function">onCreate</span>(savedInstanceState)
+        
+        <span class="function">lifecycleScope.launch</span> {
+            <span class="keyword">if</span> (<span class="function">Flagship.isEnabled</span>(<span class="string">"new_ui"</span>)) {
+                <span class="function">showNewUI</span>()
+            }
+            
+            <span class="keyword">val</span> timeout: <span class="keyword">Int</span> = <span class="function">Flagship.get</span>(<span class="string">"api_timeout"</span>, default = <span class="number">5000</span>)
+            
+            <span class="keyword">val</span> assignment = <span class="function">Flagship.assign</span>(<span class="string">"checkout_exp"</span>)
+            <span class="keyword">when</span> (assignment?.variant) {
+                <span class="string">"control"</span> -> <span class="function">showLegacyCheckout</span>()
+                <span class="string">"variant_a"</span> -> <span class="function">showNewCheckout</span>()
+            }
+        }
+    }
+}</code></pre>
+        </div>
+
+        <!-- iOS Example -->
+        <div id="platform-ios" class="platform-code-block" role="tabpanel" aria-hidden="true">
+            <div class="platform-code-header">
+                <div class="platform-code-title">iOS SwiftUI Setup</div>
+                <button class="copy-btn" onclick="copyCode('platform-ios')">Copy</button>
+            </div>
+            <pre><code><span class="keyword">import</span> SwiftUI
+<span class="keyword">import</span> Flagship
+
+<span class="keyword">@main</span>
+<span class="keyword">struct</span> <span class="function">MyApp</span>: <span class="function">App</span> {
+    <span class="function">init</span>() {
+        <span class="function">initializeFlagship</span>()
+    }
+    
+    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="function">Scene</span> {
+        <span class="function">WindowGroup</span> {
+            <span class="function">ContentView</span>()
+        }
+    }
+    
+    <span class="keyword">private func</span> <span class="function">initializeFlagship</span>() {
+        <span class="keyword">let</span> defaults: [String: Any] = [
+            <span class="string">"new_ui"</span>: <span class="keyword">false</span>,
+            <span class="string">"api_timeout"</span>: <span class="number">5000</span>,
+            <span class="string">"welcome_message"</span>: <span class="string">"Hello"</span>
+        ]
+        
+        <span class="function">FlagshipSwift.shared.quickConfigure</span>(
+            appKey: <span class="string">"my-ios-app"</span>,
+            environment: <span class="string">"production"</span>,
+            providers: []
+        )
+        
+        <span class="function">Task</span> {
+            <span class="keyword">await</span> <span class="function">FlagshipSwift.shared.manager</span>().<span class="function">ensureBootstrap</span>(timeoutMs: <span class="number">3000</span>)
+        }
+    }
+}
+
+<span class="keyword">struct</span> <span class="function">ContentView</span>: <span class="function">View</span> {
+    <span class="keyword">@State private var</span> showNewUI = <span class="keyword">false</span>
+    
+    <span class="keyword">var</span> body: <span class="keyword">some</span> <span class="function">View</span> {
+        <span class="function">Task</span> {
+            <span class="keyword">let</span> enabled = <span class="keyword">await</span> <span class="function">FlagshipSwift.shared.manager</span>.<span class="function">isEnabled</span>(
+                key: <span class="string">"new_ui"</span>,
+                default: <span class="keyword">false</span>
+            )
+            showNewUI = enabled
+        }
+        
+        <span class="keyword">if</span> showNewUI {
+            <span class="function">NewUIView</span>()
+        } <span class="keyword">else</span> {
+            <span class="function">LegacyUIView</span>()
+        }
+    }
+}</code></pre>
+        </div>
+
+        <!-- KMP Example -->
+        <div id="platform-kmp" class="platform-code-block" role="tabpanel" aria-hidden="true">
+            <div class="platform-code-header">
+                <div class="platform-code-title">Kotlin Multiplatform Setup</div>
+                <button class="copy-btn" onclick="copyCode('platform-kmp')">Copy</button>
+            </div>
+            <pre><code>kotlin {
+    android()
+    ios()
+    
+    sourceSets {
+        <span class="function">commonMain</span>.dependencies {
+            implementation(<span class="string">"io.maxluxs.flagship:flagship-core:0.1.1"</span>)
+            implementation(<span class="string">"io.maxluxs.flagship:flagship-provider-rest:0.1.1"</span>)
+        }
+        
+        <span class="function">androidMain</span>.dependencies {
+            implementation(<span class="string">"io.maxluxs.flagship:flagship-provider-firebase:0.1.1"</span>)
+        }
+    }
+}
+
+<span class="keyword">import</span> io.maxluxs.flagship.core.Flagship
+<span class="keyword">import</span> io.maxluxs.flagship.core.FlagsConfig
+<span class="keyword">import</span> io.maxluxs.flagship.core.cache.PersistentCache
+<span class="keyword">import</span> io.maxluxs.flagship.core.manager.DefaultFlagsManager
+<span class="keyword">import</span> io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
+<span class="keyword">import</span> io.maxluxs.flagship.core.platform.IOSFlagsInitializer
+<span class="keyword">import</span> io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
+<span class="keyword">import</span> kotlinx.coroutines.CoroutineScope
+<span class="keyword">import</span> kotlinx.coroutines.Dispatchers
+<span class="keyword">import</span> kotlinx.coroutines.launch
+
+<span class="keyword">expect class</span> <span class="function">PlatformContext</span>
+
+<span class="keyword">expect fun</span> <span class="function">createPersistentCache</span>(context: <span class="function">PlatformContext</span>): <span class="function">PersistentCache</span>
+
+<span class="keyword">object</span> <span class="function">FlagshipInitializer</span> {
+    <span class="keyword">fun</span> <span class="function">initialize</span>(platformContext: <span class="function">PlatformContext</span>) {
+        <span class="keyword">val</span> firebaseDefaults = <span class="function">mapOf</span>(
+            <span class="string">"new_feature"</span> <span class="keyword">to</span> <span class="keyword">false</span>,
+            <span class="string">"api_timeout"</span> <span class="keyword">to</span> <span class="number">5000</span>
+        )
+        
+        <span class="keyword">val</span> config = <span class="function">FlagsConfig</span>(
+            appKey = <span class="string">"my-kmp-app"</span>,
+            environment = <span class="string">"production"</span>,
+            providers = <span class="function">createProviders</span>(platformContext, firebaseDefaults),
+            cache = <span class="function">createPersistentCache</span>(platformContext)
+        )
+        
+        <span class="function">Flagship.configure</span>(config)
+        
+        <span class="keyword">val</span> manager = <span class="function">Flagship.manager</span>() <span class="keyword">as</span> <span class="function">DefaultFlagsManager</span>
+        <span class="function">setDefaultContext</span>(manager, platformContext)
+        
+        <span class="function">CoroutineScope</span>(<span class="function">Dispatchers.Default</span>).<span class="function">launch</span> {
+            manager.<span class="function">ensureBootstrap</span>(timeoutMs = <span class="number">3000</span>)
+        }
+    }
+    
+    <span class="keyword">expect fun</span> <span class="function">createProviders</span>(context: <span class="function">PlatformContext</span>, defaults: <span class="function">Map</span>&lt;<span class="keyword">String</span>, <span class="keyword">Any</span>&gt;): <span class="function">List</span>&lt;<span class="function">FlagsProvider</span>&gt;
+    <span class="keyword">expect fun</span> <span class="function">setDefaultContext</span>(manager: <span class="function">DefaultFlagsManager</span>, context: <span class="function">PlatformContext</span>)
+}
+
+<span class="keyword">class</span> <span class="function">FeatureRepository</span> {
+    <span class="keyword">suspend fun</span> <span class="function">shouldShowNewFeature</span>(): <span class="keyword">Boolean</span> {
+        <span class="keyword">return</span> <span class="function">Flagship.isEnabled</span>(<span class="string">"new_feature"</span>, default = <span class="keyword">false</span>)
+    }
+    
+    <span class="keyword">suspend fun</span> <span class="function">getExperimentVariant</span>(): <span class="keyword">String?</span> {
+        <span class="keyword">val</span> assignment = <span class="function">Flagship.assign</span>(<span class="string">"checkout_exp"</span>)
+        <span class="keyword">return</span> assignment?.variant
+    }
+}
+
+<span class="comment">Android: androidMain source set</span>
+<span class="keyword">import</span> android.app.Application
+<span class="keyword">import</span> android.content.Context
+<span class="keyword">import</span> io.maxluxs.flagship.core.provider.FlagsProvider
+
+<span class="keyword">actual class</span> <span class="function">PlatformContext</span>(<span class="keyword">val</span> androidContext: <span class="function">Context</span>)
+
+<span class="keyword">actual fun</span> <span class="function">createPersistentCache</span>(context: <span class="function">PlatformContext</span>): <span class="function">PersistentCache</span> {
+    <span class="keyword">return</span> <span class="function">AndroidFlagsInitializer.createPersistentCache</span>(context.androidContext)
+}
+
+<span class="keyword">actual fun</span> <span class="function">FlagshipInitializer.createProviders</span>(
+    context: <span class="function">PlatformContext</span>,
+    defaults: <span class="function">Map</span>&lt;<span class="keyword">String</span>, <span class="keyword">Any</span>&gt;
+): <span class="function">List</span>&lt;<span class="function">FlagsProvider</span>&gt; {
+    <span class="keyword">return</span> <span class="function">listOf</span>(
+        <span class="function">FirebaseProviderFactory.create</span>(
+            application = context.androidContext <span class="keyword">as</span> <span class="function">Application</span>,
+            defaults = defaults
+        )
+    )
+}
+
+<span class="keyword">actual fun</span> <span class="function">FlagshipInitializer.setDefaultContext</span>(
+    manager: <span class="function">DefaultFlagsManager</span>,
+    context: <span class="function">PlatformContext</span>
+) {
+    <span class="keyword">val</span> defaultContext = <span class="function">AndroidFlagsInitializer.createDefaultContext</span>(context.androidContext)
+    manager.<span class="function">setDefaultContext</span>(defaultContext)
+}
+
+<span class="comment">iOS: iosMain source set</span>
+<span class="keyword">import</span> io.ktor.client.*
+<span class="keyword">import</span> io.ktor.client.engine.darwin.*
+<span class="keyword">import</span> io.ktor.client.plugins.contentnegotiation.*
+<span class="keyword">import</span> io.ktor.serialization.kotlinx.json.*
+<span class="keyword">import</span> io.maxluxs.flagship.provider.rest.RestFlagsProvider
+<span class="keyword">import</span> kotlinx.serialization.json.Json
+
+<span class="keyword">actual class</span> <span class="function">PlatformContext</span>
+
+<span class="keyword">actual fun</span> <span class="function">createPersistentCache</span>(context: <span class="function">PlatformContext</span>): <span class="function">PersistentCache</span> {
+    <span class="keyword">return</span> <span class="function">IOSFlagsInitializer.createPersistentCache</span>()
+}
+
+<span class="keyword">actual fun</span> <span class="function">FlagshipInitializer.createProviders</span>(
+    context: <span class="function">PlatformContext</span>,
+    defaults: <span class="function">Map</span>&lt;<span class="keyword">String</span>, <span class="keyword">Any</span>&gt;
+): <span class="function">List</span>&lt;<span class="function">FlagsProvider</span>&gt; {
+    <span class="keyword">val</span> httpClient = <span class="function">HttpClient</span>(Darwin) {
+        <span class="function">install</span>(ContentNegotiation) {
+            <span class="function">json</span>(Json { ignoreUnknownKeys = <span class="keyword">true</span> })
+        }
+    }
+    <span class="keyword">return</span> <span class="function">listOf</span>(
+        <span class="function">RestFlagsProvider</span>(
+            client = httpClient,
+            baseUrl = <span class="string">"https://api.example.com/flags"</span>
+        )
+    )
+}
+
+<span class="keyword">actual fun</span> <span class="function">FlagshipInitializer.setDefaultContext</span>(
+    manager: <span class="function">DefaultFlagsManager</span>,
+    context: <span class="function">PlatformContext</span>
+) {
+    <span class="keyword">val</span> defaultContext = <span class="function">IOSFlagsInitializer.createDefaultContext</span>()
+    manager.<span class="function">setDefaultContext</span>(defaultContext)
+}</code></pre>
         </div>
     </section>
 
@@ -335,8 +1247,292 @@
         </div>
     </section>
 
+    <section class="code-examples">
+        <div class="section">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 60px;">Usage Examples</h2>
+            
+            <div class="code-tabs" role="tablist" aria-label="Code examples">
+                <button class="code-tab active" onclick="showCode('simplified')" role="tab" aria-selected="true" aria-controls="code-simplified">Simplified API</button>
+                <button class="code-tab" onclick="showCode('sync')" role="tab" aria-selected="false" aria-controls="code-sync">Sync API</button>
+                <button class="code-tab" onclick="showCode('manager')" role="tab" aria-selected="false" aria-controls="code-manager">Manager API</button>
+                <button class="code-tab" onclick="showCode('batch')" role="tab" aria-selected="false" aria-controls="code-batch">Batch</button>
+                <button class="code-tab" onclick="showCode('codegen')" role="tab" aria-selected="false" aria-controls="code-codegen">Codegen</button>
+                <button class="code-tab" onclick="showCode('preload')" role="tab" aria-selected="false" aria-controls="code-preload">Preload</button>
+            </div>
+
+            <div class="code-content">
+                <!-- Simplified API -->
+                <div id="code-simplified" class="code-block active" role="tabpanel" aria-hidden="false">
+                    <div class="code-header">
+                        <div class="code-title">Simplified API (Suspend Functions)</div>
+                        <button class="copy-btn" onclick="copyCode('code-simplified')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Boolean flags</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">if</span> (<span class="function">Flagship.isEnabled</span>(<span class="string">"new_ui"</span>)) {
+        <span class="function">showNewUI</span>()
+    }
+}
+
+<span class="comment">// Typed values - type inferred from default</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> timeout: <span class="keyword">Int</span> = <span class="function">Flagship.get</span>(<span class="string">"api_timeout"</span>, default = <span class="number">5000</span>)
+    <span class="keyword">val</span> message: <span class="keyword">String</span> = <span class="function">Flagship.get</span>(<span class="string">"welcome_msg"</span>, default = <span class="string">"Hello"</span>)
+    <span class="keyword">val</span> threshold: <span class="keyword">Double</span> = <span class="function">Flagship.get</span>(<span class="string">"score_threshold"</span>, default = <span class="number">0.75</span>)
+}
+
+<span class="comment">// Experiments</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> assignment = <span class="function">Flagship.assign</span>(<span class="string">"checkout_exp"</span>)
+    <span class="keyword">when</span> (assignment?.variant) {
+        <span class="string">"control"</span> -> <span class="function">showLegacyCheckout</span>()
+        <span class="string">"variant_a"</span> -> <span class="function">showNewCheckout</span>()
+        <span class="keyword">else</span> -> <span class="function">showLegacyCheckout</span>()
+    }
+}
+
+<span class="comment">// With custom context</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> ctx = <span class="function">EvalContext</span>(
+        userId = <span class="string">"user123"</span>,
+        region = <span class="string">"US"</span>,
+        attributes = <span class="function">mapOf</span>(<span class="string">"tier"</span> <span class="keyword">to</span> <span class="string">"premium"</span>)
+    )
+    <span class="keyword">val</span> assignment = <span class="function">Flagship.assign</span>(<span class="string">"checkout_exp"</span>, context = ctx)
+}</code></pre>
+                </div>
+
+                <!-- Sync API -->
+                <div id="code-sync" class="code-block" role="tabpanel" aria-hidden="true">
+                    <div class="code-header">
+                        <div class="code-title">Sync API (After Bootstrap)</div>
+                        <button class="copy-btn" onclick="copyCode('code-sync')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// 1. Bootstrap first (during app initialization)</span>
+<span class="keyword">class</span> <span class="function">MyApp</span> : <span class="function">Application</span>() {
+    <span class="keyword">override fun</span> <span class="function">onCreate</span>() {
+        <span class="keyword">super</span>.<span class="function">onCreate</span>()
+        <span class="function">Flagship.configure</span>(config)
+        
+        <span class="comment">// Bootstrap in background</span>
+        lifecycleScope.<span class="function">launch</span> {
+            <span class="function">Flagship.manager</span>().<span class="function">ensureBootstrap</span>(timeoutMs = <span class="number">3000</span>)
+        }
+    }
+}
+
+<span class="comment">// 2. Use sync methods after bootstrap (no suspend needed!)</span>
+<span class="keyword">class</span> <span class="function">MainActivity</span> : <span class="function">AppCompatActivity</span>() {
+    <span class="keyword">override fun</span> <span class="function">onCreate</span>(savedInstanceState: <span class="keyword">Bundle?</span>) {
+        <span class="keyword">super</span>.<span class="function">onCreate</span>(savedInstanceState)
+        
+        <span class="comment">// Sync methods - instant access, no coroutines needed</span>
+        <span class="keyword">if</span> (<span class="function">Flagship.isEnabledSync</span>(<span class="string">"new_ui"</span>)) {
+            <span class="function">showNewUI</span>()
+        }
+        
+        <span class="keyword">val</span> timeout: <span class="keyword">Int</span> = <span class="function">Flagship.getSync</span>(<span class="string">"api_timeout"</span>, default = <span class="number">5000</span>)
+        <span class="keyword">val</span> message: <span class="keyword">String</span> = <span class="function">Flagship.getSync</span>(<span class="string">"welcome_msg"</span>, default = <span class="string">"Hello"</span>)
+        
+        <span class="comment">// Sync experiment assignment</span>
+        <span class="keyword">val</span> assignment = <span class="function">Flagship.assignSync</span>(<span class="string">"checkout_exp"</span>)
+        <span class="keyword">when</span> (assignment?.variant) {
+            <span class="string">"control"</span> -> <span class="function">showLegacyCheckout</span>()
+            <span class="string">"variant_a"</span> -> <span class="function">showNewCheckout</span>()
+            <span class="keyword">else</span> -> <span class="function">showLegacyCheckout</span>()
+        }
+    }
+}
+
+<span class="comment">// Note: Sync methods throw IllegalStateException if bootstrap not completed</span>
+<span class="comment">// Always call ensureBootstrap() first or use suspend methods</span></code></pre>
+                </div>
+
+                <!-- Manager API -->
+                <div id="code-manager" class="code-block" role="tabpanel" aria-hidden="true">
+                    <div class="code-header">
+                        <div class="code-title">Full Manager API</div>
+                        <button class="copy-btn" onclick="copyCode('code-manager')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Get manager for advanced operations</span>
+<span class="keyword">val</span> flags = <span class="function">Flagship.manager</span>()
+
+<span class="comment">// Suspend methods with context</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> ctx = <span class="function">EvalContext</span>(
+        userId = <span class="string">"user123"</span>,
+        region = <span class="string">"US"</span>
+    )
+    
+    <span class="keyword">val</span> enabled = flags.<span class="function">isEnabled</span>(<span class="string">"new_feature"</span>, default = <span class="keyword">false</span>, ctx = ctx)
+    <span class="keyword">val</span> value: <span class="keyword">Int</span> = flags.<span class="function">value</span>(<span class="string">"timeout"</span>, default = <span class="number">30</span>, ctx = ctx)
+    <span class="keyword">val</span> assignment = flags.<span class="function">assign</span>(<span class="string">"exp"</span>, ctx = ctx)
+}
+
+<span class="comment">// Sync methods (after bootstrap)</span>
+<span class="keyword">val</span> enabledSync = flags.<span class="function">isEnabledSync</span>(<span class="string">"new_feature"</span>)
+<span class="keyword">val</span> valueSync: <span class="keyword">Int</span> = flags.<span class="function">valueSync</span>(<span class="string">"timeout"</span>, default = <span class="number">30</span>)
+<span class="keyword">val</span> assignmentSync = flags.<span class="function">assignSync</span>(<span class="string">"exp"</span>)
+
+<span class="comment">// Refresh flags</span>
+flags.<span class="function">refresh</span>(force = <span class="keyword">true</span>) { providerName, success ->
+    <span class="function">println</span>(<span class="string">"$providerName: $success"</span>)
+}
+
+<span class="comment">// Overrides (debug/testing)</span>
+flags.<span class="function">setOverride</span>(<span class="string">"new_feature"</span>, <span class="function">FlagValue.Bool</span>(<span class="keyword">true</span>))
+flags.<span class="function">clearOverride</span>(<span class="string">"new_feature"</span>)
+
+<span class="comment">// List all flags</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> allFlags = flags.<span class="function">listAllFlags</span>()
+    <span class="keyword">val</span> overrides = flags.<span class="function">listOverrides</span>()
+}
+
+<span class="comment">// Bootstrap control</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> success = flags.<span class="function">ensureBootstrap</span>(timeoutMs = <span class="number">3000</span>)
+    <span class="keyword">if</span> (!success) {
+        <span class="function">log</span>(<span class="string">"Bootstrap timeout"</span>)
+    }
+}</code></pre>
+                </div>
+
+                <!-- Batch -->
+                <div id="code-batch" class="code-block" role="tabpanel" aria-hidden="true">
+                    <div class="code-header">
+                        <div class="code-title">Batch Evaluation</div>
+                        <button class="copy-btn" onclick="copyCode('code-batch')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Evaluate multiple flags in one call</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> flags = <span class="function">Flagship.evaluateFlags</span>(
+        keys = <span class="function">listOf</span>(<span class="string">"new_ui"</span>, <span class="string">"dark_mode"</span>, <span class="string">"premium_features"</span>),
+        defaults = <span class="function">mapOf</span>(
+            <span class="string">"new_ui"</span> <span class="keyword">to</span> <span class="function">FlagValue.Bool</span>(<span class="keyword">false</span>),
+            <span class="string">"dark_mode"</span> <span class="keyword">to</span> <span class="function">FlagValue.Bool</span>(<span class="keyword">true</span>),
+            <span class="string">"premium_features"</span> <span class="keyword">to</span> <span class="function">FlagValue.Bool</span>(<span class="keyword">false</span>)
+        )
+    )
+    
+    <span class="comment">// All flags evaluated in one operation</span>
+    <span class="keyword">val</span> newUiEnabled = flags[<span class="string">"new_ui"</span>]?.<span class="function">asBoolean</span>() ?: <span class="keyword">false</span>
+    <span class="keyword">val</span> darkMode = flags[<span class="string">"dark_mode"</span>]?.<span class="function">asBoolean</span>() ?: <span class="keyword">true</span>
+}
+
+<span class="comment">// Batch experiment evaluation</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">val</span> experiments = <span class="function">Flagship.evaluateExperiments</span>(
+        keys = <span class="function">listOf</span>(<span class="string">"checkout_exp"</span>, <span class="string">"pricing_exp"</span>, <span class="string">"ui_exp"</span>),
+        ctx = <span class="function">EvalContext</span>(userId = <span class="string">"user123"</span>)
+    )
+    
+    <span class="comment">// All experiments assigned in one call</span>
+    experiments[<span class="string">"checkout_exp"</span>]?.variant?.<span class="function">let</span> { variant ->
+        <span class="function">showCheckoutVariant</span>(variant)
+    }
+}</code></pre>
+                </div>
+
+                <!-- Codegen -->
+                <div id="code-codegen" class="code-block" role="tabpanel" aria-hidden="true">
+                    <div class="code-header">
+                        <div class="code-title">Code Generation</div>
+                        <button class="copy-btn" onclick="copyCode('code-codegen')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// 1. Define flags in flags.json</span>
+{
+  <span class="string">"flags"</span>: [
+    {
+      <span class="string">"key"</span>: <span class="string">"new_payment_flow"</span>,
+      <span class="string">"type"</span>: <span class="string">"BOOL"</span>,
+      <span class="string">"defaultValue"</span>: <span class="string">"false"</span>
+    },
+    {
+      <span class="string">"key"</span>: <span class="string">"api_timeout"</span>,
+      <span class="string">"type"</span>: <span class="string">"INT"</span>,
+      <span class="string">"defaultValue"</span>: <span class="string">"5000"</span>
+    }
+  ]
+}
+
+<span class="comment">// 2. Generated code (auto-generated by Gradle plugin)</span>
+<span class="keyword">object</span> <span class="function">Flags</span> {
+    <span class="keyword">object</span> <span class="function">NewPaymentFlow</span> {
+        <span class="keyword">suspend fun</span> <span class="function">enabled</span>(): <span class="keyword">Boolean</span> {
+            <span class="keyword">return</span> <span class="function">Flagship.isEnabled</span>(<span class="string">"new_payment_flow"</span>, default = <span class="keyword">false</span>)
+        }
+    }
+    
+    <span class="keyword">object</span> <span class="function">ApiTimeout</span> {
+        <span class="keyword">suspend fun</span> <span class="function">value</span>(): <span class="keyword">Int</span> {
+            <span class="keyword">return</span> <span class="function">Flagship.get</span>(<span class="string">"api_timeout"</span>, default = <span class="number">5000</span>)
+        }
+    }
+}
+
+<span class="comment">// 3. Use generated flags</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="keyword">if</span> (<span class="function">Flags.NewPaymentFlow.enabled</span>()) {
+        <span class="function">showNewPayment</span>()
+    }
+    
+    <span class="keyword">val</span> timeout: <span class="keyword">Int</span> = <span class="function">Flags.ApiTimeout.value</span>()
+}</code></pre>
+                </div>
+
+                <!-- Preload -->
+                <div id="code-preload" class="code-block" role="tabpanel" aria-hidden="true">
+                    <div class="code-header">
+                        <div class="code-title">Preloading</div>
+                        <button class="copy-btn" onclick="copyCode('code-preload')">Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Preload flags before user needs them</span>
+lifecycleScope.<span class="function">launch</span> {
+    <span class="comment">// Preload flags for checkout screen</span>
+    <span class="function">Flagship.preload</span>(
+        keys = <span class="function">listOf</span>(
+            <span class="string">"checkout_enabled"</span>,
+            <span class="string">"payment_methods"</span>,
+            <span class="string">"shipping_options"</span>,
+            <span class="string">"discount_codes"</span>
+        )
+    )
+}
+
+<span class="comment">// Preload for specific user</span>
+<span class="keyword">fun</span> <span class="function">onUserLogin</span>(userId: <span class="keyword">String</span>) {
+    lifecycleScope.<span class="function">launch</span> {
+        <span class="function">Flagship.preloadForUser</span>(
+            userId = userId,
+            keys = <span class="function">listOf</span>(
+                <span class="string">"personalized_ui"</span>,
+                <span class="string">"recommendations"</span>,
+                <span class="string">"pricing_tier"</span>
+            )
+        )
+    }
+}
+
+<span class="comment">// Preload on app startup</span>
+<span class="keyword">class</span> <span class="function">MyApp</span> : <span class="function">Application</span>() {
+    <span class="keyword">override fun</span> <span class="function">onCreate</span>() {
+        <span class="keyword">super</span>.<span class="function">onCreate</span>()
+        <span class="function">Flagship.configure</span>(config)
+        
+        <span class="comment">// Preload critical flags on startup</span>
+        lifecycleScope.<span class="function">launch</span> {
+            <span class="function">Flagship.preload</span>(<span class="function">listOf</span>(<span class="string">"app_config"</span>, <span class="string">"feature_gates"</span>))
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section">
-        <h2 class="section-title">Documentation</h2>
+        <h2 class="section-title center">Documentation</h2>
         <div class="docs-grid">
             <a href="USAGE_GUIDE.html" class="doc-card">
                 <span class="doc-card-icon">📖</span>
@@ -361,8 +1557,119 @@
         </div>
     </section>
 
+    <button class="scroll-to-top" onclick="scrollToTop()" aria-label="Scroll to top">↑</button>
+
     <footer>
-        <p>Made with ❤️ by <a href="https://github.com/maxluxs" target="_blank">@maxluxs</a> • Licensed under MIT</p>
+        <p>Made with ❤️ by <a href="https://github.com/maxluxs" target="_blank" rel="noopener noreferrer">@maxluxs</a> • Licensed under MIT</p>
     </footer>
+
+    <script>
+        function showCode(platform) {
+            document.querySelectorAll('.code-block').forEach(block => {
+                block.classList.remove('active');
+                block.setAttribute('aria-hidden', 'true');
+            });
+            document.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            const codeBlock = document.getElementById('code-' + platform);
+            if (codeBlock) {
+                codeBlock.classList.add('active');
+                codeBlock.setAttribute('aria-hidden', 'false');
+            }
+            if (event && event.target) {
+                event.target.classList.add('active');
+                event.target.setAttribute('aria-selected', 'true');
+            }
+        }
+
+        function copyCode(blockId) {
+            const codeBlock = document.getElementById(blockId);
+            const code = codeBlock.querySelector('code').textContent;
+            const btn = codeBlock.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                btn.textContent = '✗ Error';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollBtn = document.querySelector('.scroll-to-top');
+            if (window.pageYOffset > 300) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+
+        // Platform tabs functionality
+        function showPlatform(platform) {
+            document.querySelectorAll('.platform-code-block').forEach(block => {
+                block.classList.remove('active');
+                block.setAttribute('aria-hidden', 'true');
+            });
+            document.querySelectorAll('.platform-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            const codeBlock = document.getElementById('platform-' + platform);
+            if (codeBlock) {
+                codeBlock.classList.add('active');
+                codeBlock.setAttribute('aria-hidden', 'false');
+            }
+            if (event && event.target) {
+                event.target.classList.add('active');
+                event.target.setAttribute('aria-selected', 'true');
+            }
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section, .feature, .doc-card');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>

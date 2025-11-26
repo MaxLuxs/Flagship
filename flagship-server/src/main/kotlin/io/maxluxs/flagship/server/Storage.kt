@@ -1,7 +1,23 @@
 package io.maxluxs.flagship.server
 
-import io.maxluxs.flagship.provider.rest.*
+import io.maxluxs.flagship.shared.api.FlagResponse
+import io.maxluxs.flagship.shared.api.RestExperiment
+import io.maxluxs.flagship.shared.api.RestFlagValue
+import io.maxluxs.flagship.shared.api.RestResponse
 import java.util.*
+
+data class FlagMetadata(
+    val createdAt: Long,
+    val updatedAt: Long,
+    val createdBy: UUID?
+)
+
+data class ExperimentMetadata(
+    val createdAt: Long,
+    val updatedAt: Long,
+    val createdBy: UUID?,
+    val isActive: Boolean
+)
 
 interface Storage {
     suspend fun getAllFlags(projectId: UUID): Map<String, RestFlagValue>
@@ -18,5 +34,15 @@ interface Storage {
 
     suspend fun getConfig(projectId: UUID, revision: String? = null): RestResponse
     fun generateRevision(): String
+    
+    // Extended methods for existence checks and metadata
+    suspend fun flagExists(projectId: UUID, key: String): Boolean
+    suspend fun experimentExists(projectId: UUID, key: String): Boolean
+    suspend fun getFlagMetadata(projectId: UUID, key: String): FlagMetadata?
+    suspend fun getExperimentMetadata(projectId: UUID, key: String): ExperimentMetadata?
+    
+    // Detailed flag methods
+    suspend fun getAllFlagsDetailed(projectId: UUID): List<FlagResponse>
+    suspend fun toggleFlag(projectId: UUID, key: String): FlagResponse?
 }
 

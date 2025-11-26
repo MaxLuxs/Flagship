@@ -1,9 +1,11 @@
 package io.maxluxs.flagship.server.database.models
 
-import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import kotlinx.datetime.Clock
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.datetime.timestamp
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 object Projects : UUIDTable("projects") {
     val name = varchar("name", 255)
     val slug = varchar("slug", 255).uniqueIndex()

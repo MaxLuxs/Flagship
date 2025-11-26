@@ -1,81 +1,165 @@
-<!doctype html>
-<html class="no-js">
+<!DOCTYPE html>
+<html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>flagship-core</title>
-<link href="../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../";</script>
-    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <link href="images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-    if (storage == null) {
+      if (storage == null) {
         const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (osDarkSchemePreferred === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    } else {
+      } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    }
+      }
     </script>
-<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
-<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
-<link href="../styles/style.css" rel="Stylesheet">
-<link href="../styles/main.css" rel="Stylesheet">
-<link href="../styles/prism.css" rel="Stylesheet">
-<link href="../styles/logo-styles.css" rel="Stylesheet">
-<link href="../styles/font-jb-sans-auto.css" rel="Stylesheet">
-<script type="text/javascript" src="../scripts/clipboard.js" async></script>
-<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
-<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
-<script type="text/javascript" src="../scripts/main.js" defer></script>
-<script type="text/javascript" src="../scripts/prism.js" async></script>
-<script type="text/javascript" src="../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+<link href="styles/style.css" rel="Stylesheet">
+<link href="styles/main.css" rel="Stylesheet">
+<link href="styles/prism.css" rel="Stylesheet">
+<link href="styles/logo-styles.css" rel="Stylesheet">
+<link href="ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
 <body>
-    <div class="root">
-<nav class="navigation" id="navigation-wrapper">
-    <div class="navigation--inner">
-        <div class="navigation-title">
-            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
-            <div class="library-name">
-<a class="library-name--link" href="../index.html">
-                            Flagship
-                    </a>            </div>
-            <div class="library-version">
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="index.html" tabindex="1">
+                    flagship-core
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/androidMain">android</button>
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/commonMain">common</button>
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/iosMain">ios</button>
+                <button class="platform-tag platform-selector js-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/jsMain">js</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/jvmMain">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/androidMain"
+                                       data-filter=":flagship-core/androidMain"/>
+                                <span class="checkbox--icon"></span>
+                                android
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/commonMain"
+                                       data-filter=":flagship-core/commonMain"/>
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/iosMain"
+                                       data-filter=":flagship-core/iosMain"/>
+                                <span class="checkbox--icon"></span>
+                                ios
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option js-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/jsMain"
+                                       data-filter=":flagship-core/jsMain"/>
+                                <span class="checkbox--icon"></span>
+                                js
+                            </label>
+                        </li>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/jvmMain"
+                                       data-filter=":flagship-core/jvmMain"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
             </div>
         </div>
-        <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":flagship-core:dokkaHtmlPartial/androidMain">android</button>
-                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":flagship-core:dokkaHtmlPartial/commonMain">common</button>
-                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":flagship-core:dokkaHtmlPartial/iosMain">ios</button>
-        </div>
-    </div>
-    <div class="navigation-controls">
-        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
-        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
-    </div>
-</nav>
-        <div id="container">
-            <div class="sidebar" id="leftColumn">
-                <div class="sidebar--inner" id="sideMenu"></div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    flagship-core
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
             </div>
-            <div id="main">
-<div class="main-content" id="content" pageids="flagship-core::////PointingToDeclaration//-31340533">
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageIds="flagship-core::////PointingToDeclaration//1929237043">
   <div class="breadcrumbs"></div>
   <div class="cover ">
     <h1 class="cover"><span><span>flagship-core</span></span></h1>
   </div>
   <h2 class="">Packages</h2>
-  <div class="table"><a data-name="1258087353%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core" id="1258087353%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
+  <div class="table"><a data-name="1258087353%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core" id="1258087353%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
       <div>
         <div class="main-subrow ">
           <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core/index.html">io.maxluxs.flagship.core</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1258087353%2FPackages%2F-1243379839"></span>
+              <div><a href="flagship-core/io.maxluxs.flagship.core/index.html">io.maxluxs.flagship.core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1258087353%2FPackages%2F1251618141"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
-          <div class="pull-right">
+          <div class="pull-right platform-tags--wrapper">
             <div class="platform-tags no-gutters">
               <div class="platform-tag common-like">common</div>
             </div>
@@ -84,37 +168,375 @@
         <div></div>
       </div>
     </div>
-<a data-name="-264223727%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.analytics" id="-264223727%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
+<a data-name="-264223727%2FPackages%2F1929237043" anchor-label="io.maxluxs.flagship.core.analytics" id="-264223727%2FPackages%2F1929237043" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain">
       <div>
         <div class="main-subrow ">
           <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.analytics/index.html">io.maxluxs.flagship.core.analytics</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-264223727%2FPackages%2F-1243379839"></span>
+              <div><a href="flagship-core/io.maxluxs.flagship.core.analytics/index.html">io.maxluxs.flagship.core.analytics</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-264223727%2FPackages%2F1929237043"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="811798925%2FPackages%2F-31340533" anchor-label="io.maxluxs.flagship.core.cache" id="811798925%2FPackages%2F-31340533" data-filterable-set=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.cache/index.html">io.maxluxs.flagship.core.cache</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="811798925%2FPackages%2F-31340533"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
+          <div class="pull-right platform-tags--wrapper">
             <div class="platform-tags no-gutters">
               <div class="platform-tag jvm-like">android</div>
               <div class="platform-tag common-like">common</div>
+              <div class="platform-tag common-like">ios</div>
+              <div class="platform-tag js-like">js</div>
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="811798925%2FPackages%2F1929237043" anchor-label="io.maxluxs.flagship.core.cache" id="811798925%2FPackages%2F1929237043" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.cache/index.html">io.maxluxs.flagship.core.cache</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="811798925%2FPackages%2F1929237043"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">android</div>
+              <div class="platform-tag common-like">common</div>
+              <div class="platform-tag common-like">ios</div>
+              <div class="platform-tag js-like">js</div>
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1625544948%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.circuit" id="1625544948%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.circuit/index.html">io.maxluxs.flagship.core.circuit</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1625544948%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="2146802459%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.config" id="2146802459%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.config/index.html">io.maxluxs.flagship.core.config</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2146802459%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-873585378%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.debug" id="-873585378%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.debug/index.html">io.maxluxs.flagship.core.debug</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-873585378%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1516693385%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.diagnostics" id="-1516693385%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.diagnostics/index.html">io.maxluxs.flagship.core.diagnostics</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1516693385%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1824011780%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.errors" id="1824011780%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.errors/index.html">io.maxluxs.flagship.core.errors</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1824011780%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-350773382%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.evaluator" id="-350773382%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.evaluator/index.html">io.maxluxs.flagship.core.evaluator</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-350773382%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1954779678%2FPackages%2F-2114561921" anchor-label="io.maxluxs.flagship.core.js" id="-1954779678%2FPackages%2F-2114561921" data-filterable-set=":flagship-core/jsMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/jsMain" data-filterable-set=":flagship-core/jsMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.js/index.html">io.maxluxs.flagship.core.js</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1954779678%2FPackages%2F-2114561921"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag js-like">js</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1015937976%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.manager" id="1015937976%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.manager/index.html">io.maxluxs.flagship.core.manager</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1015937976%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-218068364%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.model" id="-218068364%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.model/index.html">io.maxluxs.flagship.core.model</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-218068364%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1878871557%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.performance" id="-1878871557%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.performance/index.html">io.maxluxs.flagship.core.performance</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1878871557%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="321778508%2FPackages%2F1929237043" anchor-label="io.maxluxs.flagship.core.platform" id="321778508%2FPackages%2F1929237043" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.platform/index.html">io.maxluxs.flagship.core.platform</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="321778508%2FPackages%2F1929237043"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">android</div>
+              <div class="platform-tag common-like">common</div>
+              <div class="platform-tag common-like">ios</div>
+              <div class="platform-tag js-like">js</div>
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1035956406%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.provider" id="-1035956406%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.provider/index.html">io.maxluxs.flagship.core.provider</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1035956406%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1405746313%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.provider.env" id="1405746313%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.provider.env/index.html">io.maxluxs.flagship.core.provider.env</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1405746313%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-2081279580%2FPackages%2F1929237043" anchor-label="io.maxluxs.flagship.core.provider.file" id="-2081279580%2FPackages%2F1929237043" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.provider.file/index.html">io.maxluxs.flagship.core.provider.file</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2081279580%2FPackages%2F1929237043"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">android</div>
+              <div class="platform-tag common-like">common</div>
+              <div class="platform-tag common-like">ios</div>
+              <div class="platform-tag js-like">js</div>
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="137720388%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.realtime" id="137720388%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.realtime/index.html">io.maxluxs.flagship.core.realtime</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="137720388%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="226967859%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.retry" id="226967859%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.retry/index.html">io.maxluxs.flagship.core.retry</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="226967859%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="546827225%2FPackages%2F1251618141" anchor-label="io.maxluxs.flagship.core.security" id="546827225%2FPackages%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.security/index.html">io.maxluxs.flagship.core.security</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="546827225%2FPackages%2F1251618141"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag common-like">common</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-3957538%2FPackages%2F-314206843" anchor-label="io.maxluxs.flagship.core.swift" id="-3957538%2FPackages%2F-314206843" data-filterable-set=":flagship-core/iosMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/iosMain" data-filterable-set=":flagship-core/iosMain">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="flagship-core/io.maxluxs.flagship.core.swift/index.html">io.maxluxs.flagship.core.swift</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-3957538%2FPackages%2F-314206843"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
               <div class="platform-tag common-like">ios</div>
             </div>
           </div>
@@ -122,146 +544,22 @@
         <div></div>
       </div>
     </div>
-<a data-name="-1516693385%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.diagnostics" id="-1516693385%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
+<a data-name="-1266316901%2FPackages%2F1929237043" anchor-label="io.maxluxs.flagship.core.util" id="-1266316901%2FPackages%2F1929237043" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain" data-filterable-set=":flagship-core/commonMain,:flagship-core/androidMain,:flagship-core/iosMain,:flagship-core/jsMain,:flagship-core/jvmMain">
       <div>
         <div class="main-subrow ">
           <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.diagnostics/index.html">io.maxluxs.flagship.core.diagnostics</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1516693385%2FPackages%2F-1243379839"></span>
+              <div><a href="flagship-core/io.maxluxs.flagship.core.util/index.html">io.maxluxs.flagship.core.util</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1266316901%2FPackages%2F1929237043"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="-350773382%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.evaluator" id="-350773382%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.evaluator/index.html">io.maxluxs.flagship.core.evaluator</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-350773382%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="1015937976%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.manager" id="1015937976%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.manager/index.html">io.maxluxs.flagship.core.manager</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1015937976%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="-218068364%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.model" id="-218068364%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.model/index.html">io.maxluxs.flagship.core.model</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-218068364%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="-1878871557%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.performance" id="-1878871557%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.performance/index.html">io.maxluxs.flagship.core.performance</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1878871557%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="-1035956406%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.provider" id="-1035956406%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.provider/index.html">io.maxluxs.flagship.core.provider</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1035956406%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="226967859%2FPackages%2F-1243379839" anchor-label="io.maxluxs.flagship.core.retry" id="226967859%2FPackages%2F-1243379839" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/commonMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/commonMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.retry/index.html">io.maxluxs.flagship.core.retry</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="226967859%2FPackages%2F-1243379839"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
-            <div class="platform-tags no-gutters">
-              <div class="platform-tag common-like">common</div>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
-    </div>
-<a data-name="-1266316901%2FPackages%2F-31340533" anchor-label="io.maxluxs.flagship.core.util" id="-1266316901%2FPackages%2F-31340533" data-filterable-set=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain"></a>
-    <div class="table-row" data-filterable-current=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain" data-filterable-set=":flagship-core:dokkaHtmlPartial/androidMain,:flagship-core:dokkaHtmlPartial/commonMain,:flagship-core:dokkaHtmlPartial/iosMain">
-      <div>
-        <div class="main-subrow ">
-          <div class=""><span class="inline-flex">
-              <div><a href="io.maxluxs.flagship.core.util/index.html">io.maxluxs.flagship.core.util</a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1266316901%2FPackages%2F-31340533"></span>
-                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-              </span></span></div>
-          <div class="pull-right">
+          <div class="pull-right platform-tags--wrapper">
             <div class="platform-tags no-gutters">
               <div class="platform-tag jvm-like">android</div>
               <div class="platform-tag common-like">common</div>
               <div class="platform-tag common-like">ios</div>
+              <div class="platform-tag js-like">js</div>
+              <div class="platform-tag jvm-like">jvm</div>
             </div>
           </div>
         </div>
@@ -270,12 +568,22 @@
     </div>
   </div>
 </div>
-      <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2025 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
-      </div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
             </div>
         </div>
     </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-

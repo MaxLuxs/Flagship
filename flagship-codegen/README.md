@@ -56,7 +56,7 @@ Create a `flags.json` file in your project root:
 
 ## Generated Code
 
-The plugin generates a `Flags` object with typed accessors. **Note:** All accessors are suspend functions and must be called within a coroutine scope:
+The plugin generates a `Flags` object with typed accessors using the modern Flagship API (`Flagship.value()` and `Flagship.assign()`). **Note:** All accessors are suspend functions and must be called within a coroutine scope:
 
 ```kotlin
 // Boolean flag (suspend function)

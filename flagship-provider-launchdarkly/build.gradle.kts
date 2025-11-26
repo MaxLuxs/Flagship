@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
     kotlin("native.cocoapods")
+    alias(libs.plugins.dokka)
     // Publishing: uncomment when ready
     // `maven-publish`
     // signing
@@ -82,5 +83,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+// Fix for CocoaPods build tasks that create temporary files
+// Gradle cannot track outputs of these tasks because temporary files are deleted during execution
+tasks.matching { it.name.startsWith("podBuild") }.configureEach {
+    doNotTrackState("CocoaPods build tasks create temporary files that are deleted during execution")
 }
 

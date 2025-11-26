@@ -5,8 +5,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    // Skip Dokka for Compose UI (heavy dependency)
-    // alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka)
     // Publishing: uncomment when ready to publish
     // `maven-publish`
     // signing
@@ -55,6 +54,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.flagshipCore)
+            implementation(projects.flagshipUiComponents)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

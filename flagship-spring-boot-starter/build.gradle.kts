@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     id("java-library")
     id("maven-publish")
+    alias(libs.plugins.dokka)
 }
 
 group = "io.maxluxs.flagship"

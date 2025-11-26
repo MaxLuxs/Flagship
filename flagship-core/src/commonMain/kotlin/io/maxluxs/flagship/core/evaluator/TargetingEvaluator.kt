@@ -50,6 +50,21 @@ object TargetingEvaluator {
                 val anyMatch = rule.any.isEmpty() || rule.any.any { evaluate(it, context) }
                 allMatch && anyMatch
             }
+            is TargetingRule.TimeBased -> {
+                val currentTime = io.maxluxs.flagship.core.util.currentTimeMillis()
+                val afterStart = rule.startTimeMs == null || currentTime >= rule.startTimeMs
+                val beforeEnd = rule.endTimeMs == null || currentTime <= rule.endTimeMs
+                afterStart && beforeEnd
+            }
+            is TargetingRule.CanaryRelease -> {
+                // Check whitelist first
+                if (context.userId != null && context.userId in rule.whitelistUserIds) {
+                    return true
+                }
+                // Then check percentage
+                val id = context.userId ?: context.deviceId ?: return false
+                BucketingEngine.isInBucket(id, rule.percentage)
+            }
         }
     }
 

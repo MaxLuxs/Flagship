@@ -1,8 +1,12 @@
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    alias(libs.plugins.kotlinSerialization)
+    `maven-publish`
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21"
 }
+
+group = "io.maxluxs.flagship"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
@@ -11,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization.json)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 }
 
 gradlePlugin {
@@ -19,7 +23,14 @@ gradlePlugin {
         create("flagshipCodegen") {
             id = "io.maxluxs.flagship.codegen"
             implementationClass = "io.maxluxs.flagship.codegen.FlagshipCodegenPlugin"
+            version = project.version.toString()
         }
     }
 }
 
+// Enable publishing to mavenLocal
+publishing {
+    repositories {
+        mavenLocal()
+    }
+}

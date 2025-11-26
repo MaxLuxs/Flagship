@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>FlagsConfig</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../index.html" tabindex="1">
+                    flagship-core
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true"
+                        data-filter=":flagship-core/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":flagship-core/commonMain"
+                                       data-filter=":flagship-core/commonMain"/>
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    flagship-core
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="flagship-core::io.maxluxs.flagship.core/FlagsConfig///PointingToDeclaration//1251618141">
+  <div class="breadcrumbs"><a href="../../../index.html">flagship-core</a><span class="delimiter">/</span><a href="../index.html">io.maxluxs.flagship.core</a><span class="delimiter">/</span><span class="current">FlagsConfig</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Flags</span><wbr></wbr><span><span>Config</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">FlagsConfig</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>appKey<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>environment<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>defaultRefreshIntervalMs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>15 * 60_000<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>providers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../io.maxluxs.flagship.core.provider/-flags-provider/index.html">FlagsProvider</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>cache<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.cache/-flags-cache/index.html">FlagsCache</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>serializer<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-serializer/index.html">FlagsSerializer</a><span class="token operator"> = </span>JsonSerializer()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>logger<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-logger/index.html">FlagsLogger</a><span class="token operator"> = </span>NoopLogger<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>clock<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-clock/index.html">Clock</a><span class="token operator"> = </span>SystemClock<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>crypto<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-crypto/index.html">Crypto</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>analytics<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-flags-analytics/index.html">FlagsAnalytics</a><span class="token operator"> = </span>NoopAnalytics<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>performanceMonitor<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.performance/-performance-monitor/index.html">PerformanceMonitor</a><span class="token operator"> = </span>NoopPerformanceMonitor<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>retryPolicy<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.retry/-retry-policy/index.html">RetryPolicy</a><span class="token operator"> = </span>NoRetryPolicy<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>enableRealtime<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>providerAnalytics<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-provider-analytics-config/index.html">ProviderAnalyticsConfig</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>enablePerformanceProfiling<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>maxSnapshots<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>maxSnapshotAgeMs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><p class="paragraph">Configuration for the Flagship flags system.</p><p class="paragraph">This configures all aspects of the flags library including:</p><ul><li><p class="paragraph">Which providers to use and in what order</p></li><li><p class="paragraph">Caching strategy</p></li><li><p class="paragraph">Refresh intervals</p></li><li><p class="paragraph">Analytics and monitoring</p></li><li><p class="paragraph">Retry policies</p></li><li><p class="paragraph">Logging</p></li></ul><h2 class="">Basic Example</h2><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val config = FlagsConfig(<br>    appKey = &quot;my-app&quot;,<br>    environment = &quot;production&quot;,<br>    providers = listOf(<br>        RestFlagsProvider(httpClient, &quot;https://api.example.com/flags&quot;),<br>        FirebaseRemoteConfigProvider(firebase)<br>    ),<br>    cache = PersistentCache(serializer)<br>)<br><br>Flagship.configure(config)</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><h2 class="">Advanced Example with Analytics</h2><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val config = FlagsConfig(<br>    appKey = &quot;my-app&quot;,<br>    environment = if (BuildConfig.DEBUG) &quot;development&quot; else &quot;production&quot;,<br>    providers = listOf(<br>        FirebaseProviderFactory.create(application),<br>        RestFlagsProvider(httpClient, &quot;https://api.example.com/flags&quot;)<br>    ),<br>    cache = PersistentCache(FlagsSerializer()),<br>    analytics = object : FlagsAnalytics {<br>        override fun trackEvent(event: AnalyticsEvent) {<br>            when (event) {<br>                is AnalyticsEvent.ExperimentExposure -&gt; {<br>                    Firebase.analytics.logEvent(&quot;experiment_exposure&quot;) {<br>                        param(&quot;experiment&quot;, event.experimentKey)<br>                        param(&quot;variant&quot;, event.variant)<br>                    }<br>                }<br>            }<br>        }<br>    },<br>    providerAnalytics = ProviderAnalyticsConfig(<br>        projectId = &quot;my-project&quot;,<br>        analyticsUrl = &quot;https://api.example.com&quot;<br>    ),<br>    defaultRefreshIntervalMs = 10 * 60_000L, // 10 minutes<br>    enableRealtime = true<br>)</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-821941176%2FConstructors%2F1251618141" anchor-label="FlagsConfig" id="-821941176%2FConstructors%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-flags-config.html"><span>Flags</span><wbr></wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-821941176%2FConstructors%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">appKey<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">environment<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">defaultRefreshIntervalMs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>15 * 60_000<span class="token punctuation">, </span></span><span class="parameter ">providers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../io.maxluxs.flagship.core.provider/-flags-provider/index.html">FlagsProvider</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">cache<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.cache/-flags-cache/index.html">FlagsCache</a><span class="token punctuation">, </span></span><span class="parameter ">serializer<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-serializer/index.html">FlagsSerializer</a><span class="token operator"> = </span>JsonSerializer()<span class="token punctuation">, </span></span><span class="parameter ">logger<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-logger/index.html">FlagsLogger</a><span class="token operator"> = </span>NoopLogger<span class="token punctuation">, </span></span><span class="parameter ">clock<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-clock/index.html">Clock</a><span class="token operator"> = </span>SystemClock<span class="token punctuation">, </span></span><span class="parameter ">crypto<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-crypto/index.html">Crypto</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">analytics<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-flags-analytics/index.html">FlagsAnalytics</a><span class="token operator"> = </span>NoopAnalytics<span class="token punctuation">, </span></span><span class="parameter ">performanceMonitor<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.performance/-performance-monitor/index.html">PerformanceMonitor</a><span class="token operator"> = </span>NoopPerformanceMonitor<span class="token punctuation">, </span></span><span class="parameter ">retryPolicy<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.retry/-retry-policy/index.html">RetryPolicy</a><span class="token operator"> = </span>NoRetryPolicy<span class="token punctuation">, </span></span><span class="parameter ">enableRealtime<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">providerAnalytics<span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-provider-analytics-config/index.html">ProviderAnalyticsConfig</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">enablePerformanceProfiling<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">maxSnapshots<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">maxSnapshotAgeMs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1808186805%2FProperties%2F1251618141" anchor-label="analytics" id="1808186805%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="analytics.html"><span><span>analytics</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1808186805%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="analytics.html">analytics</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-flags-analytics/index.html">FlagsAnalytics</a></div><div class="brief "><p class="paragraph">Analytics tracker for flag events (experiment exposures, conversions). Default: <a href="../../io.maxluxs.flagship.core.analytics/-noop-analytics/index.html">NoopAnalytics</a>. Implement to track events in Firebase Analytics, Amplitude, etc.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1715144959%2FProperties%2F1251618141" anchor-label="appKey" id="-1715144959%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="app-key.html"><span>app</span><wbr></wbr><span><span>Key</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1715144959%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="app-key.html">appKey</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Unique application identifier. Used for analytics and provider identification.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1870195769%2FProperties%2F1251618141" anchor-label="cache" id="1870195769%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="cache.html"><span><span>cache</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1870195769%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="cache.html">cache</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.cache/-flags-cache/index.html">FlagsCache</a></div><div class="brief "><p class="paragraph">Cache implementation for persisting flag snapshots. Use PersistentCache for offline support, or InMemoryCache for faster but non-persistent caching.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1815524653%2FProperties%2F1251618141" anchor-label="clock" id="1815524653%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clock.html"><span><span>clock</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1815524653%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="clock.html">clock</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-clock/index.html">Clock</a></div><div class="brief "><p class="paragraph">Clock abstraction for testing. Default: <a href="../../io.maxluxs.flagship.core.util/-system-clock/index.html">SystemClock</a>. Override for time-based testing scenarios.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1345827870%2FProperties%2F1251618141" anchor-label="crypto" id="1345827870%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="crypto.html"><span><span>crypto</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1345827870%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="crypto.html">crypto</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-crypto/index.html">Crypto</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Optional crypto implementation for signature verification. If provided, snapshots will be verified against their signatures to prevent tampering.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2010437990%2FProperties%2F1251618141" anchor-label="defaultRefreshIntervalMs" id="-2010437990%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-refresh-interval-ms.html"><span>default</span><wbr></wbr><span>Refresh</span><wbr></wbr><span>Interval</span><wbr></wbr><span><span>Ms</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2010437990%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="default-refresh-interval-ms.html">defaultRefreshIntervalMs</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">How often to automatically refresh configuration in milliseconds. Default: 15 minutes (900,000 ms). Set to 0 to disable automatic refresh.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1144651494%2FProperties%2F1251618141" anchor-label="enablePerformanceProfiling" id="1144651494%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="enable-performance-profiling.html"><span>enable</span><wbr></wbr><span>Performance</span><wbr></wbr><span><span>Profiling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1144651494%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="enable-performance-profiling.html">enablePerformanceProfiling</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Enable performance profiling for flag operations. Default: null (auto-detected). When enabled, tracks detailed performance metrics.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2080776335%2FProperties%2F1251618141" anchor-label="enableRealtime" id="-2080776335%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="enable-realtime.html"><span>enable</span><wbr></wbr><span><span>Realtime</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2080776335%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="enable-realtime.html">enableRealtime</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Enable realtime updates for RealtimeFlagsProvider instances. Default: false. When enabled, flags update instantly via WebSocket/SSE without polling.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-772147128%2FProperties%2F1251618141" anchor-label="environment" id="-772147128%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="environment.html"><span><span>environment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-772147128%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="environment.html">environment</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Environment name (e.g., &quot;production&quot;, &quot;staging&quot;, &quot;development&quot;). Providers can return different values based on environment.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1429562927%2FProperties%2F1251618141" anchor-label="logger" id="1429562927%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="logger.html"><span><span>logger</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1429562927%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="logger.html">logger</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-logger/index.html">FlagsLogger</a></div><div class="brief "><p class="paragraph">Logger for debug and error messages. Default: <a href="../../io.maxluxs.flagship.core.util/-noop-logger/index.html">NoopLogger</a>. Use <a href="../../io.maxluxs.flagship.core.util/-default-logger/index.html">DefaultLogger</a> for console logging or implement custom logger for your logging framework.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1674970814%2FProperties%2F1251618141" anchor-label="maxSnapshotAgeMs" id="-1674970814%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="max-snapshot-age-ms.html"><span>max</span><wbr></wbr><span>Snapshot</span><wbr></wbr><span>Age</span><wbr></wbr><span><span>Ms</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1674970814%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="max-snapshot-age-ms.html">maxSnapshotAgeMs</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Maximum age of snapshots before cleanup in milliseconds. Default: null (24 hours). Older snapshots are automatically removed.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1044084852%2FProperties%2F1251618141" anchor-label="maxSnapshots" id="1044084852%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="max-snapshots.html"><span>max</span><wbr></wbr><span><span>Snapshots</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1044084852%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="max-snapshots.html">maxSnapshots</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Maximum number of snapshots to keep in memory for rollback purposes. Default: null (unlimited). Set to limit memory usage.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2144958197%2FProperties%2F1251618141" anchor-label="performanceMonitor" id="2144958197%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="performance-monitor.html"><span>performance</span><wbr></wbr><span><span>Monitor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2144958197%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="performance-monitor.html">performanceMonitor</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.performance/-performance-monitor/index.html">PerformanceMonitor</a></div><div class="brief "><p class="paragraph">Performance monitoring for flag operations. Default: <a href="../../io.maxluxs.flagship.core.performance/-noop-performance-monitor/index.html">NoopPerformanceMonitor</a>. Use to track bootstrap times, refresh durations, etc.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-527047290%2FProperties%2F1251618141" anchor-label="providerAnalytics" id="-527047290%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="provider-analytics.html"><span>provider</span><wbr></wbr><span><span>Analytics</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-527047290%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="provider-analytics.html">providerAnalytics</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.analytics/-provider-analytics-config/index.html">ProviderAnalyticsConfig</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Optional configuration for provider analytics reporting. Default: null (disabled). When enabled, SDK automatically reports provider health metrics (success rate, response time, failures) to your backend.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="879777817%2FProperties%2F1251618141" anchor-label="providers" id="879777817%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="providers.html"><span><span>providers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="879777817%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="providers.html">providers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../io.maxluxs.flagship.core.provider/-flags-provider/index.html">FlagsProvider</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">List of flag providers in order of precedence. First provider has highest priority. If first provider fails or doesn't have a flag, subsequent providers are tried.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1819047489%2FProperties%2F1251618141" anchor-label="retryPolicy" id="1819047489%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="retry-policy.html"><span>retry</span><wbr></wbr><span><span>Policy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1819047489%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="retry-policy.html">retryPolicy</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.retry/-retry-policy/index.html">RetryPolicy</a></div><div class="brief "><p class="paragraph">Retry policy for failed provider operations. Default: <a href="../../io.maxluxs.flagship.core.retry/-no-retry-policy/index.html">NoRetryPolicy</a>. Use ExponentialBackoffRetry for automatic retries with exponential backoff.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-980042899%2FProperties%2F1251618141" anchor-label="serializer" id="-980042899%2FProperties%2F1251618141" data-filterable-set=":flagship-core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":flagship-core/commonMain" data-filterable-set=":flagship-core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="serializer.html"><span><span>serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-980042899%2FProperties%2F1251618141"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":flagship-core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="serializer.html">serializer</a><span class="token operator">: </span><a href="../../io.maxluxs.flagship.core.util/-flags-serializer/index.html">FlagsSerializer</a></div><div class="brief "><p class="paragraph">Serializer for flag snapshots. Default: <a href="../../io.maxluxs.flagship.core.util/-json-serializer/index.html">JsonSerializer</a>. Only needed if using custom cache implementation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

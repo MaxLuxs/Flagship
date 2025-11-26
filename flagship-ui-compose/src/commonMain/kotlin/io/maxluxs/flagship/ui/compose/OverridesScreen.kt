@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.manager.FlagsManager
 import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.core.model.FlagValue
+import io.maxluxs.flagship.ui.components.components.BrandedCard
+import io.maxluxs.flagship.ui.components.components.BrandedButton
+import io.maxluxs.flagship.ui.components.components.BrandedOutlinedButton
 
 @Composable
 fun OverridesScreen(manager: FlagsManager) {
@@ -61,17 +64,13 @@ fun OverridesScreen(manager: FlagsManager) {
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (overrides.isNotEmpty()) {
-                        OutlinedButton(
-                            onClick = { showClearAllDialog = true },
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = MaterialTheme.colorScheme.error
-                            ),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                        BrandedOutlinedButton(
+                            onClick = { showClearAllDialog = true }
                         ) {
-                            Text("Clear All")
+                            Text("Clear All", color = MaterialTheme.colorScheme.error)
                         }
                     }
-                    Button(onClick = { showAddDialog = true }) {
+                    BrandedButton(onClick = { showAddDialog = true }) {
                         Text("+ Add")
                     }
                 }
@@ -155,7 +154,8 @@ fun OverridesScreen(manager: FlagsManager) {
                         showClearAllDialog = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
                     )
                 ) {
                     Text("Clear All")
@@ -176,13 +176,9 @@ fun OverrideItem(
     value: FlagValue,
     onClear: () -> Unit
 ) {
-    Card(
+    BrandedCard(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -246,6 +242,10 @@ private fun getValueTypeLabel(value: FlagValue): String {
         is FlagValue.Double -> "DOUBLE"
         is FlagValue.StringV -> "STRING"
         is FlagValue.Json -> "JSON"
+        is FlagValue.Date -> "DATE"
+        is FlagValue.Enum -> "ENUM"
+        is FlagValue.List -> "LIST"
+        is FlagValue.Map -> "MAP"
     }
 }
 
@@ -323,7 +323,7 @@ fun AddOverrideDialog(
             }
         },
         confirmButton = {
-            Button(
+            BrandedButton(
                 onClick = {
                     if (key.isNotBlank()) {
                         val value = when (valueType) {
@@ -355,6 +355,10 @@ private fun formatValue(value: FlagValue): String {
         is FlagValue.Double -> "Double: ${value.value}"
         is FlagValue.StringV -> "String: ${value.value}"
         is FlagValue.Json -> "JSON: ${value.value}"
+        is FlagValue.Date -> "Date: ${value.value}"
+        is FlagValue.Enum -> "Enum: ${value.value}"
+        is FlagValue.List -> "List: [${value.value.size} items]"
+        is FlagValue.Map -> "Map: {${value.value.size} keys}"
     }
 }
 
