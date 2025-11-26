@@ -1,0 +1,1 @@
+sourceset_dependencies='{":flagship-ktor-plugin/main":[]}'

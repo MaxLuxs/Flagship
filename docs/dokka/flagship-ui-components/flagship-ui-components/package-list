@@ -1,0 +1,35 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.maxluxs.flagship.ui.components.components////PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/index.html
+$dokka.location:io.maxluxs.flagship.ui.components.components//BrandedButton/#kotlin.Function0[kotlin.Unit]#androidx.compose.ui.Modifier#kotlin.Boolean#kotlin.Function1[androidx.compose.foundation.layout.RowScope,kotlin.Unit]/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/-branded-button.html
+$dokka.location:io.maxluxs.flagship.ui.components.components//BrandedCard/#androidx.compose.ui.Modifier#androidx.compose.material3.CardElevation#androidx.compose.foundation.layout.PaddingValues#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/-branded-card.html
+$dokka.location:io.maxluxs.flagship.ui.components.components//BrandedLogo/#androidx.compose.ui.Modifier#androidx.compose.ui.unit.Dp/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/-branded-logo.html
+$dokka.location:io.maxluxs.flagship.ui.components.components//BrandedOutlinedButton/#kotlin.Function0[kotlin.Unit]#androidx.compose.ui.Modifier#kotlin.Boolean#kotlin.Function1[androidx.compose.foundation.layout.RowScope,kotlin.Unit]/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/-branded-outlined-button.html
+$dokka.location:io.maxluxs.flagship.ui.components.components//BrandedTopBar/#kotlin.String#androidx.compose.ui.Modifier#kotlin.Function0[kotlin.Unit]?#kotlin.Function1[androidx.compose.foundation.layout.RowScope,kotlin.Unit]#kotlin.Boolean/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.components/-branded-top-bar.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme////PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/index.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme//FlagshipTheme/#kotlin.Boolean#androidx.compose.material3.ColorScheme?#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-flagship-theme.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme//FlagshipTypography/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-flagship-typography.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors///PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/index.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Background/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-background.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Border/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-border.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Divider/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-divider.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Error/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-error.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipGreen/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-green.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipGreenContainer/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-green-container.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipGreenDark/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-green-dark.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipGreenLight/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-green-light.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipOrange/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-orange.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipOrangeContainer/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-orange-container.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipOrangeDark/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-orange-dark.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/FlagshipOrangeLight/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-flagship-orange-light.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Info/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-info.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Success/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-success.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Surface/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-surface.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/SurfaceElevated/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-surface-elevated.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/SurfaceVariant/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-surface-variant.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/TextPrimary/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-text-primary.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/TextSecondary/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-text-secondary.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/TextTertiary/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-text-tertiary.html
+$dokka.location:io.maxluxs.flagship.ui.components.theme/BrandColors/Warning/#/PointingToDeclaration/flagship-ui-components/io.maxluxs.flagship.ui.components.theme/-brand-colors/-warning.html
+io.maxluxs.flagship.ui.components.components
+io.maxluxs.flagship.ui.components.theme

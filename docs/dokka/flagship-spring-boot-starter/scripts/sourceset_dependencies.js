@@ -1,0 +1,1 @@
+sourceset_dependencies='{":flagship-spring-boot-starter/main":[]}'

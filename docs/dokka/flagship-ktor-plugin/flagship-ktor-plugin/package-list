@@ -1,0 +1,17 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.maxluxs.flagship.ktor////PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/index.html
+$dokka.location:io.maxluxs.flagship.ktor//flagship/io.ktor.server.application.Application#kotlin.Function1[io.maxluxs.flagship.ktor.FlagshipPlugin.Configuration,kotlin.Unit]/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/flagship.html
+$dokka.location:io.maxluxs.flagship.ktor//flagshipRoutes/io.ktor.server.routing.Routing#io.maxluxs.flagship.core.manager.FlagsManager/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/flagship-routes.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Configuration///PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-configuration/index.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Configuration/Configuration/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-configuration/-configuration.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Configuration/appKey/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-configuration/app-key.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Configuration/environment/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-configuration/environment.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Configuration/providers/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-configuration/providers.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Plugin///PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-plugin/index.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Plugin/install/#io.ktor.server.application.Application#kotlin.Function1[io.maxluxs.flagship.ktor.FlagshipPlugin.Configuration,kotlin.Unit]/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-plugin/install.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin.Plugin/key/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-plugin/key.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin///PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/index.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin/FlagshipPlugin/#io.maxluxs.flagship.ktor.FlagshipPlugin.Configuration/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/-flagship-plugin.html
+$dokka.location:io.maxluxs.flagship.ktor/FlagshipPlugin/flagsManager/#/PointingToDeclaration/flagship-ktor-plugin/io.maxluxs.flagship.ktor/-flagship-plugin/flags-manager.html
+io.maxluxs.flagship.ktor

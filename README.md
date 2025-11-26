@@ -54,11 +54,14 @@ Perfect for: mobile apps, KMP projects, gradual feature releases, experimentatio
 - **🎯 Advanced Targeting**: Target users by Region, App Version (SemVer), OS, Language, or Custom Attributes.
 - **🛡️ Safety First**: Offline-first architecture, automatic rollback to last good snapshot, and thread-safe concurrency.
 - **📊 Analytics Ready**: Hooks for exposure tracking (assignment events) to integrate with Google Analytics, Amplitude, Mixpanel, or Segment.
+- **📈 Provider Analytics** (🆕 **FREE**): Automatic monitoring of provider health, performance metrics (success rate, response time), and failure tracking. Built-in dashboard in admin panel.
 - **🕵️ Debug Dashboard**: A drop-in **Compose Multiplatform** UI for inspecting flags, forcing overrides, and diagnostics.
 
 ---
 
 ## 📦 Installation
+
+> 📘 **New**: Detailed integration guide is available in [INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md)
 
 Add the dependencies to your `build.gradle.kts`:
 
@@ -68,7 +71,7 @@ dependencies {
     implementation("io.maxluxs.flagship:flagship-core:0.1.1")
     implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1") // Optional
     implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")     // Optional
-    implementation("io.maxluxs.flagship:flagship-ui-compose:0.1.1")        // Optional: Debug UI
+    implementation("io.maxluxs.flagship:flagship-admin-ui-compose:0.1.1")  // Optional: Admin UI
 }
 
 // Platform-specific code is included in flagship-core
@@ -79,128 +82,214 @@ dependencies {
 
 ## 🚀 Quick Start
 
-### Method 1: Simplified API
+### Method 1: Simplified API (Recommended for Beginners)
 
-For simple remote config use cases, you can use the simplified API with minimal boilerplate:
+The simplest way to get started - just one line of initialization!
 
+**Step 1: Add dependency**
 ```kotlin
-// In Application.onCreate()
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        Flags.initFirebase(application)
-    }
-}
-
-// Use flags directly without calling manager()
-// Note: All flag access methods are suspend functions
-lifecycleScope.launch {
-    if (Flags.isEnabled("new_payment_flow")) {
-        ShowNewPayment()
-    } else {
-        ShowLegacyPayment()
-    }
-    
-    // Typed values
-    val maxUploadSize = Flags.value("max_upload_mb", default = 10)
-    val apiTimeout = Flags.value("api_timeout", default = 30)
+dependencies {
+    implementation("io.maxluxs.flagship:flagship-core:0.1.1")
+    implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1")
 }
 ```
 
-See [Simplified API Guide](docs/SIMPLIFIED_API.md) for more details.
+**Step 2: Initialize in Application**
+```kotlin
+import android.app.Application
+import io.maxluxs.flagship.core.Flagship
+import io.maxluxs.flagship.provider.firebase.initFirebase // ⚠️ Important: import extension function
+
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        // One line initialization!
+        Flagship.initFirebase(application)
+    }
+}
+```
+
+**Step 3: Use flags in your code**
+```kotlin
+import androidx.lifecycle.lifecycleScope
+import io.maxluxs.flagship.core.Flagship
+import kotlinx.coroutines.launch
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        // ⚠️ Important: All flag methods are suspend functions - use in coroutine scope
+        lifecycleScope.launch {
+            // Check boolean flag
+            if (Flagship.isEnabled("new_payment_flow")) {
+                showNewPayment()
+            } else {
+                showLegacyPayment()
+            }
+            
+            // Get typed values (type is inferred from default)
+            val maxUploadSize: Int = Flagship.value("max_upload_mb", default = 10)
+            val apiTimeout: Int = Flagship.value("api_timeout", default = 30)
+            val welcomeMsg: String = Flagship.value("welcome_message", default = "Hello!")
+        }
+    }
+}
+```
+
+> 📖 **See [Simplified API Guide](docs/SIMPLIFIED_API.md) for more details and examples.**
 
 ### Method 2: Full Configuration API
 
-For advanced use cases requiring custom configuration:
+For advanced use cases requiring custom configuration, multiple providers, or custom analytics:
 
 ```kotlin
-// Android example using provider factories
+import android.app.Application
+import io.maxluxs.flagship.core.Flagship
+import io.maxluxs.flagship.core.FlagsConfig
+import io.maxluxs.flagship.core.manager.DefaultFlagsManager
+import io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
+import io.maxluxs.flagship.core.util.DefaultLogger
 import io.maxluxs.flagship.provider.firebase.FirebaseProviderFactory
 import io.maxluxs.flagship.provider.rest.RestFlagsProvider
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
 
-val config = FlagsConfig(
-    appKey = "my-app",
-    environment = "production",
-    providers = listOf(
-        FirebaseProviderFactory.create(application),
-        RestFlagsProvider(httpClient, "https://api.myserver.com/flags")
-    ),
-    cache = PersistentCache(platformContext),
-    logger = DefaultLogger()
-)
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        initializeFlagship()
+    }
+    
+    private fun initializeFlagship() {
+        // Create HTTP client for REST provider (if using REST)
+        val httpClient = HttpClient(Android) {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        
+        // Configure Flagship
+        val config = FlagsConfig(
+            appKey = "my-app",
+            environment = if (BuildConfig.DEBUG) "development" else "production",
+            providers = listOf(
+                // Primary provider: Firebase
+                FirebaseProviderFactory.create(application),
+                // Fallback provider: REST API
+                RestFlagsProvider(httpClient, "https://api.myserver.com/flags")
+            ),
+            cache = AndroidFlagsInitializer.createPersistentCache(application),
+            logger = DefaultLogger()
+        )
+        
+        Flagship.configure(config)
+        
+        // Set default context (for targeting and experiments)
+        val manager = Flagship.manager() as DefaultFlagsManager
+        val defaultContext = AndroidFlagsInitializer.createDefaultContext(this)
+        manager.setDefaultContext(defaultContext)
+    }
+}
 
-Flags.configure(config)
-
-// Use flags via manager
-// Note: All flag access methods are suspend functions
-val flags = Flags.manager()
-lifecycleScope.launch {
-    if (flags.isEnabled("new_payment_flow")) {
-        ShowNewPayment()
+// Use flags in your code
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        val flags = Flagship.manager()
+        
+        // ⚠️ Important: All flag methods are suspend functions
+        lifecycleScope.launch {
+            if (flags.isEnabled("new_payment_flow")) {
+                showNewPayment()
+            }
+        }
     }
 }
 ```
 
 ### A/B Testing
 
-Both methods support A/B testing:
+Both methods support A/B testing with deterministic bucketing:
 
 ```kotlin
-// Simplified API
+import io.maxluxs.flagship.core.model.EvalContext
+
 lifecycleScope.launch {
-    val variant = Flags.assign("checkout_optimization_exp")?.variant
+    // Simplified API
+    val variant = Flagship.assign("checkout_optimization_exp")?.variant
     
-    // Full API
-    val assignment = Flags.manager().assign("checkout_optimization_exp")
+    // Or with Full API and custom context
+    val assignment = Flagship.manager().assign(
+        key = "checkout_optimization_exp",
+        ctx = EvalContext(
+            userId = "user_12345",
+            appVersion = "2.5.0",
+            osName = "Android",
+            osVersion = "12",
+            region = "US",
+            attributes = mapOf("tier" to "premium")
+        )
+    )
     
     when (variant ?: assignment?.variant) {
-        "control" -> ShowStandardCheckout()
-        "treatment_a" -> ShowOnePageCheckout()
-        "treatment_b" -> ShowModalCheckout()
-        else -> ShowStandardCheckout()
+        "control" -> showStandardCheckout()
+        "treatment_a" -> showOnePageCheckout()
+        "treatment_b" -> showModalCheckout()
+        else -> showStandardCheckout() // Fallback
     }
 }
 ```
+
+> 💡 **Tip**: User ID is required for consistent experiment assignment. The same user will always get the same variant.
 
 ---
 
 ## ⚙️ Setting Up Remote Config
 
-### Firebase Remote Config
+### Firebase Remote Config Setup
 
-1. **Add Firebase to your project** - Follow [Firebase Setup Guide](https://firebase.google.com/docs/android/setup)
+**Step 1:** Add Firebase to your project following the [official guide](https://firebase.google.com/docs/android/setup)
 
-2. **In Firebase Console**, create parameters:
-   - `flagship_flags` - JSON object with your feature flags
-   - `flagship_experiments` - JSON object with your A/B tests
+**Step 2:** In Firebase Console, create these parameters:
 
-3. **Example Firebase Console JSON**:
+| Parameter Name | Type | Description |
+|---------------|------|-------------|
+| `flagship_flags` | JSON | Your feature flags |
+| `flagship_experiments` | JSON | Your A/B tests |
+
+**Step 3:** Example Firebase Console values:
 
 ```json
+// flagship_flags parameter value:
 {
-  "flagship_flags": {
-    "new_payment_flow": true,
-    "dark_mode_enabled": false,
-    "api_timeout": 5000
-  },
-  "flagship_experiments": {
-    "checkout_test": {
-      "variants": [
-        { "name": "control", "weight": 0.5 },
-        { "name": "variant_a", "weight": 0.5 }
-      ]
-    }
+  "new_payment_flow": true,
+  "dark_mode_enabled": false,
+  "api_timeout": 5000,
+  "max_upload_mb": 10
+}
+
+// flagship_experiments parameter value:
+{
+  "checkout_test": {
+    "variants": [
+      { "name": "control", "weight": 0.5 },
+      { "name": "variant_a", "weight": 0.5 }
+    ]
   }
 }
 ```
 
-4. **That's it!** Flagship will automatically parse and use these values.
+**Step 4:** That's it! Flagship automatically parses and uses these values.
 
-📖 **Full guide**: [Firebase Integration Guide](docs/USAGE_GUIDE.md#firebase-remote-config)
+> 📖 **Full guide**: [Firebase Integration Guide](docs/USAGE_GUIDE.md#firebase-remote-config)
 
-### REST API Provider
+### REST API Provider Setup
 
-If you have your own backend, just return JSON in this format:
+If you have your own backend, return JSON in this format:
 
 ```json
 {
@@ -226,57 +315,58 @@ If you have your own backend, just return JSON in this format:
 }
 ```
 
-📖 **Full API docs**: [REST Provider Guide](docs/USAGE_GUIDE.md#rest-provider)
+> 📖 **Full API docs**: [REST Provider Guide](docs/USAGE_GUIDE.md#rest-provider)
 
 ---
 
 ## 🧩 Modules
 
-| Module | Description |
-|--------|-------------|
-| `:flagship-core` | The brain. Evaluator, models, caching logic. Includes platform-specific code (Android/iOS). |
-| `:flagship-provider-firebase` | Adapter for Firebase Remote Config. |
-| `:flagship-provider-rest` | Generic REST API adapter. |
-| `:flagship-ui-compose` | Debug UI dashboard (Inspect & Override). |
+| Module | Required | Description |
+|--------|----------|-------------|
+| `flagship-core` | ✅ **Yes** | Core library with evaluator, models, caching. Includes platform code. |
+| `flagship-provider-firebase` | ⚪ Optional | Firebase Remote Config adapter |
+| `flagship-provider-rest` | ⚪ Optional | Generic REST API adapter |
+| `flagship-admin-ui-compose` | ⚪ Optional | Admin UI dashboard for debugging |
+
+> 💡 **Tip**: Start with `flagship-core` + one provider. Add more modules as needed.
 
 ---
 
-## 🔌 Creating Custom Providers
+## 🔌 Advanced: Custom Providers
 
-You can implement your own provider by implementing the `FlagsProvider` interface. This is useful for connecting to proprietary backends, local files, or other services.
+For connecting to proprietary backends or local files, you can implement your own provider.
+
+> 📖 **See [Creating Custom Providers](docs/USAGE_GUIDE.md#creating-custom-providers) for detailed guide.**
+
+Basic example:
 
 ```kotlin
-class MyCustomProvider(
+import io.maxluxs.flagship.core.model.*
+import io.maxluxs.flagship.core.provider.FlagsProvider
+import kotlinx.datetime.Clock
+
+class MyCustomProvider : FlagsProvider {
     override val name: String = "my_custom_provider"
-) : FlagsProvider {
     
-    // Called on app start or when refresh() is requested
     override suspend fun bootstrap(): ProviderSnapshot {
-        // Fetch data from your source
-        val myData = fetchFromMyBackend()
+        // Fetch from your backend
+        val data = fetchFromMyBackend()
         
-        // Map to Flagship models
         return ProviderSnapshot(
-            flags = myData.flags.mapValues { ... },
-            experiments = myData.experiments.mapValues { ... },
+            flags = data.flags.mapValues { (_, v) -> FlagValue.String(v.toString()) },
+            experiments = emptyMap(),
             fetchedAtMs = Clock.System.now().toEpochMilliseconds()
         )
     }
     
     override suspend fun refresh(): ProviderSnapshot = bootstrap()
     
-    // Optional: Optimized single-flag evaluation if needed
-    override fun evaluateFlag(key: FlagKey, context: EvalContext): FlagValue? {
-        return null // Return null to fallback to standard evaluation using the snapshot
-    }
-    
-    override fun evaluateExperiment(key: ExperimentKey, context: EvalContext): ExperimentAssignment? {
-        return null
-    }
+    override fun evaluateFlag(key: FlagKey, context: EvalContext): FlagValue? = null
+    override fun evaluateExperiment(key: ExperimentKey, context: EvalContext): ExperimentAssignment? = null
 }
 ```
 
-### Using the REST Provider
+### REST Provider JSON Schema
 
 The `flagship-provider-rest` module expects a JSON response with the following schema:
 
@@ -318,7 +408,7 @@ Flagship can be easily integrated into any native iOS project using **Swift Pack
 
 Once installed, import the `Flagship` module in your Swift code.
 
-#### Initialization (AppDelegate or App.swift)
+#### Initialization (Recommended: Using FlagshipSwift)
 
 ```swift
 import SwiftUI
@@ -327,8 +417,14 @@ import Flagship
 @main
 struct iOSApp: App {
     init() {
-        // Initialize Flagship
-        FlagshipIOSInitializer.shared.initialize()
+        // Quick configuration with automatic platform context initialization
+        FlagshipSwift.shared.quickConfigure(
+            appKey: "my-app",
+            environment: "production",
+            providers: [
+                // Add your providers here
+            ]
+        )
     }
     
     var body: some Scene {
@@ -347,7 +443,7 @@ import Flagship
 
 struct PaymentView: View {
     // Access the shared manager
-    let flags = Flags.shared.manager()
+    let flags = FlagshipSwift.shared.manager
     @State private var isNewPaymentEnabled = false
     
     var body: some View {
@@ -359,7 +455,7 @@ struct PaymentView: View {
             }
         }
         .onAppear {
-            // Note: Swift suspend functions are called via async/await
+            // Note: Swift suspend functions are automatically converted to async/await
             Task {
                 isNewPaymentEnabled = await flags.isEnabled(key: "new_payment_flow", default: false, ctx: nil)
             }
@@ -402,18 +498,23 @@ If you are maintaining this library and want to release a new version for SPM:
 
 ## 🛠️ Debug Dashboard
 
-Embed the debug UI in your developer settings to easily test different flag states without recompiling.
+Embed the debug UI in your developer settings to test flags without recompiling:
 
 ```kotlin
+import io.maxluxs.flagship.core.Flagship
+import io.maxluxs.flagship.ui.compose.FlagsDashboard
+
 @Composable
 fun DeveloperSettingsScreen() {
     FlagsDashboard(
-        manager = Flags.manager(),
-        allowOverrides = true, // Enable local overrides
-        allowEnvSwitch = false
+        manager = Flagship.manager(),
+        allowOverrides = true,  // Enable local overrides for testing
+        allowEnvSwitch = false   // Hide environment switching
     )
 }
 ```
+
+> 💡 **Tip**: Use overrides to test different flag states during development without changing remote config.
 
 ---
 
@@ -422,7 +523,8 @@ fun DeveloperSettingsScreen() {
 **Comprehensive Guides:**
 - 📖 [Usage Guide](docs/USAGE_GUIDE.md) - Complete usage guide (including detailed Android integration)
 - 📱 [Simplified API Guide](docs/SIMPLIFIED_API.md) - Quick start with simplified API
-- 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Migrating from other solutions
+- 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Migrating from other solutions (LaunchDarkly, Firebase, Unleash, Split.io)
+- 🎯 [Use Cases](docs/USE_CASES.md) - Common use cases (A/B testing, gradual rollouts, kill switches, etc.)
 - 📚 [API Reference](docs/API_REFERENCE.md) - Full API reference
 - 🚀 [Publishing Guide](PUBLISHING.md) - How to publish the library
 - 🔧 [Development Log](DEV_LOG.md) - Development history
@@ -431,23 +533,34 @@ fun DeveloperSettingsScreen() {
 - [flagship-core](flagship-core/README.md)
 - [flagship-provider-firebase](flagship-provider-firebase/README.md)
 - [flagship-provider-rest](flagship-provider-rest/README.md)
-- [flagship-ui-compose](flagship-ui-compose/README.md)
+- [flagship-ui-compose](flagship-admin-ui-compose/README.md)
 
 **Auto-generated API Docs:**
 - [Dokka HTML Documentation](https://maxluxs.github.io/Flagship/)
 
+**Visual Materials:**
+- 📸 [Screenshots Guide](docs/images/SCREENSHOT_GUIDE.md) - Guide for creating admin UI screenshots
+- 🎬 [Video Tutorials](docs/videos/CHECKLIST.md) - Video tutorials checklist
+- 🖼️ [Visual Materials](docs/images/README.md) - All visual materials (screenshots, GIFs, videos)
+
 ---
 
-## 📐 Architecture
+## 📐 How It Works
 
-Flagship uses a **Composite Provider** strategy.
-1. **Overrides**: Local overrides (set via Debug UI) have the highest priority.
-2. **Providers**: Iterates through the list of providers (e.g., Firebase -> REST). The first one to return a value wins.
-3. **Defaults**: If no provider has the value, the code default is returned.
+### Evaluation Priority
+
+Flagship evaluates flags in this order (highest to lowest priority):
+
+1. **Local Overrides** (set via Debug UI) - Highest priority
+2. **Provider Values** (in order: Firebase → REST → Custom) - First provider with value wins
+3. **Default Values** (from your code) - Fallback if no provider has the flag
 
 ### Targeting & Bucketing
-- **Targeting**: Rules are evaluated locally (Client-side evaluation). This supports instant updates if the rules are fetched with the config.
-- **Bucketing**: Uses **MurmurHash3** with the Experiment Key + User ID as salt. This ensures that a user always sees the same variant across sessions and platforms, provided the User ID is stable.
+
+- **Targeting**: Rules are evaluated **locally** (client-side). No server round-trips needed!
+- **Bucketing**: Uses **MurmurHash3** with `Experiment Key + User ID` as salt. 
+  - Same user = same variant (consistent across sessions)
+  - Deterministic = reproducible results
 
 ---
 
