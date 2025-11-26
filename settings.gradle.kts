@@ -58,6 +58,4 @@ if (file("internal/flagship-admin-ui-compose").exists()) {
 if (file("internal/flagship-shared").exists()) {
     include(":flagship-shared")
     project(":flagship-shared").projectDir = file("internal/flagship-shared")
-} else {
-    include(":flagship-shared")
 }
