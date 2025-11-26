@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     alias(libs.plugins.kotlinSerialization)
     id("java-library")
+    alias(libs.plugins.dokka)
 }
 
 group = "io.maxluxs.flagship"

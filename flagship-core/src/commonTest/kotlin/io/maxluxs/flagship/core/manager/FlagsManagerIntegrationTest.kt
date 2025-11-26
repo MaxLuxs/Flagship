@@ -183,6 +183,10 @@ class FlagsManagerIntegrationTest {
         override fun evaluateExperiment(key: String, context: EvalContext): ExperimentAssignment? {
             return null // Handled by manager
         }
+        
+        override fun isHealthy(): Boolean = true
+        override fun getLastSuccessfulFetchMs(): Long? = currentTimeMillis()
+        override fun getConsecutiveFailures(): Int = 0
     }
 }
 

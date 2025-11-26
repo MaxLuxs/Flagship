@@ -45,11 +45,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.flagshipCore)
+            implementation(projects.flagshipShared)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.json)
+            implementation("io.ktor:ktor-client-websockets:${libs.versions.ktor.get()}")
         }
 
         commonTest.dependencies {

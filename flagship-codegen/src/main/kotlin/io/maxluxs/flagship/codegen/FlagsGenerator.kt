@@ -9,11 +9,15 @@ class FlagsGenerator(private val packageName: String) {
         
         builder.appendLine("package $packageName")
         builder.appendLine()
-        builder.appendLine("import io.maxluxs.flagship.core.Flagship")
-        builder.appendLine("import io.maxluxs.flagship.core.model.ExperimentAssignment")
-        builder.appendLine("import kotlinx.serialization.json.Json")
-        builder.appendLine("import kotlinx.serialization.Serializable")
-        builder.appendLine("import kotlinx.serialization.decodeFromString")
+builder.appendLine("import io.maxluxs.flagship.core.Flagship")
+builder.appendLine("import io.maxluxs.flagship.core.value") // Extension function for typed values
+builder.appendLine("import io.maxluxs.flagship.core.model.ExperimentAssignment")
+builder.appendLine("import io.maxluxs.flagship.core.model.FlagStatus")
+builder.appendLine("import kotlinx.serialization.json.Json")
+builder.appendLine("import kotlinx.serialization.json.JsonElement")
+builder.appendLine("import kotlinx.serialization.json.JsonNull")
+builder.appendLine("import kotlinx.serialization.Serializable")
+builder.appendLine("import kotlinx.serialization.decodeFromString")
         builder.appendLine()
         builder.appendLine("/**")
         builder.appendLine(" * Auto-generated typed flags.")
@@ -53,7 +57,22 @@ class FlagsGenerator(private val packageName: String) {
                     builder.appendLine("         * Returns null if value doesn't match any enum value.")
                     builder.appendLine("         */")
                     builder.appendLine("        suspend fun value(): $enumType? {")
-                    builder.appendLine("            val stringValue = Flagship.get(\"${flag.key}\", default = \"$defaultValue\")")
+                    builder.appendLine("            val stringValue: String = Flagship.value(\"${flag.key}\", default = \"$defaultValue\")")
+                    builder.appendLine("            return try {")
+                    builder.appendLine("                $enumType.valueOf(stringValue.uppercase())")
+                    builder.appendLine("            } catch (e: IllegalArgumentException) {")
+                    builder.appendLine("                null")
+                    builder.appendLine("            }")
+                    builder.appendLine("        }")
+                    builder.appendLine()
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Get the value of this flag as enum (synchronous).")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                    builder.appendLine("         * Returns null if value doesn't match any enum value.")
+                    builder.appendLine("         */")
+                    builder.appendLine("        fun valueSync(): $enumType? {")
+                    builder.appendLine("            val stringValue: String = Flagship.valueSync(\"${flag.key}\", default = \"$defaultValue\")")
                     builder.appendLine("            return try {")
                     builder.appendLine("                $enumType.valueOf(stringValue.uppercase())")
                     builder.appendLine("            } catch (e: IllegalArgumentException) {")
@@ -69,6 +88,15 @@ class FlagsGenerator(private val packageName: String) {
                     builder.appendLine("        suspend fun valueOrDefault(default: $enumType): $enumType {")
                     builder.appendLine("            return value() ?: default")
                     builder.appendLine("        }")
+                    builder.appendLine()
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Get the value of this flag as enum with default (synchronous).")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                    builder.appendLine("         */")
+                    builder.appendLine("        fun valueOrDefaultSync(default: $enumType): $enumType {")
+                    builder.appendLine("            return valueSync() ?: default")
+                    builder.appendLine("        }")
                 }
                 flag.type == BOOL -> {
                     val defaultValue = flag.defaultValue?.toBoolean() ?: false
@@ -80,6 +108,16 @@ class FlagsGenerator(private val packageName: String) {
                     builder.appendLine("         */")
                     builder.appendLine("        suspend fun enabled(): Boolean {")
                     builder.appendLine("            return Flagship.isEnabled(\"${flag.key}\", default = $defaultValue)")
+                    builder.appendLine("        }")
+                    builder.appendLine()
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Check if this flag is enabled (synchronous).")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                    builder.appendLine("         * Example: if (Flags.NewFeature.enabledSync()) { ... }")
+                    builder.appendLine("         */")
+                    builder.appendLine("        fun enabledSync(): Boolean {")
+                    builder.appendLine("            return Flagship.isEnabledSync(\"${flag.key}\", default = $defaultValue)")
                     builder.appendLine("        }")
                 }
                 flag.type == JSON -> {
@@ -93,7 +131,24 @@ class FlagsGenerator(private val packageName: String) {
                         builder.appendLine("         * Requires: $jsonType must be @Serializable")
                         builder.appendLine("         */")
                         builder.appendLine("        suspend fun value(): $jsonType? {")
-                        builder.appendLine("            val jsonString = Flagship.get(\"${flag.key}\", default = \"\")")
+                        builder.appendLine("            val jsonString: String = Flagship.value(\"${flag.key}\", default = \"\")")
+                        builder.appendLine("            return if (jsonString.isBlank()) null else {")
+                        builder.appendLine("                try {")
+                        builder.appendLine("                    Json.decodeFromString<$jsonType>(jsonString)")
+                        builder.appendLine("                } catch (e: Exception) {")
+                        builder.appendLine("                    null")
+                        builder.appendLine("                }")
+                        builder.appendLine("            }")
+                        builder.appendLine("        }")
+                        builder.appendLine()
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the value of this flag as typed JSON object (synchronous).")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                        builder.appendLine("         * Requires: $jsonType must be @Serializable")
+                        builder.appendLine("         */")
+                        builder.appendLine("        fun valueSync(): $jsonType? {")
+                        builder.appendLine("            val jsonString: String = Flagship.valueSync(\"${flag.key}\", default = \"\")")
                         builder.appendLine("            return if (jsonString.isBlank()) null else {")
                         builder.appendLine("                try {")
                         builder.appendLine("                    Json.decodeFromString<$jsonType>(jsonString)")
@@ -110,7 +165,17 @@ class FlagsGenerator(private val packageName: String) {
                         builder.appendLine("         */")
                         builder.appendLine("        suspend fun valueAsString(): String {")
                         val defaultValue = flag.defaultValue ?: "\"\""
-                        builder.appendLine("            return Flagship.get(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("            return Flagship.value(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("        }")
+                        builder.appendLine()
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the raw JSON string value of this flag (synchronous).")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                        builder.appendLine("         */")
+                        builder.appendLine("        fun valueAsStringSync(): String {")
+                        val defaultValue2 = flag.defaultValue ?: "\"\""
+                        builder.appendLine("            return Flagship.valueSync(\"${flag.key}\", default = $defaultValue2)")
                         builder.appendLine("        }")
                     } else {
                         // Fallback to String for JSON without type
@@ -122,7 +187,17 @@ class FlagsGenerator(private val packageName: String) {
                         builder.appendLine("         * Tip: Specify 'jsonType' in config to get typed accessor")
                         builder.appendLine("         */")
                         builder.appendLine("        suspend fun value(): String {")
-                        builder.appendLine("            return Flagship.get(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("            return Flagship.value(\"${flag.key}\", default = $defaultValue)")
+                        builder.appendLine("        }")
+                        builder.appendLine()
+                        builder.appendLine("        /**")
+                        builder.appendLine("         * Get the value of this flag as JSON string (synchronous).")
+                        builder.appendLine("         * ")
+                        builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                        builder.appendLine("         * Tip: Specify 'jsonType' in config to get typed accessor")
+                        builder.appendLine("         */")
+                        builder.appendLine("        fun valueSync(): String {")
+                        builder.appendLine("            return Flagship.valueSync(\"${flag.key}\", default = $defaultValue)")
                         builder.appendLine("        }")
                     }
                 }
@@ -134,8 +209,21 @@ class FlagsGenerator(private val packageName: String) {
                     builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
                     builder.appendLine("         */")
                     builder.appendLine("        suspend fun value(): $kotlinType {")
-                    builder.appendLine("            return Flagship.get(\"${flag.key}\", default = $defaultValue)")
+                    builder.appendLine("            return Flagship.value(\"${flag.key}\", default = $defaultValue)")
                     builder.appendLine("        }")
+                    builder.appendLine()
+                    builder.appendLine("        /**")
+                    builder.appendLine("         * Get the value of this flag (synchronous).")
+                    builder.appendLine("         * ")
+                    builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                    builder.appendLine("         */")
+                    builder.appendLine("        fun valueSync(): $kotlinType {")
+                    builder.appendLine("            return Flagship.valueSync(\"${flag.key}\", default = $defaultValue)")
+                    builder.appendLine("        }")
+                    builder.appendLine()
+                    generateTypedMethods(builder, flag, kotlinType, defaultValue)
+                    generateResultMethods(builder, flag, kotlinType, defaultValue)
+                    generateStatusMethod(builder, flag)
                 }
             }
             
@@ -146,6 +234,23 @@ class FlagsGenerator(private val packageName: String) {
         // Generate experiment objects
         config.experiments.forEach { experiment ->
             val className = toPascalCase(experiment.key)
+            val enumClassName = "${className}Variant"
+            
+            // Generate enum class for variants if variants are specified
+            if (experiment.variants.isNotEmpty()) {
+                builder.appendLine("    /**")
+                builder.appendLine("     * Enum for ${experiment.key} experiment variants.")
+                builder.appendLine("     * ")
+                builder.appendLine("     * Generated from variants: ${experiment.variants.joinToString(", ")}")
+                builder.appendLine("     */")
+                builder.appendLine("    enum class $enumClassName {")
+                experiment.variants.forEachIndexed { index, variant ->
+                    val enumValue = variantToEnumName(variant)
+                    builder.append(if (index < experiment.variants.size - 1) "        $enumValue,\n" else "        $enumValue\n")
+                }
+                builder.appendLine("    }")
+                builder.appendLine()
+            }
             
             builder.appendLine("    /**")
             if (experiment.description != null) {
@@ -165,17 +270,86 @@ class FlagsGenerator(private val packageName: String) {
             builder.appendLine("         * Example: lifecycleScope.launch { val assignment = Flags.CheckoutFlow.assignment() }")
             builder.appendLine("         */")
             builder.appendLine("        suspend fun assignment(): ExperimentAssignment? {")
-            builder.appendLine("            return Flagship.experiment(\"${experiment.key}\")")
+            builder.appendLine("            return Flagship.assign(\"${experiment.key}\")")
             builder.appendLine("        }")
             builder.appendLine()
             builder.appendLine("        /**")
-            builder.appendLine("         * Get assigned variant.")
+            builder.appendLine("         * Get experiment assignment (synchronous).")
+            builder.appendLine("         * ")
+            builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+            builder.appendLine("         * Example: val assignment = Flags.CheckoutFlow.assignmentSync()")
+            builder.appendLine("         */")
+            builder.appendLine("        fun assignmentSync(): ExperimentAssignment? {")
+            builder.appendLine("            return Flagship.assignSync(\"${experiment.key}\")")
+            builder.appendLine("        }")
+            builder.appendLine()
+            builder.appendLine("        /**")
+            builder.appendLine("         * Get assigned variant as string.")
             builder.appendLine("         * ")
             builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
             builder.appendLine("         */")
             builder.appendLine("        suspend fun variant(): String? {")
             builder.appendLine("            return assignment()?.variant")
             builder.appendLine("        }")
+            builder.appendLine()
+            builder.appendLine("        /**")
+            builder.appendLine("         * Get assigned variant as string (synchronous).")
+            builder.appendLine("         * ")
+            builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+            builder.appendLine("         */")
+            builder.appendLine("        fun variantSync(): String? {")
+            builder.appendLine("            return assignmentSync()?.variant")
+            builder.appendLine("        }")
+            
+            // Generate enum-based variant methods if variants are specified
+            if (experiment.variants.isNotEmpty()) {
+                builder.appendLine()
+                builder.appendLine("        /**")
+                builder.appendLine("         * Get assigned variant as enum.")
+                builder.appendLine("         * ")
+                builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+                builder.appendLine("         * Returns null if variant doesn't match any enum value.")
+                builder.appendLine("         * Example: lifecycleScope.launch { val variant = Flags.CheckoutFlow.variantEnum() }")
+                builder.appendLine("         */")
+                builder.appendLine("        suspend fun variantEnum(): $enumClassName? {")
+                builder.appendLine("            val variantString = variant() ?: return null")
+                builder.appendLine("            return try {")
+                builder.appendLine("                $enumClassName.valueOf(variantStringToEnumName(variantString))")
+                builder.appendLine("            } catch (e: IllegalArgumentException) {")
+                builder.appendLine("                null")
+                builder.appendLine("            }")
+                builder.appendLine("        }")
+                builder.appendLine()
+                builder.appendLine("        /**")
+                builder.appendLine("         * Get assigned variant as enum (synchronous).")
+                builder.appendLine("         * ")
+                builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+                builder.appendLine("         * Returns null if variant doesn't match any enum value.")
+                builder.appendLine("         * Example: val variant = Flags.CheckoutFlow.variantEnumSync()")
+                builder.appendLine("         */")
+                builder.appendLine("        fun variantEnumSync(): $enumClassName? {")
+                builder.appendLine("            val variantString = variantSync() ?: return null")
+                builder.appendLine("            return try {")
+                builder.appendLine("                $enumClassName.valueOf(variantStringToEnumName(variantString))")
+                builder.appendLine("            } catch (e: IllegalArgumentException) {")
+                builder.appendLine("                null")
+                builder.appendLine("            }")
+                builder.appendLine("        }")
+            }
+            
+            builder.appendLine("    }")
+            builder.appendLine()
+        }
+        
+        // Add helper function for variant string to enum name conversion
+        if (config.experiments.any { it.variants.isNotEmpty() }) {
+            builder.appendLine("    /**")
+            builder.appendLine("     * Helper function to convert variant string to enum name.")
+            builder.appendLine("     * ")
+            builder.appendLine("     * Converts variant strings like \"variant-a\" or \"variant_a\" to \"VARIANT_A\".")
+            builder.appendLine("     */")
+            builder.appendLine("    private fun variantStringToEnumName(variant: String): String {")
+            builder.appendLine("        return variant.uppercase().replace(\"-\", \"_\")")
             builder.appendLine("    }")
             builder.appendLine()
         }
@@ -210,6 +384,108 @@ class FlagsGenerator(private val packageName: String) {
             FlagType.STRING -> "\"\""
             FlagType.JSON -> "\"\""
         }
+    }
+    
+    /**
+     * Convert variant string to enum name.
+     * 
+     * Examples:
+     * - "control" -> "CONTROL"
+     * - "variant-a" -> "VARIANT_A"
+     * - "variant_a" -> "VARIANT_A"
+     * - "variantA" -> "VARIANTA"
+     */
+    private fun variantToEnumName(variant: String): String {
+        return variant.uppercase().replace("-", "_")
+    }
+    
+    /**
+     * Generate typed methods (boolValue, intValue, etc.) for a flag.
+     */
+    private fun generateTypedMethods(
+        builder: StringBuilder,
+        flag: FlagDefinition,
+        kotlinType: String,
+        defaultValue: String
+    ) {
+        val typedMethodName = when (flag.type) {
+            FlagType.BOOL -> "boolValue"
+            FlagType.INT -> "intValue"
+            FlagType.DOUBLE -> "doubleValue"
+            FlagType.STRING -> "stringValue"
+            FlagType.JSON -> "jsonValue"
+        }
+        
+        builder.appendLine("        /**")
+        builder.appendLine("         * Get the value of this flag using type-safe method.")
+        builder.appendLine("         * ")
+        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+        builder.appendLine("         */")
+        builder.appendLine("        suspend fun $typedMethodName(default: $kotlinType = $defaultValue): $kotlinType {")
+        builder.appendLine("            return Flagship.$typedMethodName(\"${flag.key}\", default = default)")
+        builder.appendLine("        }")
+        builder.appendLine()
+        builder.appendLine("        /**")
+        builder.appendLine("         * Get the value of this flag using type-safe method (synchronous).")
+        builder.appendLine("         * ")
+        builder.appendLine("         * Note: Requires bootstrap to be completed. Use after ensureBootstrap().")
+        builder.appendLine("         */")
+        builder.appendLine("        fun ${typedMethodName}Sync(default: $kotlinType = $defaultValue): $kotlinType {")
+        builder.appendLine("            return Flagship.${typedMethodName}Sync(\"${flag.key}\", default = default)")
+        builder.appendLine("        }")
+        builder.appendLine()
+    }
+    
+    /**
+     * Generate Result-based API methods for a flag.
+     */
+    private fun generateResultMethods(
+        builder: StringBuilder,
+        flag: FlagDefinition,
+        kotlinType: String,
+        defaultValue: String
+    ) {
+        builder.appendLine("        /**")
+        builder.appendLine("         * Get the value of this flag with explicit error handling.")
+        builder.appendLine("         * ")
+        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+        builder.appendLine("         * Returns Result<T> for explicit error handling.")
+        builder.appendLine("         * Example: lifecycleScope.launch { val result = Flags.ApiTimeout.valueOrError(); result.onSuccess { ... } }")
+        builder.appendLine("         */")
+        builder.appendLine("        suspend fun valueOrError(default: $kotlinType = $defaultValue): Result<$kotlinType> {")
+        builder.appendLine("            return Flagship.valueOrError(\"${flag.key}\", default = default)")
+        builder.appendLine("        }")
+        builder.appendLine()
+        
+        if (flag.type == FlagType.BOOL) {
+            builder.appendLine("        /**")
+            builder.appendLine("         * Check if this flag is enabled with explicit error handling.")
+            builder.appendLine("         * ")
+            builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+            builder.appendLine("         * Returns Result<Boolean> for explicit error handling.")
+            builder.appendLine("         */")
+            builder.appendLine("        suspend fun enabledOrError(default: Boolean = $defaultValue): Result<Boolean> {")
+            builder.appendLine("            return Flagship.isEnabledOrError(\"${flag.key}\", default = default)")
+            builder.appendLine("        }")
+            builder.appendLine()
+        }
+    }
+    
+    /**
+     * Generate FlagStatus method for a flag.
+     */
+    private fun generateStatusMethod(builder: StringBuilder, flag: FlagDefinition) {
+        builder.appendLine("        /**")
+        builder.appendLine("         * Get detailed status information for this flag.")
+        builder.appendLine("         * ")
+        builder.appendLine("         * Note: This is a suspend function. Use it in a coroutine scope.")
+        builder.appendLine("         * Returns FlagStatus with source, health, and error information.")
+        builder.appendLine("         * Example: lifecycleScope.launch { val status = Flags.ApiTimeout.status(); if (!status.isHealthy()) { ... } }")
+        builder.appendLine("         */")
+        builder.appendLine("        suspend fun status(): FlagStatus {")
+        builder.appendLine("            return Flagship.getFlagStatus(\"${flag.key}\")")
+        builder.appendLine("        }")
+        builder.appendLine()
     }
 }
 

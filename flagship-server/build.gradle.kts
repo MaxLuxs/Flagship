@@ -19,13 +19,15 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:${libs.versions.ktor.get()}")
     implementation("io.ktor:ktor-server-cors:${libs.versions.ktor.get()}")
     implementation("io.ktor:ktor-server-call-logging:${libs.versions.ktor.get()}")
+    implementation("io.ktor:ktor-server-default-headers:${libs.versions.ktor.get()}")
+    implementation("io.ktor:ktor-server-status-pages:${libs.versions.ktor.get()}")
     implementation("io.ktor:ktor-server-auth:${libs.versions.ktor.get()}")
     implementation("io.ktor:ktor-server-auth-jwt:${libs.versions.ktor.get()}")
+    implementation("io.ktor:ktor-server-websockets:${libs.versions.ktor.get()}")
     
     // Serialization
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.datetime)
-    
+
     // Logging
     implementation(libs.logback.classic)
     
@@ -41,8 +43,13 @@ dependencies {
     implementation(libs.jwt)
     implementation(libs.bcrypt)
     
+    // Metrics
+    implementation(libs.prometheus.simpleclient)
+    implementation(libs.prometheus.simpleclient.common)
+    
     // Core Flagship (for models)
     implementation(projects.flagshipCore)
+    implementation(projects.flagshipShared)
     implementation(projects.flagshipProviderRest)
     
     // Testing
@@ -56,5 +63,11 @@ application {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+    dependsOn(":flagship-admin-ui-compose:copyWebBuildToServer")
+}
+
+// Ensure admin UI is built before building the server
+tasks.named("build") {
+    dependsOn(":flagship-admin-ui-compose:copyWebBuildToServer")
 }
 

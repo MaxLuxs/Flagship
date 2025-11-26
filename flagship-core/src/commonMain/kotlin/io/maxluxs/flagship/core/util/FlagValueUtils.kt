@@ -22,6 +22,10 @@ object FlagValueUtils {
             is FlagValue.Double -> value.value
             is FlagValue.StringV -> value.value
             is FlagValue.Json -> value.value.toString()
+            is FlagValue.Date -> value.value
+            is FlagValue.Enum -> value.value
+            is FlagValue.List -> value.value.map { toJsonValue(it) }
+            is FlagValue.Map -> value.value.mapValues { toJsonValue(it.value) }
         }
     }
     

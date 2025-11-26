@@ -26,6 +26,7 @@ kotlin {
         compilerOptions {
             moduleKind.set(org.jetbrains.kotlin.gradle.dsl.JsModuleKind.MODULE_ES)
             sourceMap.set(true)
+            freeCompilerArgs.add("-Xes-long-as-bigint")
         }
     }
     
@@ -61,15 +62,34 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
-        jvmMain.dependencies {}
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+        }
         
-        jsMain.dependencies {}
+        jsMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.js)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+        }
         
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
         }
 
-        iosMain.dependencies {}
+        iosMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.darwin)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+        }
     }
 }
 

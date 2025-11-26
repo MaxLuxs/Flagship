@@ -117,5 +117,48 @@ sealed class TargetingRule {
         val all: List<TargetingRule> = emptyList(),
         val any: List<TargetingRule> = emptyList()
     ) : TargetingRule()
+    
+    /**
+     * Time-based targeting rule for scheduling feature releases.
+     * 
+     * Matches when current time is within the specified range.
+     * Useful for:
+     * - Scheduled feature releases
+     * - Time-limited promotions
+     * - Business hours restrictions
+     * 
+     * @property startTimeMs Start timestamp in milliseconds (null = no start limit)
+     * @property endTimeMs End timestamp in milliseconds (null = no end limit)
+     */
+    @Serializable
+    data class TimeBased(
+        val startTimeMs: Long? = null,
+        val endTimeMs: Long? = null
+    ) : TargetingRule() {
+        init {
+            if (startTimeMs != null && endTimeMs != null) {
+                require(startTimeMs <= endTimeMs) { "Start time must be before end time" }
+            }
+        }
+    }
+    
+    /**
+     * Canary release rule for gradual feature rollouts.
+     * 
+     * Matches a percentage of users based on deterministic hashing,
+     * with optional user whitelist for early access.
+     * 
+     * @property percentage Percentage of users to include (0-100)
+     * @property whitelistUserIds Set of user IDs that always match (bypass percentage)
+     */
+    @Serializable
+    data class CanaryRelease(
+        val percentage: Int,
+        val whitelistUserIds: Set<String> = emptySet()
+    ) : TargetingRule() {
+        init {
+            require(percentage in 0..100) { "Percentage must be between 0 and 100" }
+        }
+    }
 }
 

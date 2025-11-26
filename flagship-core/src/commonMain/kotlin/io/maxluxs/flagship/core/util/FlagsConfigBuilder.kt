@@ -1,6 +1,6 @@
 package io.maxluxs.flagship.core.util
 
-import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.Flagship
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.cache.FlagsCache
 import io.maxluxs.flagship.core.cache.InMemoryCache
@@ -40,7 +40,7 @@ object FlagsConfigBuilder {
     }
     
     /**
-     * Initialize Flags if not already configured and return manager.
+     * Initialize Flagship if not already configured and return manager.
      * 
      * This is a convenience method used by framework integrations.
      * 
@@ -48,10 +48,10 @@ object FlagsConfigBuilder {
      * @return FlagsManager instance
      */
     fun initializeIfNeeded(config: FlagsConfig): FlagsManager {
-        if (!Flags.isConfigured()) {
-            Flags.configure(config)
+        if (!Flagship.isConfigured()) {
+            Flagship.configure(config)
         }
-        return Flags.manager()
+        return Flagship.manager()
     }
 }
 

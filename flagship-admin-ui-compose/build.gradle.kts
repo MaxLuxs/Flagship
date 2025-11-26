@@ -79,6 +79,9 @@ kotlin {
             implementation(libs.ktor.client.cio)
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            // Explicitly add androidx.collection for IDE run configuration
+            // This is a transitive dependency that may not be in compile classpath
+            implementation("androidx.collection:collection-jvm:1.5.0")
         }
 
         jsMain.dependencies {

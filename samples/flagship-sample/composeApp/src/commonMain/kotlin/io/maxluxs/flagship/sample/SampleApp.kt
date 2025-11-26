@@ -2,7 +2,6 @@ package io.maxluxs.flagship.sample
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +23,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,9 +45,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.Flagship
+import io.maxluxs.flagship.core.manager.FlagsListener
+import io.maxluxs.flagship.core.model.ExperimentAssignment
+import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.ui.compose.FlagsDashboard
 import io.maxluxs.flagship.ui.compose.FlagshipTheme
 import kotlinx.coroutines.launch
@@ -70,7 +68,7 @@ fun SampleApp() {
             val manager = Flagship.manager()
             // Try to bootstrap with longer timeout, but allow fallback to cache
             val success = manager.ensureBootstrap(timeoutMs = 10000) // 10 seconds timeout
-            
+
             if (success) {
                 flagsState = FlagsState.Ready
             } else {
@@ -82,7 +80,7 @@ fun SampleApp() {
                 } catch (e: Exception) {
                     false
                 }
-                
+
                 flagsState = if (hasFlags) {
                     // We have cached values, can proceed
                     FlagsState.Ready
@@ -127,7 +125,7 @@ fun SampleApp() {
             )
             return@FlagshipTheme
         }
-        
+
         if (flagsState != FlagsState.Ready) {
             NotInitializedScreen(isLoading = flagsState == FlagsState.Loading)
             return@FlagshipTheme
@@ -193,7 +191,7 @@ fun SampleApp() {
                             useDarkTheme = false
                         )
                     }
-                    
+
                     Screen.ProviderSelection -> {
                         // Handled above
                     }
@@ -226,8 +224,8 @@ fun HomeScreen(
     var welcomeMessage by remember { mutableStateOf("Welcome!") }
 
     // Experiments
-    var testExperiment by remember { mutableStateOf<io.maxluxs.flagship.core.model.ExperimentAssignment?>(null) }
-    var checkoutFlow by remember { mutableStateOf<io.maxluxs.flagship.core.model.ExperimentAssignment?>(null) }
+    var testExperiment by remember { mutableStateOf<ExperimentAssignment?>(null) }
+    var checkoutFlow by remember { mutableStateOf<ExperimentAssignment?>(null) }
 
     // Load initial data
     LaunchedEffect(manager) {
@@ -243,7 +241,7 @@ fun HomeScreen(
 
     // Listen for flag changes
     DisposableEffect(manager) {
-        val listener = object : io.maxluxs.flagship.core.manager.FlagsListener {
+        val listener = object : FlagsListener {
             override fun onSnapshotUpdated(source: String) {
                 scope.launch {
                     newFeatureEnabled = manager.isEnabled("new_feature", default = false)

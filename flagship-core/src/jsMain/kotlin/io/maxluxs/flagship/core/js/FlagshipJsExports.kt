@@ -39,7 +39,6 @@ object FlagshipJsExports {
      * @param variants List of variants with weights
      * @return Assigned variant name, or null if no variants
      */
-    @JsExport
     fun assignExperiment(
         experimentKey: String,
         userId: String,
@@ -61,9 +60,9 @@ object FlagshipJsExports {
         val context = EvalContext(
             userId = userId,
             deviceId = userId,
-            appVersion = null,
-            osName = null,
-            osVersion = null,
+            appVersion = "unknown",
+            osName = "unknown",
+            osVersion = "unknown",
             locale = null,
             region = null,
             attributes = emptyMap()
@@ -82,7 +81,6 @@ object FlagshipJsExports {
      * @param targeting Optional targeting rules (JSON string)
      * @return Assigned variant name, or null if user doesn't qualify
      */
-    @JsExport
     fun assignExperimentWithContext(
         experimentKey: String,
         contextData: ContextData,
@@ -100,9 +98,9 @@ object FlagshipJsExports {
         val context = EvalContext(
             userId = contextData.userId,
             deviceId = contextData.deviceId ?: contextData.userId,
-            appVersion = contextData.appVersion,
-            osName = contextData.osName,
-            osVersion = contextData.osVersion,
+            appVersion = contextData.appVersion ?: "unknown",
+            osName = contextData.osName ?: "unknown",
+            osVersion = contextData.osVersion ?: "unknown",
             locale = contextData.locale,
             region = contextData.region,
             attributes = contextData.attributes ?: emptyMap()
@@ -138,7 +136,6 @@ object FlagshipJsExports {
      * @param factor Exponential factor (default: 2.0)
      * @return Calculated delay in milliseconds
      */
-    @JsExport
     fun calculateBackoff(
         attempt: Int,
         initialDelayMs: Long,
@@ -161,7 +158,6 @@ object FlagshipJsExports {
      * @param factor Multiplier (default: 2.0)
      * @return Next delay in milliseconds
      */
-    @JsExport
     fun nextBackoff(
         currentDelay: Long,
         maxDelayMs: Long,
@@ -181,7 +177,6 @@ object FlagshipJsExports {
      * @param percent Rollout percentage (0-100)
      * @return true if user is in bucket
      */
-    @JsExport
     fun isInBucket(userId: String, percent: Int): Boolean {
         return BucketingEngine.isInBucket(userId, percent)
     }

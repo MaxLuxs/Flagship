@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.composeCompiler)
     kotlin("android")
+    // Flagship codegen plugin (available via mavenLocal)
+    id("io.maxluxs.flagship.codegen") version "0.1.1"
 }
 
 android {
@@ -38,6 +40,22 @@ android {
     
     buildFeatures {
         compose = true
+    }
+}
+
+// Flagship codegen configuration
+flagshipCodegen {
+    configFile = file("../flagship-sample/flags.json")
+    outputDir = file("build/generated/flagship")
+    packageName = "io.maxluxs.flagship.generated"
+}
+
+// Add generated sources to source sets
+android {
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("build/generated/flagship")
+        }
     }
 }
 

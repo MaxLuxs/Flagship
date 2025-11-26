@@ -54,8 +54,8 @@ object JsFlagsInitializer {
 
     private fun generateUUID(): String {
         return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(Regex("[xy]")) { matchResult ->
-            val r = (Math.random() * 16).toInt() or 0
-            val v = if (matchResult.value == "x") r else (r and 0x3) or 0x8
+            val r = (js("Math.random()").unsafeCast<Double>() * 16.0).toInt() or 0
+            val v = if (matchResult.value == "x") r else ((r and 0x3) or 0x8)
             v.toString(16)
         }
     }

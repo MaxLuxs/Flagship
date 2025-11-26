@@ -1,12 +1,31 @@
 package io.maxluxs.flagship.ktor
 
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationPlugin
+import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.routing.routing
 import io.maxluxs.flagship.core.manager.FlagsManager
 import io.maxluxs.flagship.core.provider.FlagsProvider
 import io.maxluxs.flagship.core.util.FlagsConfigBuilder
+
+/**
+ * Configuration for Flagship Ktor plugin.
+ */
+class FlagshipPluginConfiguration {
+    var appKey: String = "ktor-app"
+    var environment: String = "production"
+    var providers: List<FlagsProvider> = emptyList()
+    
+    internal fun build(): FlagsManager {
+        val config = FlagsConfigBuilder.build(
+            appKey = appKey,
+            environment = environment,
+            providers = providers
+        )
+        
+        return FlagsConfigBuilder.initializeIfNeeded(config)
+    }
+}
 
 /**
  * Ktor plugin for Flagship feature flags.
@@ -23,56 +42,29 @@ import io.maxluxs.flagship.core.util.FlagsConfigBuilder
  *     routing {
  *         // Use Flagship in routes
  *         get("/") {
- *             val enabled = Flagship.isEnabled("new_ui")
+ *             val enabled = Flagship.isEnabled("new_api")
  *             // ...
  *         }
  *     }
  * }
  * ```
  */
-class FlagshipPlugin(config: Configuration) {
-    val flagsManager: FlagsManager = config.build()
+val FlagshipPlugin = createApplicationPlugin(
+    name = "FlagshipPlugin",
+    createConfiguration = { FlagshipPluginConfiguration() }
+) {
+    val flagsManager = pluginConfig.build()
     
-    class Configuration {
-        var appKey: String = "ktor-app"
-        var environment: String = "production"
-        var providers: List<FlagsProvider> = emptyList()
-        
-        internal fun build(): FlagsManager {
-            val config = FlagsConfigBuilder.build(
-                appKey = appKey,
-                environment = environment,
-                providers = providers
-            )
-            
-            return FlagsConfigBuilder.initializeIfNeeded(config)
-        }
-    }
-    
-    companion object Plugin : ApplicationPlugin<Application, Configuration, FlagshipPlugin> {
-        override val key = io.ktor.util.AttributeKey<FlagshipPlugin>("FlagshipPlugin")
-        
-        override fun install(
-            pipeline: Application,
-            configure: Configuration.() -> Unit
-        ): FlagshipPlugin {
-            val configuration = Configuration().apply(configure)
-            val plugin = FlagshipPlugin(configuration)
-            
-            // Install routing extension
-            pipeline.routing {
-                flagshipRoutes(plugin.flagsManager)
-            }
-            
-            return plugin
-        }
+    // Install routing extension
+    application.routing {
+        flagshipRoutes(flagsManager)
     }
 }
 
 /**
  * Extension function to easily install Flagship plugin.
  */
-fun Application.flagship(config: FlagshipPlugin.Configuration.() -> Unit): FlagshipPlugin {
+fun Application.flagship(config: FlagshipPluginConfiguration.() -> Unit): io.ktor.server.application.PluginInstance {
     return install(FlagshipPlugin, config)
 }
 

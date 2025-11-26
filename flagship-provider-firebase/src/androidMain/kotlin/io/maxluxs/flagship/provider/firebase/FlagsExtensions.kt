@@ -1,7 +1,7 @@
 package io.maxluxs.flagship.provider.firebase
 
 import android.app.Application
-import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.Flagship
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.manager.DefaultFlagsManager
 import io.maxluxs.flagship.core.util.DefaultLogger
@@ -17,11 +17,13 @@ import io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
  * // In Application.onCreate()
  * import io.maxluxs.flagship.provider.firebase.initFirebase
  * 
- * Flags.initFirebase(application)
+ * Flagship.initFirebase(application)
  * 
  * // Then use anywhere:
- * if (Flags.isEnabled("new_feature")) {
- *     showNewFeature()
+ * lifecycleScope.launch {
+ *     if (Flagship.isEnabled("new_feature")) {
+ *         showNewFeature()
+ *     }
  * }
  * ```
  * 
@@ -29,7 +31,7 @@ import io.maxluxs.flagship.core.platform.AndroidFlagsInitializer
  * @param defaults Optional default values map
  * @param environment Environment name (default: "production")
  */
-fun Flags.initFirebase(
+fun Flagship.initFirebase(
     application: Application,
     defaults: Map<String, Any> = emptyMap(),
     environment: String = "production"

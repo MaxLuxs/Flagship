@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
@@ -16,7 +14,7 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     sourceSets {
         val jsMain by getting {
             dependencies {

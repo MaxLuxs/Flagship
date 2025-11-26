@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.manager.FlagsManager
+import io.maxluxs.flagship.ui.components.components.BrandedCard
 
 /**
  * Diagnostics screen showing system health and performance metrics.
@@ -61,20 +62,9 @@ fun DiagnosticsScreen(manager: FlagsManager) {
 private fun SystemHealthCard() {
     val isHealthy = remember { mutableStateOf(true) }
 
-    Card(
+    BrandedCard(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isHealthy.value) 
-                MaterialTheme.colorScheme.primaryContainer 
-            else 
-                MaterialTheme.colorScheme.errorContainer
-        ),
-        shape = RoundedCornerShape(16.dp),
-        border = if (isHealthy.value) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        } else {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.error)
-        }
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Column(
             modifier = Modifier
@@ -144,12 +134,8 @@ private fun ProvidersStatusCard() {
         )
     }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+    BrandedCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -261,12 +247,8 @@ private fun InfoChip(text: String) {
 
 @Composable
 private fun CacheStatisticsCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+    BrandedCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -290,12 +272,8 @@ private fun CacheStatisticsCard() {
 
 @Composable
 private fun PerformanceMetricsCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        )
+    BrandedCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -319,12 +297,8 @@ private fun PerformanceMetricsCard() {
 
 @Composable
 private fun ErrorLogsCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+    BrandedCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier

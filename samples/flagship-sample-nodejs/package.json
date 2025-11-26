@@ -1,0 +1,31 @@
+{
+  "name": "flagship-sample-nodejs",
+  "version": "1.0.0",
+  "description": "Sample Node.js application demonstrating Flagship feature flags SDK",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "feature-flags",
+    "flagship",
+    "sample",
+    "express"
+  ],
+  "author": "Flagship",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "@flagship/nodejs-sdk": "file:../../flagship-nodejs-sdk"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "ts-node-dev": "^2.0.0"
+  }
+}
+

@@ -1,7 +1,7 @@
 package io.maxluxs.flagship.provider.firebase
 
 import cocoapods.FirebaseRemoteConfig.FIRRemoteConfig
-import io.maxluxs.flagship.core.Flags
+import io.maxluxs.flagship.core.Flagship
 import io.maxluxs.flagship.core.FlagsConfig
 import io.maxluxs.flagship.core.manager.DefaultFlagsManager
 import io.maxluxs.flagship.core.platform.IOSFlagsInitializer
@@ -21,11 +21,13 @@ import platform.Foundation.NSBundle
  * // First, initialize Firebase (usually done in AppDelegate)
  * // FirebaseApp.configure() // Call this first if not already done
  * 
- * Flags.initFirebase(defaults = mapOf("feature" to false))
+ * Flagship.initFirebase(defaults = mapOf("feature" to false))
  * 
  * // Then use anywhere:
- * if (Flags.isEnabled("new_feature")) {
- *     showNewFeature()
+ * Task {
+ *     if (await Flagship.isEnabled("new_feature")) {
+ *         showNewFeature()
+ *     }
  * }
  * ```
  * 
@@ -33,7 +35,7 @@ import platform.Foundation.NSBundle
  * @param environment Environment name (default: "production")
  * @param remoteConfig Optional FIRRemoteConfig instance (creates default if not provided)
  */
-fun Flags.initFirebase(
+fun Flagship.initFirebase(
     defaults: Map<String, Any> = emptyMap(),
     environment: String = "production",
     remoteConfig: FIRRemoteConfig? = null

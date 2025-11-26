@@ -7,12 +7,9 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.googleServices)
+    // Flagship codegen plugin (available via mavenLocal)
+    id("io.maxluxs.flagship.codegen") version "0.1.1"
 }
-
-// Apply flagship-codegen plugin from local project
-// Note: Plugin needs to be included as buildSrc or included build to work
-// For now, commenting out to allow project to compile
-// apply(plugin = "io.maxluxs.flagship.codegen")
 
 kotlin {
     jvm {
@@ -103,6 +100,8 @@ kotlin {
             implementation(projects.flagshipProviderRest)
             implementation(projects.flagshipUiCompose)
         }
+        
+        // Codegen task is automatically created by the plugin
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
@@ -211,20 +210,17 @@ compose.desktop {
 }
 
 // Flagship codegen configuration
-// Note: Commented out until plugin is properly configured
-// To enable: add flagship-codegen as included build or use buildSrc
-// flagshipCodegen {
-//     configFile = file("flags.json")
-//     outputDir = file("build/generated/flagship")
-//     packageName = "io.maxluxs.flagship.generated"
-// }
+flagshipCodegen {
+    configFile = file("flags.json")
+    outputDir = file("build/generated/flagship")
+    packageName = "io.maxluxs.flagship.generated"
+}
 
 // Add generated sources to source sets
-// Note: Commented out until codegen plugin is configured
-// kotlin {
-//     sourceSets {
-//         val commonMain by getting {
-//             kotlin.srcDirs("build/generated/flagship")
-//         }
-//     }
-// }
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            kotlin.srcDirs("build/generated/flagship")
+        }
+    }
+}

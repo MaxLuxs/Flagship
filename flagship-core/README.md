@@ -46,10 +46,10 @@ val config = FlagsConfig(
     cache = InMemoryCache(),
     logger = DefaultLogger()
 )
-Flags.configure(config)
+Flagship.configure(config)
 
 // Get manager
-val manager = Flags.manager()
+val manager = Flagship.manager()
 
 // Feature flag (suspend function - use in coroutine scope)
 lifecycleScope.launch {

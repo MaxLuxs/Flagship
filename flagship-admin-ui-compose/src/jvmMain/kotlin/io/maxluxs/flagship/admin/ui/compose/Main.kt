@@ -31,4 +31,3 @@ fun main() = application {
         AdminApp(apiBaseUrl = apiBaseUrl)
     }
 }
-

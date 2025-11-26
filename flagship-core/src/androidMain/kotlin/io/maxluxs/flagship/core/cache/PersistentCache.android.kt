@@ -29,7 +29,20 @@ actual class PersistentCache actual constructor(
     actual override suspend fun load(providerName: String): ProviderSnapshot? {
         return withContext(Dispatchers.IO) {
             val data = getPrefs().getString(providerName, null) ?: return@withContext null
-            serializer.deserialize(data)
+            val snapshot = serializer.deserialize(data) ?: return@withContext null
+            
+            // Check TTL if present
+            val ttlMs = snapshot.ttlMs
+            if (ttlMs != null) {
+                val age = System.currentTimeMillis() - snapshot.fetchedAtMs
+                if (age > ttlMs) {
+                    // Expired, remove from cache
+                    clear(providerName)
+                    return@withContext null
+                }
+            }
+            
+            snapshot
         }
     }
 

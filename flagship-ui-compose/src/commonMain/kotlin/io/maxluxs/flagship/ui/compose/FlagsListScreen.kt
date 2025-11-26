@@ -19,6 +19,8 @@ import io.maxluxs.flagship.core.manager.FlagsListener
 import io.maxluxs.flagship.core.manager.FlagsManager
 import io.maxluxs.flagship.core.model.FlagKey
 import io.maxluxs.flagship.core.model.FlagValue
+import io.maxluxs.flagship.ui.components.components.BrandedCard
+import io.maxluxs.flagship.ui.components.components.BrandedButton
 import kotlinx.coroutines.launch
 
 enum class FlagTypeFilter {
@@ -269,15 +271,13 @@ fun FlagItem(
         animationSpec = tween(300)
     )
     
-    Card(
+    BrandedCard(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor
-        ),
-        shape = RoundedCornerShape(16.dp),
-        border = if (hasOverride) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        } else null
+        elevation = if (hasOverride) {
+            CardDefaults.cardElevation(defaultElevation = 4.dp)
+        } else {
+            CardDefaults.cardElevation(defaultElevation = 2.dp)
+        }
     ) {
         Column(
             modifier = Modifier
@@ -374,7 +374,8 @@ fun FlagItem(
                         }
                     }
                 }
-                is FlagValue.Int, is FlagValue.Double, is FlagValue.StringV, is FlagValue.Json -> {
+                is FlagValue.Int, is FlagValue.Double, is FlagValue.StringV, is FlagValue.Json, 
+                is FlagValue.Date, is FlagValue.Enum, is FlagValue.List, is FlagValue.Map -> {
                     Surface(
                         onClick = { if (allowOverrides) showEditDialog = true },
                         modifier = Modifier.fillMaxWidth(),
@@ -396,6 +397,10 @@ fun FlagItem(
                                     is FlagValue.Double -> flagValue.value.toString()
                                     is FlagValue.StringV -> flagValue.value
                                     is FlagValue.Json -> flagValue.value.toString()
+                                    is FlagValue.Date -> flagValue.value.toString()
+                                    is FlagValue.Enum -> flagValue.value
+                                    is FlagValue.List -> "[${flagValue.value.size} items]"
+                                    is FlagValue.Map -> "{${flagValue.value.size} keys}"
                                     else -> ""
                                 },
                                 style = MaterialTheme.typography.bodyLarge,
@@ -513,7 +518,7 @@ private fun EditValueDialog(
             }
         },
         confirmButton = {
-            Button(
+            BrandedButton(
                 onClick = {
                     val newValue = when (currentValue) {
                         is FlagValue.Int -> {
@@ -552,6 +557,10 @@ private fun getValueTypeLabel(value: FlagValue?): String {
         is FlagValue.Double -> "Double"
         is FlagValue.StringV -> "String"
         is FlagValue.Json -> "JSON"
+        is FlagValue.Date -> "Date"
+        is FlagValue.Enum -> "Enum"
+        is FlagValue.List -> "List"
+        is FlagValue.Map -> "Map"
         null -> "Unknown"
     }
 }
