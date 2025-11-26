@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Класс размера окна для адаптивной навигации.
+ * Window size class for adaptive navigation.
  */
 enum class WindowSizeClass {
     Compact,    // < 600dp (mobile)
@@ -18,7 +18,7 @@ enum class WindowSizeClass {
 }
 
 /**
- * Определяет класс размера окна на основе ширины.
+ * Determines window size class based on width.
  */
 fun getWindowSizeClass(width: Dp): WindowSizeClass {
     return when {
@@ -29,13 +29,13 @@ fun getWindowSizeClass(width: Dp): WindowSizeClass {
 }
 
 /**
- * Expect функция для получения размера окна на разных платформах.
+ * Expect function to get window size on different platforms.
  */
 @Composable
 expect fun rememberWindowSize(): WindowSize
 
 /**
- * Модель размера окна.
+ * Window size model.
  */
 data class WindowSize(
     val width: Dp,

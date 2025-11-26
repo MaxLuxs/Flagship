@@ -25,13 +25,13 @@ object ValidationUtils {
     private const val MIN_EMAIL_LENGTH = 3
     private const val MAX_EMAIL_LENGTH = 255
 
-    // Boolean версии для быстрой проверки (используются в AdminRoutes, ProjectRoutes)
+    // Boolean versions for quick validation (used in AdminRoutes, ProjectRoutes)
     fun validateEmail(email: String): Boolean {
         if (email.isBlank() || email.length > 255) return false
         return EMAIL_PATTERN.matcher(email).matches()
     }
 
-    // ValidationResult версия для детальных сообщений об ошибках (используется в AuthRoutes)
+    // ValidationResult version for detailed error messages (used in AuthRoutes)
     fun validateEmailWithResult(email: String): ValidationResult {
         if (email.isBlank()) {
             return ValidationResult(false, "Email cannot be empty")
@@ -75,14 +75,14 @@ object ValidationUtils {
         return ValidationResult(true)
     }
 
-    // Boolean версия для быстрой проверки
+    // Boolean version for quick validation
     fun validateSlug(slug: String): Boolean {
         if (slug.isBlank() || slug.length > 100) return false
         if (slug.startsWith("-") || slug.endsWith("-")) return false
         return SLUG_PATTERN.matcher(slug).matches()
     }
 
-    // ValidationResult версия для детальных сообщений об ошибках
+    // ValidationResult version for detailed error messages
     fun validateSlugWithResult(slug: String): ValidationResult {
         if (slug.isBlank()) {
             return ValidationResult(false, "Slug cannot be empty")
@@ -102,13 +102,13 @@ object ValidationUtils {
         return ValidationResult(true)
     }
 
-    // Boolean версия для быстрой проверки
+    // Boolean version for quick validation
     fun validateFlagKey(key: String): Boolean {
         if (key.isBlank() || key.length > 100) return false
         return FLAG_KEY_PATTERN.matcher(key).matches()
     }
 
-    // ValidationResult версия для детальных сообщений об ошибках
+    // ValidationResult version for detailed error messages
     fun validateFlagKeyWithResult(key: String): ValidationResult {
         if (key.isBlank()) {
             return ValidationResult(false, "Flag key cannot be empty")

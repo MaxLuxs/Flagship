@@ -291,7 +291,7 @@ fun ProjectCard(
             flagsCount = flags.size
             experimentsCount = experiments.size
         } catch (e: Exception) {
-            // Если не удалось загрузить, оставляем null
+            // If failed to load, leave null
             flagsCount = null
             experimentsCount = null
         } finally {
@@ -351,14 +351,14 @@ fun ProjectCard(
             
             Spacer(modifier = Modifier.weight(1f))
             
-            // Визуальные индикаторы количества флагов и экспериментов
+            // Visual indicators for flags and experiments count
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Индикатор флагов
+                // Flags indicator
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -389,7 +389,7 @@ fun ProjectCard(
                     )
                 }
                 
-                // Индикатор экспериментов
+                // Experiments indicator
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically

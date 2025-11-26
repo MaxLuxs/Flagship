@@ -256,7 +256,7 @@ fun AuditLogScreen(
 
 @Composable
 fun AuditLogCard(log: AuditLogEntry) {
-    // Цветовое кодирование типов действий
+    // Color coding for action types
     val (actionColor, actionIcon, actionContainerColor) = when {
         log.action.contains("CREATED") -> Triple(
             BrandColors.FlagshipGreen,

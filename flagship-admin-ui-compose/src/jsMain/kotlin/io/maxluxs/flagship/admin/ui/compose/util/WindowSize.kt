@@ -10,15 +10,15 @@ import androidx.compose.ui.unit.dp
 import kotlinx.browser.window
 
 /**
- * JS (Web) реализация получения размера окна.
+ * JS (Web) implementation for getting window size.
  * 
- * Для web используем размер окна браузера.
- * По умолчанию считаем Expanded, если ширина > 840px.
+ * For web, we use browser window size.
+ * By default, consider Expanded if width > 840px.
  */
 @Composable
 actual fun rememberWindowSize(): WindowSize {
-    // Для web используем размер окна браузера
-    // Конвертируем пиксели в dp (примерно 1px = 1dp для web)
+    // For web, use browser window size
+    // Convert pixels to dp (approximately 1px = 1dp for web)
     val widthPx = window.innerWidth
     val heightPx = window.innerHeight
     

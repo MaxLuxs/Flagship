@@ -7,17 +7,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /**
- * Типографика для Flagship UI.
+ * Typography for Flagship UI.
  * 
- * Переиспользуемый модуль для всех Flagship UI клиентов.
+ * Reusable module for all Flagship UI clients.
  * 
- * Стиль в духе Firebase/LaunchDarkly:
- * - Чистый, современный вид
- * - Хорошая читаемость
- * - Четкая иерархия
+ * Style inspired by Firebase/LaunchDarkly:
+ * - Clean, modern look
+ * - Good readability
+ * - Clear hierarchy
  */
 val FlagshipTypography = Typography(
-    // Display - для больших заголовков
+    // Display - for large headings
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
@@ -40,7 +40,7 @@ val FlagshipTypography = Typography(
         letterSpacing = 0.sp
     ),
     
-    // Headline - для заголовков разделов
+    // Headline - for section headings
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
@@ -63,7 +63,7 @@ val FlagshipTypography = Typography(
         letterSpacing = 0.sp
     ),
     
-    // Title - для заголовков карточек и секций
+    // Title - for card and section headings
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
@@ -86,7 +86,7 @@ val FlagshipTypography = Typography(
         letterSpacing = 0.1.sp
     ),
     
-    // Body - для основного текста
+    // Body - for main text
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -109,7 +109,7 @@ val FlagshipTypography = Typography(
         letterSpacing = 0.4.sp
     ),
     
-    // Label - для кнопок и меток
+    // Label - for buttons and labels
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,

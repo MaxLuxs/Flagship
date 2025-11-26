@@ -13,11 +13,11 @@ import io.maxluxs.flagship.core.Flagship
 import kotlinx.coroutines.launch
 
 /**
- * Пример использования сгенерированных классов из flagship-codegen с Firebase.
+ * Example usage of generated classes from flagship-codegen with Firebase.
  * 
- * Этот пример показывает, как использовать codegen в Android приложении с Firebase Remote Config.
+ * This example demonstrates how to use codegen in an Android app with Firebase Remote Config.
  * 
- * После запуска ./gradlew generateFlags, используйте:
+ * After running ./gradlew generateFlags, use:
  * ```kotlin
  * import io.maxluxs.flagship.generated.Flags
  * 
@@ -61,12 +61,12 @@ fun CodegenExampleScreen() {
     var checkoutVariant by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     
-    // Загружаем флаги при первом рендере
+    // Load flags on first render
     LaunchedEffect(Unit) {
         val activity = androidx.compose.ui.platform.LocalContext.current as? ComponentActivity
         activity?.lifecycleScope?.launch {
-            // Используем сгенерированные классы из codegen
-            // После запуска ./gradlew :flagship-sample-android:generateFlags
+            // Use generated classes from codegen
+            // After running ./gradlew :flagship-sample-android:generateFlags
             try {
                 // Boolean flag
                 newUiEnabled = io.maxluxs.flagship.generated.Flags.NewUi.enabled()
@@ -103,7 +103,7 @@ fun CodegenExampleScreen() {
         )
         
         Text(
-            text = "Пример использования сгенерированных классов из flagship-codegen с Firebase Remote Config",
+            text = "Example usage of generated classes from flagship-codegen with Firebase Remote Config",
             style = MaterialTheme.typography.bodyMedium
         )
         
@@ -203,24 +203,24 @@ fun CodegenExampleScreen() {
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Как использовать:",
+                        text = "How to use:",
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "1. Убедитесь, что flags.json существует",
+                        text = "1. Ensure flags.json exists",
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "2. Запустите: ./gradlew generateFlags",
+                        text = "2. Run: ./gradlew generateFlags",
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "3. Импортируйте: import io.maxluxs.flagship.generated.Flags",
+                        text = "3. Import: import io.maxluxs.flagship.generated.Flags",
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "4. Используйте: Flags.NewUi.enabled()",
+                        text = "4. Use: Flags.NewUi.enabled()",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

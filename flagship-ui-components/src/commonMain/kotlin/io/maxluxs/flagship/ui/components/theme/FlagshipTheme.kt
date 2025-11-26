@@ -8,7 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 /**
- * Light color scheme с брендовыми цветами Flagship.
+ * Light color scheme with Flagship brand colors.
  * Primary: FlagshipGreen (#00d687)
  * Secondary: FlagshipOrange (#ef7200)
  */
@@ -45,7 +45,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 /**
- * Dark color scheme с брендовыми цветами Flagship.
+ * Dark color scheme with Flagship brand colors.
  */
 private val DarkColorScheme = darkColorScheme(
     primary = BrandColors.FlagshipGreenLight,
@@ -80,17 +80,17 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 /**
- * Flagship Theme с брендовыми цветами.
+ * Flagship Theme with brand colors.
  * 
- * Переиспользуемый модуль для всех Flagship UI клиентов.
+ * Reusable module for all Flagship UI clients.
  * 
- * Использует:
- * - BrandColors для цветовой палитры
- * - FlagshipTypography для типографики
+ * Uses:
+ * - BrandColors for color palette
+ * - FlagshipTypography for typography
  * 
- * @param useDarkTheme Использовать темную тему (по умолчанию: системная настройка)
- * @param colorScheme Кастомная цветовая схема (опционально)
- * @param content Контент для отображения
+ * @param useDarkTheme Use dark theme (default: system setting)
+ * @param colorScheme Custom color scheme (optional)
+ * @param content Content to display
  */
 @Composable
 fun FlagshipTheme(

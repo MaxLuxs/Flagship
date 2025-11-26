@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * Брендовая карточка в едином стиле Flagship.
+ * Branded card in unified Flagship style.
  * 
- * Переиспользуемый компонент для всех Flagship UI клиентов.
+ * Reusable component for all Flagship UI clients.
  * 
- * Использует:
- * - Закругленные углы
- * - Тень для elevation
- * - Брендовые цвета
+ * Uses:
+ * - Rounded corners
+ * - Shadow for elevation
+ * - Brand colors
  */
 @Composable
 fun BrandedCard(

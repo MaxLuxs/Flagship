@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import io.maxluxs.flagship.ui.components.theme.FlagshipTheme
 
 /**
- * Admin Theme с брендовыми цветами Flagship.
+ * Admin Theme with Flagship brand colors.
  * 
- * Алиас для FlagshipTheme из flagship-ui-components.
- * Использует переиспользуемую дизайн-систему.
+ * Alias for FlagshipTheme from flagship-ui-components.
+ * Uses reusable design system.
  * 
- * @param useDarkTheme Использовать темную тему (по умолчанию: системная настройка)
- * @param colorScheme Кастомная цветовая схема (опционально)
- * @param content Контент для отображения
+ * @param useDarkTheme Use dark theme (default: system setting)
+ * @param colorScheme Custom color scheme (optional)
+ * @param content Content to display
  */
 @Composable
 fun AdminTheme(

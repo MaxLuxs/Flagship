@@ -12,9 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
- * Брендовая верхняя панель с логотипом и навигацией.
+ * Branded top bar with logo and navigation.
  * 
- * Переиспользуемый компонент для всех Flagship UI клиентов.
+ * Reusable component for all Flagship UI clients.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

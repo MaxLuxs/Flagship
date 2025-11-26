@@ -19,10 +19,10 @@ import io.maxluxs.flagship.admin.ui.compose.util.rememberWindowSize
 import io.maxluxs.flagship.shared.api.UserResponse
 
 /**
- * Адаптивный Scaffold с навигацией, который меняется в зависимости от размера экрана.
+ * Adaptive Scaffold with navigation that changes based on screen size.
  * 
- * - Expanded (desktop/web > 840dp): Sidebar навигация слева
- * - Medium (tablet 600-840dp): Drawer навигация
+ * - Expanded (desktop/web > 840dp): Sidebar navigation on the left
+ * - Medium (tablet 600-840dp): Drawer navigation
  * - Compact (mobile < 600dp): Bottom navigation bar
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,10 +39,10 @@ fun AdaptiveNavigationScaffold(
     
     when {
         windowSize.isExpanded -> {
-            // Desktop/Web: Sidebar навигация
+            // Desktop/Web: Sidebar navigation
             Row(modifier = Modifier.fillMaxSize()) {
                 if (showNavigation) {
-                    // Кастомный sidebar
+                    // Custom sidebar
                     Column(
                         modifier = Modifier
                             .width(240.dp)
@@ -72,7 +72,7 @@ fun AdaptiveNavigationScaffold(
             }
         }
         windowSize.isMedium -> {
-            // Tablet: Drawer навигация
+            // Tablet: Drawer navigation
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val scope = rememberCoroutineScope()
             
@@ -133,7 +133,7 @@ fun AdaptiveNavigationScaffold(
             }
         }
         else -> {
-            // Mobile: Bottom navigation (упрощенная версия)
+            // Mobile: Bottom navigation (simplified version)
             Scaffold(
                 bottomBar = {
                     if (showNavigation) {
@@ -172,7 +172,7 @@ fun AdaptiveNavigationScaffold(
 }
 
 /**
- * Элемент навигации для sidebar (desktop).
+ * Navigation item for sidebar (desktop).
  */
 @Composable
 private fun SidebarNavigationItem(
@@ -209,7 +209,7 @@ private fun SidebarNavigationItem(
 }
 
 /**
- * Элемент навигации для bottom bar (mobile).
+ * Navigation item for bottom bar (mobile).
  */
 @Composable
 private fun BottomNavItem(
@@ -239,7 +239,7 @@ private fun BottomNavItem(
 }
 
 /**
- * Определяет индекс выбранного элемента навигации.
+ * Determines the index of the selected navigation item.
  */
 private fun getSelectedNavigationItem(screen: Screen): Int {
     return when (screen) {
@@ -250,7 +250,7 @@ private fun getSelectedNavigationItem(screen: Screen): Int {
 }
 
 /**
- * Получает экран по индексу навигации.
+ * Gets screen by navigation index.
  */
 private fun getNavigationItemByIndex(index: Int): Screen {
     return when (index) {

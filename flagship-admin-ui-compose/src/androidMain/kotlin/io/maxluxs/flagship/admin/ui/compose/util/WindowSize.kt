@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Android реализация получения размера окна.
+ * Android implementation for getting window size.
  */
 @Composable
 actual fun rememberWindowSize(): WindowSize {

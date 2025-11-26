@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Компонент логотипа Flagship.
+ * Flagship logo component.
  * 
- * Переиспользуемый компонент для всех Flagship UI клиентов.
+ * Reusable component for all Flagship UI clients.
  * 
- * Пока использует текстовое представление.
- * В будущем можно заменить на SVG компонент из docs/images/flagship_icon.svg
+ * Currently uses text representation.
+ * Can be replaced with SVG component from docs/images/flagship_icon.svg in the future.
  */
 @Composable
 fun BrandedLogo(

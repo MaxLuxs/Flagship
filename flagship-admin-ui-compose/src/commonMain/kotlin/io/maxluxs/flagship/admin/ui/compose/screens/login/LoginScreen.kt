@@ -43,7 +43,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Логотип в центре с анимацией
+        // Logo in center with animation
         AnimatedVisibility(
             visible = isVisible,
             enter = fadeIn(animationSpec = tween(600)) + slideInVertically(
@@ -55,7 +55,7 @@ fun LoginScreen(
             BrandedLogo(size = 48.dp)
         }
         
-        // Карточка с формой с анимацией
+        // Card with form with animation
         AnimatedVisibility(
             visible = isVisible,
             enter = fadeIn(
@@ -144,7 +144,7 @@ fun LoginScreen(
             }
         }
         
-        // Кнопка регистрации с анимацией
+        // Register button with animation
         AnimatedVisibility(
             visible = isVisible,
             enter = fadeIn(

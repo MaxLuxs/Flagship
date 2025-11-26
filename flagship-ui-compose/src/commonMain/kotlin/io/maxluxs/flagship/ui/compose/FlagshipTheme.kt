@@ -6,15 +6,15 @@ import androidx.compose.runtime.Composable
 import io.maxluxs.flagship.ui.components.theme.FlagshipTheme as SharedFlagshipTheme
 
 /**
- * Flagship Theme для SDK Debug UI.
+ * Flagship Theme for SDK Debug UI.
  * 
- * Использует общую дизайн-систему из [flagship-ui-components] с брендовыми цветами Flagship.
+ * Uses shared design system from [flagship-ui-components] with Flagship brand colors.
  * 
- * Обеспечивает обратную совместимость с существующим API.
+ * Provides backward compatibility with existing API.
  * 
- * @param useDarkTheme Использовать темную тему (по умолчанию: системная настройка)
- * @param colorScheme Кастомная цветовая схема (опционально)
- * @param content Контент для отображения
+ * @param useDarkTheme Use dark theme (default: system setting)
+ * @param colorScheme Custom color scheme (optional)
+ * @param content Content to display
  */
 @Composable
 fun FlagshipTheme(

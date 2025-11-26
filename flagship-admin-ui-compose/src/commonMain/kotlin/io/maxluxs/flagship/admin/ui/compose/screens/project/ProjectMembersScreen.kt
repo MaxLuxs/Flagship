@@ -299,7 +299,7 @@ fun MemberCard(
     onDelete: () -> Unit,
     isDeleting: Boolean
 ) {
-    // Цветовое кодирование ролей
+    // Color coding for roles
     val roleColor = when (member.role) {
         "ADMIN" -> BrandColors.FlagshipOrange
         "MEMBER" -> BrandColors.FlagshipGreen

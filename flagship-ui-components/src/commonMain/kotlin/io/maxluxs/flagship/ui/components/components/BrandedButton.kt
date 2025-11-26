@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * Брендовая кнопка с цветами Flagship.
+ * Branded button with Flagship colors.
  * 
- * Переиспользуемый компонент для всех Flagship UI клиентов.
+ * Reusable component for all Flagship UI clients.
  * 
- * Использует primary цвет (FlagshipGreen) для основного действия.
+ * Uses primary color (FlagshipGreen) for main action.
  */
 @Composable
 fun BrandedButton(
@@ -42,7 +42,7 @@ fun BrandedButton(
 }
 
 /**
- * Вторичная брендовая кнопка с outline стилем.
+ * Secondary branded button with outline style.
  */
 @Composable
 fun BrandedOutlinedButton(

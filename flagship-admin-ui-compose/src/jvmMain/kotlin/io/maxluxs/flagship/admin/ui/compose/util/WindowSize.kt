@@ -13,18 +13,18 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
 
 /**
- * JVM (Desktop) реализация получения размера окна.
+ * JVM (Desktop) implementation for getting window size.
  * 
- * Для desktop используем фиксированный размер Expanded по умолчанию,
- * так как desktop приложения обычно имеют большие окна.
+ * For desktop, we use fixed Expanded size by default,
+ * as desktop applications usually have large windows.
  */
 @Composable
 actual fun rememberWindowSize(): WindowSize {
-    // Для desktop по умолчанию используем Expanded размер
-    // В реальном приложении можно использовать WindowState для получения реального размера
+    // For desktop, use Expanded size by default
+    // In a real application, can use WindowState to get actual size
     return remember {
         WindowSize(
-            width = 1200.dp, // Expanded по умолчанию для desktop
+            width = 1200.dp, // Expanded by default for desktop
             height = 800.dp
         )
     }

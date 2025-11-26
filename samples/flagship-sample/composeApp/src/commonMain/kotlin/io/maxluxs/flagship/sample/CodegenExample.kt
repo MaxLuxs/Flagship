@@ -3,7 +3,6 @@ package io.maxluxs.flagship.sample
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.maxluxs.flagship.core.Flagship
@@ -11,25 +10,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * Пример использования сгенерированных классов из flagship-codegen с Firebase.
- * 
- * Этот пример показывает:
- * 1. Как использовать сгенерированные типизированные флаги
- * 2. Как использовать сгенерированные эксперименты
- * 3. Как использовать синхронные методы после bootstrap
- * 4. Как использовать enum для экспериментов
- * 
- * После запуска ./gradlew generateFlags, используйте:
+ * Example usage of generated classes from flagship-codegen with Firebase.
+ *
+ * This example demonstrates:
+ * 1. How to use generated typed flags
+ * 2. How to use generated experiments
+ * 3. How to use synchronous methods after bootstrap
+ * 4. How to use enum for experiments
+ *
+ * After running ./gradlew generateFlags, use:
  * ```kotlin
  * import io.maxluxs.flagship.generated.Flags
- * 
+ *
  * // Boolean flag
  * if (Flags.NewUi.enabled()) { ... }
- * 
+ *
  * // Typed values
  * val timeout = Flags.ApiTimeout.value()
  * val message = Flags.WelcomeMessage.value()
- * 
+ *
  * // Experiments with enum
  * val variant = Flags.CheckoutFlow.variant()
  * when (variant) {
@@ -46,38 +45,38 @@ fun CodegenExample(scope: CoroutineScope) {
     var welcomeMessage by remember { mutableStateOf("Welcome!") }
     var checkoutVariant by remember { mutableStateOf<String?>(null) }
     var paymentVariant by remember { mutableStateOf<String?>(null) }
-    
-    // Загружаем флаги при первом рендере
+
+    // Load flags on first render
     LaunchedEffect(Unit) {
         scope.launch {
-            // Используем сгенерированные классы из codegen
-            // После запуска ./gradlew :flagship-sample:generateFlags
+            // Use generated classes from codegen
+            // After running ./gradlew :flagship-sample:generateFlags
             try {
                 // Boolean flag
-                newUiEnabled = io.maxluxs.flagship.generated.Flags.NewUi.enabled()
-                
+                newUiEnabled = Flags.NewUi.enabled()
+
                 // Typed values
-                apiTimeout = io.maxluxs.flagship.generated.Flags.ApiTimeout.value()
-                welcomeMessage = io.maxluxs.flagship.generated.Flags.WelcomeMessage.value()
-                
+                apiTimeout = Flags.ApiTimeout.value()
+                welcomeMessage = Flags.WelcomeMessage.value()
+
                 // Experiments
-                checkoutVariant = io.maxluxs.flagship.generated.Flags.CheckoutFlow.variant()
-                paymentVariant = io.maxluxs.flagship.generated.Flags.PaymentMethod.variant()
+                checkoutVariant = Flags.CheckoutFlow.variant()
+                paymentVariant = Flags.PaymentMethod.variant()
             } catch (e: Exception) {
                 // Fallback to direct API if generated classes not available
                 newUiEnabled = Flagship.isEnabled("new_ui", default = false)
                 apiTimeout = Flagship.intValue("api_timeout", default = 5000)
                 welcomeMessage = Flagship.stringValue("welcome_message", default = "Welcome!")
-                
+
                 val checkoutAssignment = Flagship.assign("checkout_flow")
                 checkoutVariant = checkoutAssignment?.variant
-                
+
                 val paymentAssignment = Flagship.assign("payment_method")
                 paymentVariant = paymentAssignment?.variant
             }
         }
     }
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,12 +87,12 @@ fun CodegenExample(scope: CoroutineScope) {
             text = "Codegen Example",
             style = MaterialTheme.typography.headlineMedium
         )
-        
+
         Text(
-            text = "Пример использования сгенерированных классов из flagship-codegen",
+            text = "Example usage of generated classes from flagship-codegen",
             style = MaterialTheme.typography.bodyMedium
         )
-        
+
         // Boolean flag example
         Card(
             modifier = Modifier.fillMaxWidth()
@@ -117,7 +116,7 @@ fun CodegenExample(scope: CoroutineScope) {
                 )
             }
         }
-        
+
         // Typed values example
         Card(
             modifier = Modifier.fillMaxWidth()
@@ -151,7 +150,7 @@ fun CodegenExample(scope: CoroutineScope) {
                 )
             }
         }
-        
+
         // Experiments example
         Card(
             modifier = Modifier.fillMaxWidth()
@@ -185,7 +184,7 @@ fun CodegenExample(scope: CoroutineScope) {
                 )
             }
         }
-        
+
         // Instructions
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -197,24 +196,24 @@ fun CodegenExample(scope: CoroutineScope) {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Как использовать:",
+                    text = "How to use:",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "1. Убедитесь, что flags.json существует в корне проекта",
+                    text = "1. Ensure flags.json exists in the project root",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "2. Запустите: ./gradlew generateFlags",
+                    text = "2. Run: ./gradlew generateFlags",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "3. Импортируйте: import io.maxluxs.flagship.generated.Flags",
+                    text = "3. Import: import io.maxluxs.flagship.generated.Flags",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "4. Используйте: Flags.NewUi.enabled()",
+                    text = "4. Use: Flags.NewUi.enabled()",
                     style = MaterialTheme.typography.bodySmall
                 )
             }

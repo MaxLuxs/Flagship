@@ -25,9 +25,9 @@ import io.maxluxs.flagship.shared.api.UserResponse
  * - Desktop (JVM)
  * - Web (JS)
  *
- * Использует адаптивную навигацию:
- * - Desktop/Web (> 840dp): Sidebar навигация
- * - Tablet (600-840dp): Drawer навигация
+ * Uses adaptive navigation:
+ * - Desktop/Web (> 840dp): Sidebar navigation
+ * - Tablet (600-840dp): Drawer navigation
  * - Mobile (< 600dp): Bottom navigation
  *
  * @param apiBaseUrl Base URL for the Flagship server API (default: "http://localhost:8080")
