@@ -1,2 +1,0 @@
-web: java -jar flagship-server/build/libs/*.jar
-

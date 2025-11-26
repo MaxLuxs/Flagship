@@ -71,7 +71,6 @@ dependencies {
     implementation("io.maxluxs.flagship:flagship-core:0.1.1")
     implementation("io.maxluxs.flagship:flagship-provider-firebase:0.1.1") // Optional
     implementation("io.maxluxs.flagship:flagship-provider-rest:0.1.1")     // Optional
-    implementation("io.maxluxs.flagship:flagship-admin-ui-compose:0.1.1")  // Optional: Admin UI
 }
 
 // Platform-specific code is included in flagship-core
@@ -326,7 +325,6 @@ If you have your own backend, return JSON in this format:
 | `flagship-core` | ✅ **Yes** | Core library with evaluator, models, caching. Includes platform code. |
 | `flagship-provider-firebase` | ⚪ Optional | Firebase Remote Config adapter |
 | `flagship-provider-rest` | ⚪ Optional | Generic REST API adapter |
-| `flagship-admin-ui-compose` | ⚪ Optional | Admin UI dashboard for debugging |
 
 > 💡 **Tip**: Start with `flagship-core` + one provider. Add more modules as needed.
 
@@ -526,22 +524,16 @@ fun DeveloperSettingsScreen() {
 - 🔄 [Migration Guide](docs/MIGRATION_GUIDE.md) - Migrating from other solutions (LaunchDarkly, Firebase, Unleash, Split.io)
 - 🎯 [Use Cases](docs/USE_CASES.md) - Common use cases (A/B testing, gradual rollouts, kill switches, etc.)
 - 📚 [API Reference](docs/API_REFERENCE.md) - Full API reference
-- 🚀 [Publishing Guide](PUBLISHING.md) - How to publish the library
-- 🔧 [Development Log](DEV_LOG.md) - Development history
 
 **Module Documentation:**
 - [flagship-core](flagship-core/README.md)
 - [flagship-provider-firebase](flagship-provider-firebase/README.md)
 - [flagship-provider-rest](flagship-provider-rest/README.md)
-- [flagship-ui-compose](flagship-admin-ui-compose/README.md)
+- [flagship-ui-compose](flagship-ui-compose/README.md)
 
 **Auto-generated API Docs:**
 - [Dokka HTML Documentation](https://maxluxs.github.io/Flagship/)
 
-**Visual Materials:**
-- 📸 [Screenshots Guide](docs/images/SCREENSHOT_GUIDE.md) - Guide for creating admin UI screenshots
-- 🎬 [Video Tutorials](docs/videos/CHECKLIST.md) - Video tutorials checklist
-- 🖼️ [Visual Materials](docs/images/README.md) - All visual materials (screenshots, GIFs, videos)
 
 ---
 
